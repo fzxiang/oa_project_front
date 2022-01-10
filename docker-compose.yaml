@@ -1,0 +1,12 @@
+version: '3.3'
+
+services:
+  node:
+    container_name: local-node
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: node:16.9.0
+    environment:
+      TZ: "Asia/Shanghai"
+    restart: always
