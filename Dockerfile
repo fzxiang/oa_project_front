@@ -14,5 +14,6 @@ FROM nginx:alpine
 COPY --from=0 /app/dist /usr/share/nginx/html
 COPY --from=0 /app/default.conf /etc/nginx/conf.d/default.conf
 
+EXPOSE 8200
+
 CMD ["nginx", "-g", "daemon off;"]
-CMD [""]
