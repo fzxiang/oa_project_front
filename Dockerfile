@@ -1,18 +1,14 @@
-FROM node:14
+FROM nginx:1.18.0
 WORKDIR app
 
-RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
+#RUN curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm
 
 # Files required by pnpm install
 COPY . .
 
-RUN pnpm install --frozen-lockfile --prod 
-RUN npm run build
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./dist /var/www/oa_project_front/
 
-FROM nginx:1.18.0
-
-COPY --from=0 /app/dist /var/www/oa_project_front
-COPY --from=0 /app/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
