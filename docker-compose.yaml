@@ -1,14 +1,16 @@
 version: '3.3'
 
 services:
-  node:
+  nginx:
     container_name: local-node
     build:
       context: .
       dockerfile: Dockerfile
-    image: node:16.9.0
     environment:
       TZ: "Asia/Shanghai"
     restart: always
     ports:
       - "8200:80"
+    volumes:
+      - .:/var/www/oa_project_front
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
