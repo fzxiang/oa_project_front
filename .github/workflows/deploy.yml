@@ -99,7 +99,7 @@ jobs:
 
       - name: Delete gh-pages branch
         run: |
-          git push origin --delete gh-pages
+          git rev-parse --verify gh-pages && git push origin --delete gh-pages
 
       - name: Build
         run: |
