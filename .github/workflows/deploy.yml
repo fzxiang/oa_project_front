@@ -108,20 +108,12 @@ jobs:
           touch dist/.nojekyll
           cp dist/index.html dist/404.html
 
-      - name: GH Pages deploy
-        uses: Cecilapp/GitHub-Pages-deploy@3.2.1\
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v2.5.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          email: 848026280@qq.com
-          build_dir: ./dist
-          commit_message: 发布
-
-#      - name: Deploy
-#        uses: peaceiris/actions-gh-pages@v2.5.0
-#        env:
 #          ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-#          PUBLISH_BRANCH: gh-pages
-#          PUBLISH_DIR: ./dist
-#        with:
-#          forceOrphan: true
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./dist
+        with:
+          forceOrphan: true
