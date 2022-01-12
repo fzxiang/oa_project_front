@@ -5,19 +5,29 @@ export function createFakeUserList() {
   return [
     {
       userId: '1',
-      username: 'vben',
-      realName: 'Vben Admin',
-      avatar: 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640',
+      username: 'Admin',
+      realName: '傅子湘',
+      // avatar: 'https://q1.qlogo.cn/g?b=qq&nk=190848757&s=640',
       desc: 'manager',
       password: '123456',
       token: 'fakeToken1',
-      homePath: '/dashboard/analysis',
-      roles: [
+      // homePath: '/dashboard/analysis',
+      permission: [
         {
-          roleName: 'Super Admin',
-          value: 'super',
+          shop: '1',
+          menu: [0, 1, 1 - 1, 2, 2 - 1],
+        },
+        {
+          shop: '2',
+          menu: [0, 1, 1 - 1],
         },
       ],
+      // roles: [
+      //   {
+      //     roleName: 'Super Admin',
+      //     value: 'super',
+      //   },
+      // ],
     },
     {
       userId: '2',
@@ -46,7 +56,7 @@ const fakeCodeList: any = {
 export default [
   // mock user login
   {
-    url: '/basic-api/login',
+    url: '/api/login',
     timeout: 200,
     method: 'post',
     response: ({ body }) => {
@@ -69,7 +79,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/getUserInfo',
+    url: '/api/getUserInfo',
     method: 'get',
     response: (request: requestParams) => {
       const token = getRequestToken(request);
@@ -82,7 +92,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/getPermCode',
+    url: '/api/getPermCode',
     timeout: 200,
     method: 'get',
     response: (request: requestParams) => {
@@ -98,7 +108,7 @@ export default [
     },
   },
   {
-    url: '/basic-api/logout',
+    url: '/api/logout',
     timeout: 200,
     method: 'get',
     response: (request: requestParams) => {
