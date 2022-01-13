@@ -20,6 +20,7 @@ const system: AppRouteModule = {
       meta: {
         title: t('routes.demo.system.account'),
         ignoreKeepAlive: false,
+        permission: '2000',
       },
       component: () => import('/@/views/system/account/index.vue'),
     },
@@ -32,6 +33,7 @@ const system: AppRouteModule = {
         ignoreKeepAlive: true,
         showMenu: false,
         currentActiveMenu: '/system/account',
+        permission: '2000-1',
       },
       component: () => import('/@/views/system/account/AccountDetail.vue'),
     },
@@ -41,6 +43,7 @@ const system: AppRouteModule = {
       meta: {
         title: t('routes.demo.system.role'),
         ignoreKeepAlive: true,
+        permission: '2000-2',
       },
       component: () => import('/@/views/system/role/index.vue'),
     },
@@ -51,10 +54,11 @@ const system: AppRouteModule = {
       meta: {
         title: t('routes.demo.system.menu'),
         ignoreKeepAlive: true,
+        permission: '2000-3',
       },
       component: () => import('/@/views/system/menu/index.vue'),
     },
-    {
+    /*{
       path: 'dept',
       name: 'DeptManagement',
       meta: {
@@ -62,7 +66,7 @@ const system: AppRouteModule = {
         ignoreKeepAlive: true,
       },
       component: () => import('/@/views/system/dept/index.vue'),
-    },
+    },*/
     {
       path: 'changePassword',
       name: 'ChangePassword',
