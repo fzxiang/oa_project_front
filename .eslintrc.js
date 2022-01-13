@@ -41,15 +41,15 @@ module.exports = defineConfig({
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_|^[A-Z]',
+        varsIgnorePattern: '^_|^[A-Z]',
       },
     ],
     'no-unused-vars': [
       'error',
       {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_|^[A-Z]',
+        varsIgnorePattern: '^_|^[A-Z]',
       },
     ],
     'space-before-function-paren': 'off',

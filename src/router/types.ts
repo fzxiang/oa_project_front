@@ -25,6 +25,8 @@ export interface MenuTag {
 }
 
 export interface Menu {
+  // id: string;
+
   name: string;
 
   icon?: string;

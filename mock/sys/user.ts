@@ -15,11 +15,11 @@ export function createFakeUserList() {
       permission: [
         {
           shop: '1',
-          menu: [0, 1, 1 - 1, 2, 2 - 1],
+          menu: ['2000', '2000-1', '2000-2', '2000-3'],
         },
         {
           shop: '2',
-          menu: [0, 1, 1 - 1],
+          menu: ['2000', '2000-1', '2000-2'],
         },
       ],
       // roles: [
@@ -88,6 +88,7 @@ export default [
       if (!checkUser) {
         return resultError('The corresponding user information was not obtained!');
       }
+      Reflect.deleteProperty(checkUser, 'token');
       return resultSuccess(checkUser);
     },
   },
