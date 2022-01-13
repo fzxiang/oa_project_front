@@ -89,6 +89,7 @@ export default [
         return resultError('The corresponding user information was not obtained!');
       }
       Reflect.deleteProperty(checkUser, 'token');
+      Reflect.deleteProperty(checkUser, 'passwork');
       return resultSuccess(checkUser);
     },
   },

@@ -8,10 +8,10 @@
     v-show="getShow"
     @keypress.enter="handleLogin"
   >
-    <FormItem name="account" class="enter-x">
+    <FormItem name="username" class="enter-x">
       <Input
         size="large"
-        v-model:value="formData.account"
+        v-model:value="formData.username"
         :placeholder="t('sys.login.userName')"
         class="fix-auto-fill"
       />
@@ -29,9 +29,9 @@
       <ACol :span="12">
         <FormItem>
           <!-- No logic, you need to deal with it yourself -->
-          <Checkbox v-model:checked="rememberMe" size="small">
+          <!-- <Checkbox v-model:checked="rememberMe" size="small">
             {{ t('sys.login.rememberMe') }}
-          </Checkbox>
+          </Checkbox>-->
         </FormItem>
       </ACol>
       <ACol :span="12">
@@ -119,12 +119,16 @@
 
   const formRef = ref();
   const loading = ref(false);
-  const rememberMe = ref(userStore.rememberMe);
-  console.log(userStore.rememberMe);
+  // const rememberMe = ref(userStore.rememberMe);
   const formData = reactive({
-    account: 'Admin',
-    password: '123456',
+    username: '',
+    password: '',
   });
+  // if (userStore.rememberMe) {
+  //   const { username = '', password = '' } = userStore.getUserInfo || {};
+  //   formData.username = username;
+  //   formData.password = password;
+  // }
 
   const { validForm } = useFormValid(formRef);
 
@@ -139,7 +143,7 @@
       loading.value = true;
       const userInfo = await userStore.login({
         password: data.password,
-        username: data.account,
+        username: data.username,
         mode: 'none', //不要默认的错误提示
       });
       if (userInfo) {

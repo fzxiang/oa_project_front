@@ -23,7 +23,6 @@ interface UserState {
   roleList: RoleEnum[];
   sessionTimeout?: boolean;
   lastUpdateTime: number;
-  rememberMe: boolean;
 }
 
 export const useUserStore = defineStore({
@@ -39,8 +38,6 @@ export const useUserStore = defineStore({
     sessionTimeout: false,
     // Last fetch time
     lastUpdateTime: 0,
-    // remember password
-    rememberMe: false,
   }),
   getters: {
     getUserInfo(): UserInfo {
@@ -57,9 +54,6 @@ export const useUserStore = defineStore({
     },
     getLastUpdateTime(): number {
       return this.lastUpdateTime;
-    },
-    getRememberMe(): boolean {
-      return this.rememberMe;
     },
   },
   actions: {
@@ -84,9 +78,6 @@ export const useUserStore = defineStore({
       this.token = '';
       this.roleList = [];
       this.sessionTimeout = false;
-    },
-    setRememberMe(value: boolean) {
-      this.rememberMe = value;
     },
     /**
      * @description: login
