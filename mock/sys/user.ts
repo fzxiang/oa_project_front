@@ -11,14 +11,17 @@ export function createFakeUserList() {
       desc: 'manager',
       password: '123456',
       token: 'fakeToken1',
+      seletedShop: '2',
       // homePath: '/dashboard/analysis',
       permission: [
         {
           shop: '1',
+          shopName: '神功',
           menu: ['2000', '2000-1', '2000-2', '2000-3'],
         },
         {
           shop: '2',
+          shopName: '仙命诀',
           menu: ['2000', '2000-1', '2000-2'],
         },
       ],
