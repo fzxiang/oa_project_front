@@ -38,6 +38,8 @@ export interface UserInfo {
   desc?: string;
   homePath?: string;
   roles: RoleInfo[];
+  selectedShop: string;
+  permission: Permission[];
 }
 
 export interface BeforeMiniState {
@@ -45,4 +47,10 @@ export interface BeforeMiniState {
   menuSplit?: boolean;
   menuMode?: MenuModeEnum;
   menuType?: MenuTypeEnum;
+}
+
+interface Permission {
+  shop: string;
+  menu: [string];
+  shopName: string;
 }
