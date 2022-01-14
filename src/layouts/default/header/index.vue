@@ -20,6 +20,9 @@
     </div>
     <!-- left end -->
 
+    <!-- center select -->
+    <TopSelect />
+
     <!-- menu start -->
     <div :class="`${prefixCls}-menu`" v-if="getShowTopMenu && !getIsMobile">
       <LayoutMenu
@@ -37,16 +40,16 @@
 
       <ErrorAction v-if="getUseErrorHandle" :class="`${prefixCls}-action__item error-action`" />
 
-      <Notify v-if="getShowNotice" :class="`${prefixCls}-action__item notify-item`" />
+      <!--<Notify v-if="getShowNotice" :class="`${prefixCls}-action__item notify-item`" />-->
 
       <FullScreen v-if="getShowFullScreen" :class="`${prefixCls}-action__item fullscreen-item`" />
 
-      <AppLocalePicker
+      <!--<AppLocalePicker
         v-if="getShowLocalePicker"
         :reload="true"
         :showText="false"
         :class="`${prefixCls}-action__item`"
-      />
+      />-->
 
       <UserDropDown :theme="getHeaderTheme" />
 
@@ -59,7 +62,7 @@
 
   import { propTypes } from '/@/utils/propTypes';
 
-  import { Layout } from 'ant-design-vue';
+  import { Layout, Dropdown, Menu } from 'ant-design-vue';
   import { AppLogo } from '/@/components/Application';
   import LayoutMenu from '../menu/index.vue';
   import LayoutTrigger from '../trigger/index.vue';
@@ -69,12 +72,17 @@
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
-
   import { MenuModeEnum, MenuSplitTyeEnum } from '/@/enums/menuEnum';
   import { SettingButtonPositionEnum } from '/@/enums/appEnum';
-  import { AppLocalePicker } from '/@/components/Application';
+  import TopSelect from '/@/layouts/default/header/components/TopSelect.vue';
+  // import { AppLocalePicker } from '/@/components/Application';
 
-  import { UserDropDown, LayoutBreadcrumb, FullScreen, Notify, ErrorAction } from './components';
+  import {
+    UserDropDown,
+    LayoutBreadcrumb,
+    FullScreen,
+    /*Notify,*/ ErrorAction,
+  } from './components';
   import { useAppInject } from '/@/hooks/web/useAppInject';
   import { useDesign } from '/@/hooks/web/useDesign';
 
@@ -90,9 +98,10 @@
       LayoutBreadcrumb,
       LayoutMenu,
       UserDropDown,
-      AppLocalePicker,
+      TopSelect,
+      // AppLocalePicker,
       FullScreen,
-      Notify,
+      // Notify,
       AppSearch,
       ErrorAction,
       SettingDrawer: createAsyncComponent(() => import('/@/layouts/default/setting/index.vue'), {
