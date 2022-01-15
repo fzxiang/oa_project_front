@@ -17,12 +17,25 @@ export function createFakeUserList() {
         {
           shop: '1',
           shopName: '神功',
-          menu: ['2000', '2000-1', '2000-2', '2000-3'],
+          menu: [
+            '1',
+            '1-0',
+            '3',
+            '3-2',
+            '3-3',
+            '4',
+            '4-0',
+            '4-1',
+            '2000',
+            '2000-0',
+            '2000-1',
+            '2000-2',
+          ],
         },
         {
           shop: '2',
           shopName: '仙命诀',
-          menu: ['2000', '2000-1', '2000-2'],
+          menu: ['2000', '2000-2'],
         },
       ],
       // roles: [
@@ -124,6 +137,21 @@ export default [
         return resultError('Invalid token!');
       }
       return resultSuccess(undefined, { message: 'Token has been destroyed' });
+    },
+  },
+  {
+    url: '/api/selectShop',
+    timeout: 200,
+    method: 'post',
+    response: ({ body, headers }) => {
+      const { shop_id } = body;
+      if (!shop_id) {
+        return resultError('The shop_id be must!');
+      }
+      if (!headers.authorization) {
+        return resultError('Invalid token!');
+      }
+      return resultSuccess({});
     },
   },
 ] as MockMethod[];
