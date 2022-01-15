@@ -8,7 +8,7 @@ const customer: AppRouteModule = {
   redirect: '/customer/report',
   meta: {
     orderNo: 3,
-    icon: 'ant-design:reconciliation-outlined',
+    icon: 'ant-design:customer-service-outlined',
     title: '客服管理',
     permission: '3',
   },

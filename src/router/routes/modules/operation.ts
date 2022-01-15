@@ -8,7 +8,7 @@ const operation: AppRouteModule = {
   redirect: '/operation/report',
   meta: {
     orderNo: 2,
-    icon: 'ant-design:reconciliation-outlined',
+    icon: 'ant-design:laptop-outlined',
     title: '运营管理',
     permission: '2',
   },
