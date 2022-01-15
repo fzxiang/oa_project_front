@@ -10,7 +10,7 @@ const operation: AppRouteModule = {
     orderNo: 2,
     icon: 'ant-design:laptop-outlined',
     title: '运营管理',
-    permission: '2',
+    menu: '2',
   },
   children: [
     {
@@ -18,7 +18,7 @@ const operation: AppRouteModule = {
       name: 'Report',
       meta: {
         title: '运营报表',
-        permission: '2-1',
+        menu: '2-1',
       },
       component: () => import('/@/views/operation/report/index.vue'),
     },

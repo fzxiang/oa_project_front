@@ -11,6 +11,10 @@ export interface RoleInfo {
   value: string;
 }
 
+export interface SelectShopParams {
+  shop_id: string;
+}
+
 /**
  * @description: Login interface return value
  */

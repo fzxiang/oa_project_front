@@ -10,7 +10,7 @@ const order: AppRouteModule = {
     orderNo: 4,
     icon: 'ant-design:reconciliation-outlined',
     title: '订单管理',
-    permission: '4',
+    menu: '4',
   },
   children: [
     {
@@ -18,7 +18,7 @@ const order: AppRouteModule = {
       name: 'Writer',
       meta: {
         title: '写手总览',
-        permission: '4-0',
+        menu: '4-0',
       },
       component: () => import('/@/views/order/writer/index.vue'),
     },
@@ -27,7 +27,7 @@ const order: AppRouteModule = {
       name: 'My',
       meta: {
         title: '我的订单',
-        permission: '4-1',
+        menu: '4-1',
       },
       component: () => import('/@/views/order/my/index.vue'),
     },

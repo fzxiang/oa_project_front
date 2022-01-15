@@ -105,6 +105,10 @@ export const usePermissionStore = defineStore({
       const roleList = toRaw(userStore.getRoleList) || [];
       const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
 
+      const { permission, selectedShop } = userStore.getUserInfo;
+      const storePermission =
+        permission.find((item) => item.shop === selectedShop) || permission[0];
+
       const routeFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route;
         const { roles } = meta || {};
@@ -114,9 +118,9 @@ export const usePermissionStore = defineStore({
 
       const routeFilterPermission = (route: AppRouteRecordRaw) => {
         const { meta } = route;
-        const { roles } = meta || {};
-        if (!roles) return true;
-        return roleList.some((role) => roles.includes(role));
+        const { menu } = meta || {};
+        if (!menu) return true;
+        return storePermission.menu.includes(menu);
       };
 
       const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {

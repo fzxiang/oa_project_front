@@ -10,7 +10,7 @@ const customer: AppRouteModule = {
     orderNo: 3,
     icon: 'ant-design:customer-service-outlined',
     title: '客服管理',
-    permission: '3',
+    menu: '3',
   },
   children: [
     {
@@ -18,7 +18,7 @@ const customer: AppRouteModule = {
       name: 'Achievement',
       meta: {
         title: '客服绩效',
-        permission: '3-0',
+        menu: '3-0',
       },
       component: () => import('/@/views/customer/achievement/index.vue'),
     },
@@ -27,7 +27,7 @@ const customer: AppRouteModule = {
       name: 'Poor',
       meta: {
         title: '差评报表',
-        permission: '3-1',
+        menu: '3-1',
       },
       component: () => import('/@/views/customer/poor/index.vue'),
     },
@@ -36,7 +36,7 @@ const customer: AppRouteModule = {
       name: 'Report',
       meta: {
         title: '客服报表',
-        permission: '3-2',
+        menu: '3-2',
       },
       component: () => import('/@/views/customer/report/index.vue'),
     },
@@ -45,7 +45,7 @@ const customer: AppRouteModule = {
       name: 'Writer',
       meta: {
         title: '写手报表',
-        permission: '3-3',
+        menu: '3-3',
       },
       component: () => import('/@/views/customer/writer/index.vue'),
     },

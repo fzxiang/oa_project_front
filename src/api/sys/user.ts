@@ -1,5 +1,10 @@
 import { defHttp } from '/@/utils/http/axios';
-import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
+import {
+  LoginParams,
+  LoginResultModel,
+  GetUserInfoModel,
+  SelectShopParams,
+} from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
 
@@ -8,6 +13,7 @@ enum Api {
   Logout = '/logout',
   GetUserInfo = '/getUserInfo',
   GetPermCode = '/getPermCode',
+  SelectShop = '/selectShop',
 }
 
 /**
@@ -38,4 +44,19 @@ export function getPermCode() {
 
 export function doLogout() {
   return defHttp.get({ url: Api.Logout });
+}
+
+/**
+ * 选择商店
+ * */
+export function selectShop(params: SelectShopParams, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post(
+    {
+      url: Api.SelectShop,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
 }

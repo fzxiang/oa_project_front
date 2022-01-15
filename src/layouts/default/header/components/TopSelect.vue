@@ -11,9 +11,10 @@
 </template>
 <script lang="ts">
   import { Select } from 'ant-design-vue';
-  import type { SelectProps } from 'ant-design-vue';
+  // import type { SelectProps } from 'ant-design-vue';
   import { defineComponent, ref, computed } from 'vue';
   import { useUserStore } from '/@/store/modules/user';
+  import { selectShop } from '/@/api/sys/user';
 
   export default defineComponent({
     components: {
@@ -27,7 +28,7 @@
       });
 
       const { permission } = userStore.getUserInfo;
-      console.log(permission, selectedShop);
+      // console.log(permission, selectedShop);
       const options = computed(() => {
         return permission.map((item) => {
           return {
@@ -42,15 +43,16 @@
       //   { value: 'tom', label: 'Tom' },
       // ]);
 
-      const handleChange = (value: string) => {
-        console.log(`selected ${value}`);
+      const handleChange = async (value: string) => {
+        await selectShop({ shop_id: value });
+        location.reload();
       };
       const filterOption = (input: string, option: any) => {
         return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
       };
       return {
         selectedShop,
-        value: ref<string | undefined>(undefined),
+        value: ref<string>(selectedShop.value),
         filterOption,
         handleChange,
         options,
