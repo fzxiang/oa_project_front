@@ -10,11 +10,14 @@
   </PageWrapper>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, onBeforeUnmount } from 'vue';
   import { PageWrapper } from '/@/components/Page';
   import { BasicForm, useForm } from '/@/components/Form';
-
   import { formSchema } from './pwd.data';
+  import { changePwd } from '/@/api/sys/user';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { useUserStore } from '/@/store/modules/user';
+
   export default defineComponent({
     name: 'ChangePassword',
     components: { BasicForm, PageWrapper },
@@ -25,14 +28,32 @@
         showActionButtonGroup: false,
         schemas: formSchema,
       });
+      const { notification } = useMessage();
+      const userStore = useUserStore();
 
       async function handleSubmit() {
         try {
           const values = await validate();
-          const { passwordOld, passwordNew } = values;
-
+          const { /*passwordOld, */ passwordNew } = values;
+          await changePwd({
+            password: passwordNew,
+          });
+          await notification.success({
+            message: '操作成功！',
+            description: `密码更改成功，3秒后将退出重新登录！`,
+            duration: 3,
+            onClick: () => {
+              userStore.logout(true);
+            },
+          });
+          const timer = setTimeout(() => {
+            userStore.logout(true);
+          }, 3000);
+          onBeforeUnmount(() => {
+            clearTimeout(timer);
+          });
           // TODO custom api
-          console.log(passwordOld, passwordNew);
+          // console.log(passwordOld, passwordNew);
           // const { router } = useRouter();
           // router.push(pageEnum.BASE_LOGIN);
         } catch (error) {}

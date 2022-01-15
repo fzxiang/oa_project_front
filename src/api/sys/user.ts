@@ -4,6 +4,7 @@ import {
   LoginResultModel,
   GetUserInfoModel,
   SelectShopParams,
+  ChangePwdParams,
 } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
@@ -14,6 +15,7 @@ enum Api {
   GetUserInfo = '/getUserInfo',
   GetPermCode = '/getPermCode',
   SelectShop = '/selectShop',
+  changePwd = '/changePwd',
 }
 
 /**
@@ -43,7 +45,7 @@ export function getPermCode() {
 }
 
 export function doLogout() {
-  return defHttp.get({ url: Api.Logout });
+  return defHttp.post({ url: Api.Logout });
 }
 
 /**
@@ -53,6 +55,21 @@ export function selectShop(params: SelectShopParams, mode: ErrorMessageMode = 'm
   return defHttp.post(
     {
       url: Api.SelectShop,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
+}
+
+/**
+ * 修改密码
+ * */
+export function changePwd(params: ChangePwdParams, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post(
+    {
+      url: Api.changePwd,
       params,
     },
     {

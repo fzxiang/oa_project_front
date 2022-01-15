@@ -3,7 +3,7 @@ import { AppRouteModule } from '/@/router/types';
 
 const shop: AppRouteModule = {
   path: '/shopManage',
-  name: 'ShopMange',
+  name: 'ShopManage',
   component: LAYOUT,
   redirect: '/shopManage/shop',
   meta: {

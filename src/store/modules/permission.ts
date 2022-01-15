@@ -121,6 +121,7 @@ export const usePermissionStore = defineStore({
         const { meta } = route;
         const { menu } = meta || {};
         if (!menu) return true;
+        // @ts-ignore
         return storePermission.menu.includes(menu);
       };
 

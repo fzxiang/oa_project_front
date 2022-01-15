@@ -40,3 +40,7 @@ export interface GetUserInfoModel {
   // 介绍
   desc?: string;
 }
+
+export interface ChangePwdParams {
+  password: string;
+}
