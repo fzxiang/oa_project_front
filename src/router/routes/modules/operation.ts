@@ -1,0 +1,28 @@
+import { LAYOUT } from '/@/router/constant';
+import { AppRouteModule } from '/@/router/types';
+
+const operation: AppRouteModule = {
+  path: '/operation',
+  name: 'Operation',
+  component: LAYOUT,
+  redirect: '/operation/report',
+  meta: {
+    orderNo: 2,
+    icon: 'ant-design:reconciliation-outlined',
+    title: '运营管理',
+    permission: '2',
+  },
+  children: [
+    {
+      path: 'report',
+      name: 'Report',
+      meta: {
+        title: '运营报表',
+        permission: '2-1',
+      },
+      component: () => import('/@/views/operation/report/index.vue'),
+    },
+  ],
+};
+
+export default operation;

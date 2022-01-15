@@ -1,0 +1,55 @@
+import { LAYOUT } from '/@/router/constant';
+import { AppRouteModule } from '/@/router/types';
+
+const customer: AppRouteModule = {
+  path: '/customer',
+  name: 'Customer',
+  component: LAYOUT,
+  redirect: '/customer/report',
+  meta: {
+    orderNo: 3,
+    icon: 'ant-design:reconciliation-outlined',
+    title: '客服管理',
+    permission: '3',
+  },
+  children: [
+    {
+      path: 'achievement',
+      name: 'Achievement',
+      meta: {
+        title: '客服绩效',
+        permission: '3-0',
+      },
+      component: () => import('/@/views/customer/achievement/index.vue'),
+    },
+    {
+      path: 'poor',
+      name: 'Poor',
+      meta: {
+        title: '差评报表',
+        permission: '3-1',
+      },
+      component: () => import('/@/views/customer/poor/index.vue'),
+    },
+    {
+      path: 'report',
+      name: 'Report',
+      meta: {
+        title: '客服报表',
+        permission: '3-2',
+      },
+      component: () => import('/@/views/customer/report/index.vue'),
+    },
+    {
+      path: 'writer',
+      name: 'Writer',
+      meta: {
+        title: '写手报表',
+        permission: '3-3',
+      },
+      component: () => import('/@/views/customer/writer/index.vue'),
+    },
+  ],
+};
+
+export default customer;
