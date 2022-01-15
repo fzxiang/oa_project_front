@@ -11,7 +11,7 @@ export function createFakeUserList() {
       desc: 'manager',
       password: '123456',
       token: 'fakeToken1',
-      seletedShop: '2',
+      selectedShop: '2',
       // homePath: '/dashboard/analysis',
       permission: [
         {
