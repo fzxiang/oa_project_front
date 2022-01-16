@@ -65,7 +65,7 @@ export default {
     signUpFormTitle: '注册',
     forgetFormTitle: '重置密码',
 
-    signInTitle: '欢迎来到泡游网络游戏后台管理系统',
+    signInTitle: '欢迎来到OA办公管理系统',
     signInDesc: '高效办公，高效生活！',
     policy: '我同意xxx隐私政策',
     scanSign: `扫码后点击"确认"，即可完成登录`,

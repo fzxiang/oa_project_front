@@ -18,7 +18,7 @@ const operation: AppRouteModule = {
       name: 'Report',
       meta: {
         title: '运营报表',
-        menu: '2-1',
+        menu: '2-0',
       },
       component: () => import('/@/views/operation/report/index.vue'),
     },
