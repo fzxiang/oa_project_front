@@ -16,7 +16,7 @@ export function createFakeUserList() {
       permission: [
         {
           shop: '1',
-          shopName: '神功',
+          shopName: '店铺1号',
           menu: [
             '1',
             '1-0',
@@ -34,7 +34,7 @@ export function createFakeUserList() {
         },
         {
           shop: '2',
-          shopName: '仙命诀',
+          shopName: '店铺2号',
           menu: ['2000', '2000-2'],
         },
       ],
