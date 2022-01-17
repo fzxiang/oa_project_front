@@ -10,7 +10,7 @@ export function getBasicColumns(): BasicColumn[] {
       width: 200,
     },
     {
-      title: '姓名',
+      title: '店铺名称',
       dataIndex: 'name',
       width: 150,
       filters: [
@@ -19,26 +19,27 @@ export function getBasicColumns(): BasicColumn[] {
       ],
     },
     {
-      title: '地址',
+      title: '公司名',
       dataIndex: 'address',
     },
     {
-      title: '编号',
+      title: '备注',
       dataIndex: 'no',
       width: 150,
       sorter: true,
       defaultHidden: true,
     },
     {
-      title: '开始时间',
+      title: '创建时间',
       width: 150,
       sorter: true,
       dataIndex: 'beginTime',
     },
     {
-      title: '结束时间',
+      title: '更新时间',
       width: 150,
       sorter: true,
+      defaultHidden: true,
       dataIndex: 'endTime',
     },
   ];
@@ -241,7 +242,6 @@ export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [
-      ...getAdvanceSchema(5),
       {
         field: `field11`,
         label: `Slot示例`,

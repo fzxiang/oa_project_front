@@ -12,7 +12,6 @@ const getRouteNames = (array: any[]) =>
     getRouteNames(item.children || []);
   });
 getRouteNames(basicRoutes);
-console.log(basicRoutes);
 
 // app router
 export const router = createRouter({
