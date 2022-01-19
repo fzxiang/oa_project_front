@@ -33,7 +33,7 @@
         isUpdate.value = !!data?.isUpdate;
 
         if (unref(isUpdate)) {
-          rowId.value = data.record.id;
+          rowId.value = data.record.shop_id;
           setFieldsValue({
             ...data.record,
           });

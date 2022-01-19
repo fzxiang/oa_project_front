@@ -96,7 +96,6 @@
       }
 
       function handleEdit(record: Recordable) {
-        console.log(record);
         openModal(true, {
           record,
           isUpdate: true,
@@ -104,7 +103,6 @@
       }
 
       async function handleDelete(record: Recordable) {
-        console.log(record);
         const { shop_id } = record;
         await deleteShopApi({ shop_id });
         await handleGetShopList();
@@ -115,8 +113,8 @@
         if (isUpdate) {
           // 演示不刷新表格直接更新内部数据。
           // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
-          const result = updateTableDataRecord(values.id, values);
-          console.log(result);
+          // console.log(values)
+          updateTableDataRecord(values.id, values);
         } else {
           handleGetShopList().then(() => {});
         }
