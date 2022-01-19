@@ -7,9 +7,33 @@ import { FormSchema } from '/@/components/Table';
 
 export const columns: BasicColumn[] = [
   {
+    title: '角色ID',
+    dataIndex: 'id',
+    width: 120,
+  },
+  {
     title: '角色名称',
-    dataIndex: 'roleName',
+    dataIndex: 'role_name',
     width: 200,
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'created_at',
+    width: 250,
+  },
+  {
+    title: '更新时间',
+    dataIndex: 'updated_at',
+    width: 250,
+  },
+  {
+    title: '备注',
+    dataIndex: 'remarks',
+  },
+  {
+    title: '菜单权限',
+    dataIndex: 'menu',
+    ifShow: false,
   },
   // {
   //   title: '角色值',
@@ -53,43 +77,51 @@ export const columns: BasicColumn[] = [
   //     });
   //   },
   // },
-  {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    width: 180,
-  },
-  {
-    title: '备注',
-    dataIndex: 'remark',
-  },
 ];
 
 export const searchFormSchema: FormSchema[] = [
   {
-    field: 'roleNme',
+    field: 'role_name',
     label: '角色名称',
     component: 'Input',
     colProps: { span: 8 },
   },
-  {
-    field: 'status',
-    label: '状态',
-    component: 'Select',
-    componentProps: {
-      options: [
-        { label: '启用', value: '0' },
-        { label: '停用', value: '1' },
-      ],
-    },
-    colProps: { span: 8 },
-  },
+  // {
+  //   field: 'status',
+  //   label: '状态',
+  //   component: 'Select',
+  //   componentProps: {
+  //     options: [
+  //       { label: '启用', value: '0' },
+  //       { label: '停用', value: '1' },
+  //     ],
+  //   },
+  //   colProps: { span: 8 },
+  // },
 ];
 
 export const formSchema: FormSchema[] = [
   {
-    field: 'roleName',
+    field: 'id',
+    label: '角色ID',
+    component: 'Input',
+    show: false,
+  },
+  {
+    field: 'role_name',
     label: '角色名称',
     required: true,
+    component: 'Input',
+  },
+  {
+    label: '备注',
+    field: 'remarks',
+    component: 'InputTextArea',
+  },
+  {
+    label: ' ',
+    field: 'menu',
+    slot: 'menu',
     component: 'Input',
   },
   // {
@@ -110,15 +142,4 @@ export const formSchema: FormSchema[] = [
   //     ],
   //   },
   // },
-  {
-    label: '备注',
-    field: 'remark',
-    component: 'InputTextArea',
-  },
-  {
-    label: ' ',
-    field: 'menu',
-    slot: 'menu',
-    component: 'Input',
-  },
 ];

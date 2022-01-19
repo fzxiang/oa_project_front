@@ -43,7 +43,7 @@
     components: { TableAction, ShopModal, BasicTable },
     setup() {
       const [registerModal, { openModal }] = useModal();
-      const checkedKeys = ref<Array<string | number>>([]);
+      // const checkedKeys = ref<Array<string | number>>([]);
       const dataSource = reactive<any>({
         data: [],
         origin: [],
@@ -137,7 +137,7 @@
         handleCreate,
         handleSuccess,
         registerTable,
-        checkedKeys,
+        // checkedKeys,
         handleEdit,
         handleDelete,
       };

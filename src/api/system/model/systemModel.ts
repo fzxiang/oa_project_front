@@ -51,6 +51,13 @@ export interface MenuListItem {
   permission: string;
 }
 
+export interface AddRoleParams {
+  id?: string | number;
+  remarks: string;
+  roleName: string;
+  menu: [string | number];
+}
+
 export interface RoleListItem {
   id: string;
   roleName: string;

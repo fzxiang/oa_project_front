@@ -8,7 +8,7 @@ import { t } from '/@/hooks/web/useI18n';
 
 const modules = import.meta.globEager('./modules/*.ts');
 
-const routeModuleList: AppRouteModule[] = [];
+export const routeModuleList: AppRouteModule[] = [];
 
 Object.keys(modules).forEach((key) => {
   const mod = modules[key].default || {};

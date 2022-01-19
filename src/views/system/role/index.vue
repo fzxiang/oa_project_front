@@ -27,10 +27,10 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, reactive, ref, computed, onMounted } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getRoleListByPage } from '/@/api/system/system';
+  import { deleteRoleApi, getRoleListByPage } from '/@/api/system/system';
 
   import { useDrawer } from '/@/components/Drawer';
   import RoleDrawer from './RoleDrawer.vue';
@@ -42,9 +42,17 @@
     components: { BasicTable, RoleDrawer, TableAction },
     setup() {
       const [registerDrawer, { openDrawer }] = useDrawer();
-      const [registerTable, { reload }] = useTable({
+      const loading = ref<boolean>(false);
+      const dataSource = reactive<any>({
+        data: [],
+        origin: [],
+      });
+      const [registerTable, { updateTableDataRecord }] = useTable({
         title: '角色列表',
-        api: getRoleListByPage,
+        // api: getRoleListByPage,
+        loading: loading,
+        dataSource: computed(() => dataSource.data),
+        handleSearchInfoFn,
         columns,
         formConfig: {
           labelWidth: 120,
@@ -76,14 +84,48 @@
         });
       }
 
-      function handleDelete(record: Recordable) {
-        console.log(record);
+      function handleSearchInfoFn(params) {
+        console.log('handleSearchInfoFn', params);
+        if (params.shop_id) {
+          const filter = dataSource.origin.filter((item) => {
+            return item.role_name === params.role_name;
+          });
+          dataSource.data = [...filter];
+        } else {
+          handleGetList().then(() => {});
+        }
+        return params;
       }
 
-      function handleSuccess() {
-        reload();
+      async function handleDelete(record: Recordable) {
+        const params = {
+          id: record.id,
+        };
+        await deleteRoleApi(params);
+        handleGetList().then(() => {});
       }
 
+      async function handleGetList() {
+        loading.value = true;
+        const res = await getRoleListByPage();
+        dataSource.data = res;
+        dataSource.origin = res;
+        loading.value = false;
+      }
+
+      function handleSuccess({ isUpdate, values }) {
+        if (isUpdate) {
+          // 演示不刷新表格直接更新内部数据。
+          // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
+          // console.log(values)
+          updateTableDataRecord(values.id, values);
+        } else {
+          handleGetList().then(() => {});
+        }
+      }
+      onMounted(() => {
+        handleGetList().then(() => {});
+      });
       return {
         registerTable,
         registerDrawer,
