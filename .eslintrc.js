@@ -38,9 +38,21 @@ module.exports = defineConfig({
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    'vue/no-unused-components': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
-    'no-unused-vars': 'off',
+    'vue/no-unused-components': 'warn',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_|^[A-Z]',
+        varsIgnorePattern: '^_|^[A-Z]',
+      },
+    ],
+    'no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_|^[A-Z]',
+        varsIgnorePattern: '^_|^[A-Z]',
+      },
+    ],
     'space-before-function-paren': 'off',
 
     'vue/attributes-order': 'off',
