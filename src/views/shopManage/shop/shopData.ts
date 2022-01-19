@@ -1,6 +1,7 @@
 // import { getAllRoleList /*isAccountExist*/ } from '/@/api/demo/system';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
+import { shopListApi } from '/@/api/shopManage/shop';
 
 export const columns: BasicColumn[] = [
   {
@@ -43,16 +44,34 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    field: 'shopName',
     label: '店铺名称',
-    component: 'Input',
+    field: 'shop_id',
+    component: 'ApiSelect',
+    componentProps: {
+      api: shopListApi,
+      labelField: 'shop_name',
+      valueField: 'shop_id',
+      showSearch: true,
+    },
     colProps: { span: 8 },
   },
+  // {
+  //   field: 'shop_name',
+  //   label: '店铺名称',
+  //   component: 'Input',
+  //   colProps: { span: 8 },
+  // },
 ];
 
 export const formSchemas: FormSchema[] = [
   {
-    field: 'shopName',
+    field: 'shop_id',
+    label: 'ID',
+    component: 'Input',
+    show: false,
+  },
+  {
+    field: 'shop_name',
     label: '店铺名称',
     component: 'Input',
     helpMessage: ['请输入新的店铺名称（不重复）'],
@@ -75,7 +94,7 @@ export const formSchemas: FormSchema[] = [
     ],
   },
   {
-    field: 'companyName',
+    field: 'company_name',
     label: '公司名称',
     component: 'Input',
     required: true,

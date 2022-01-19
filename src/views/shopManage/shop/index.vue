@@ -1,23 +1,7 @@
 <template>
   <div>
-    <BasicTable
-      @register="registerTable"
-      :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-    >
+    <BasicTable @register="registerTable">
       <!--      <template #form-custom> custom-slot </template>-->
-      <template #headerTop>
-        <a-alert type="info" show-icon>
-          <template #message>
-            <template v-if="checkedKeys.length > 0">
-              <span>已选中{{ checkedKeys.length }}条记录(可跨页)</span>
-              <a-button type="link" @click="checkedKeys = []" size="small">清空</a-button>
-            </template>
-            <template v-else>
-              <span>未选中任何项目</span>
-            </template>
-          </template>
-        </a-alert>
-      </template>
       <template #toolbar>
         <a-button type="primary" @click="handleCreate">新增店铺</a-button>
       </template>
@@ -35,7 +19,7 @@
               tooltip: '您确定要删除此商店吗？清谨慎操作',
               popConfirm: {
                 title: '是否确认删除',
-                // confirm: handleDelete.bind(null, record),
+                confirm: handleDelete.bind(null, record),
               },
             },
           ]"
@@ -46,34 +30,43 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { defineComponent, onMounted, reactive, ref } from 'vue';
+  import { BasicTable, TableAction, useTable } from '/@/components/Table';
   import { columns, searchFormSchema } from './shopData';
-  import { Alert } from 'ant-design-vue';
 
-  import { shopListApi } from '/@/api/shopManage/shop';
+  import { deleteShopApi, shopListApi } from '/@/api/shopManage/shop';
   import { useModal } from '/@/components/Modal';
   import ShopModal from './ShopModal.vue';
+  import { computed } from '@vue/runtime-core';
 
   export default defineComponent({
-    components: { TableAction, ShopModal, BasicTable, AAlert: Alert },
+    components: { TableAction, ShopModal, BasicTable },
     setup() {
       const [registerModal, { openModal }] = useModal();
       const checkedKeys = ref<Array<string | number>>([]);
-      const [registerTable, { reload, updateTableDataRecord }] = useTable({
+      const dataSource = reactive<any>({
+        data: [],
+        origin: [],
+      });
+      const loading = ref<boolean>(false);
+
+      const [registerTable, { updateTableDataRecord }] = useTable({
         title: '店铺列表',
-        api: shopListApi,
+        // api: shopListApi,
         columns: columns,
+        dataSource: computed(() => dataSource.data),
         useSearchForm: true,
         formConfig: {
           labelWidth: 120,
           schemas: searchFormSchema,
           autoSubmitOnEnter: true,
         },
+        loading: loading,
         showTableSetting: true,
-        tableSetting: { fullScreen: true },
+        tableSetting: { fullScreen: true, redo: false },
         showIndexColumn: false,
-        rowKey: 'id',
+        rowKey: 'shop_id',
+        handleSearchInfoFn,
         actionColumn: {
           width: 120,
           title: '操作',
@@ -81,6 +74,19 @@
           slots: { customRender: 'action' },
         },
       });
+
+      function handleSearchInfoFn(params) {
+        console.log('handleSearchInfoFn', params);
+        if (params.shop_id) {
+          const filter = dataSource.origin.filter((item) => {
+            return item.shop_id === params.shop_id;
+          });
+          dataSource.data = [...filter];
+        } else {
+          handleGetShopList().then(() => {});
+        }
+        return params;
+      }
 
       function handleCreate() {
         console.log('新增店铺');
@@ -97,13 +103,12 @@
         });
       }
 
-      function handleDelete(record: Recordable) {
+      async function handleDelete(record: Recordable) {
         console.log(record);
-      }
-
-      function onSelectChange(selectedRowKeys: (string | number)[]) {
-        console.log(selectedRowKeys);
-        checkedKeys.value = selectedRowKeys;
+        const { shop_id } = record;
+        await deleteShopApi({ shop_id });
+        await handleGetShopList();
+        handleGetShopList().then(() => {});
       }
 
       function handleSuccess({ isUpdate, values }) {
@@ -113,17 +118,28 @@
           const result = updateTableDataRecord(values.id, values);
           console.log(result);
         } else {
-          reload();
+          handleGetShopList().then(() => {});
         }
       }
 
+      async function handleGetShopList() {
+        loading.value = true;
+        const res = await shopListApi();
+        dataSource.data = res;
+        dataSource.origin = res;
+        loading.value = false;
+      }
+
+      onMounted(() => {
+        handleGetShopList().then(() => {});
+      });
       return {
+        dataSource,
         registerModal,
         handleCreate,
         handleSuccess,
         registerTable,
         checkedKeys,
-        onSelectChange,
         handleEdit,
         handleDelete,
       };

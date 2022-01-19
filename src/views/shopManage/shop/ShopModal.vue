@@ -8,7 +8,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchemas } from './shopData';
-  import { addShopApi } from '/@/api/shopManage/shop';
+  import { addShopApi, updateShopApi } from '/@/api/shopManage/shop';
 
   export default defineComponent({
     name: 'ShopModal',
@@ -48,7 +48,11 @@
           setModalProps({ confirmLoading: true });
           // TODO custom api
           console.log(values);
-          await addShopApi(values);
+          if (unref(isUpdate)) {
+            await updateShopApi(values);
+          } else {
+            await addShopApi(values);
+          }
           closeModal();
           emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
         } finally {

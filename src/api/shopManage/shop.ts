@@ -1,5 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
-import { ShopParams, ShopListGetResultModel, AddShopParams } from './model/shopModel';
+import { ShopListGetResultModel, AddShopParams } from './model/shopModel';
 
 enum Api {
   SHOP_LIST = '/getShops',
@@ -12,9 +12,14 @@ enum Api {
  * @description: Get sample list value
  */
 
-export const shopListApi = (params: ShopParams) =>
+export const shopListApi = () =>
   defHttp.get<ShopListGetResultModel>({
     url: Api.SHOP_LIST,
+  });
+
+export const addShopApi = (params: AddShopParams) =>
+  defHttp.post({
+    url: Api.ADD_SHOP,
     params,
     // headers: {
     //   // @ts-ignore
@@ -22,9 +27,9 @@ export const shopListApi = (params: ShopParams) =>
     // },
   });
 
-export const addShopApi = (params: AddShopParams) =>
+export const updateShopApi = (params: AddShopParams) =>
   defHttp.post({
-    url: Api.ADD_SHOP,
+    url: Api.UPDATE_SHOP,
     params,
     // headers: {
     //   // @ts-ignore
