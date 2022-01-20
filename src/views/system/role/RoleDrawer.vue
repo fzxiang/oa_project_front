@@ -4,7 +4,7 @@
     @register="registerDrawer"
     showFooter
     :title="getTitle"
-    width="500px"
+    width="508px"
     @ok="handleSubmit"
   >
     <BasicForm @register="registerForm">
@@ -12,7 +12,7 @@
         <BasicTree
           v-model:value="model[field]"
           :treeData="treeData"
-          :fieldNames="{ title: 'menuName', key: 'id' }"
+          :fieldNames="{ title: 'title', key: 'id' }"
           checkable
           toolbar
           title="菜单分配"
@@ -67,7 +67,7 @@
         return data.map((item) => {
           return {
             id: item.meta.menu,
-            menuName: item.meta.title,
+            title: item.meta.title,
             children: item.children ? getMenuHandle(item.children) : [],
           };
         });
@@ -83,7 +83,7 @@
           };
           await AddEditRoleApi(params);
           closeDrawer();
-          emit('success');
+          emit('success', { isUpdate: unref(isUpdate), values: params });
         } finally {
           setDrawerProps({ confirmLoading: false });
         }

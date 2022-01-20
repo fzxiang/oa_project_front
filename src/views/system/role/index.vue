@@ -114,14 +114,16 @@
       }
 
       function handleSuccess({ isUpdate, values }) {
-        if (isUpdate) {
-          // 演示不刷新表格直接更新内部数据。
-          // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
-          // console.log(values)
-          updateTableDataRecord(values.id, values);
-        } else {
-          handleGetList().then(() => {});
-        }
+        handleGetList().then(() => {});
+        //
+        // if (isUpdate) {
+        //   // 演示不刷新表格直接更新内部数据。
+        //   // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
+        //   // console.log(values)
+        //   updateTableDataRecord(+values.id, values);
+        // } else {
+        //   handleGetList().then(() => {});
+        // }
       }
       onMounted(() => {
         handleGetList().then(() => {});

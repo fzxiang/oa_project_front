@@ -23,6 +23,7 @@ enum Api {
   GetAllRoleList = '/system/getAllRoleList',
   AddRole = '/addRole',
   DeleteRole = '/delRole',
+  UpdateRolePower = '/updateRolePower',
 }
 
 export const getAccountList = (params: AccountParams) =>
@@ -48,7 +49,7 @@ export const isAccountExist = (account: string) =>
 
 export const AddEditRoleApi = (params: AddRoleParams) =>
   defHttp.post(
-    { url: params.id ? Api.DeleteRole : Api.AddRole, params },
+    { url: params.id ? Api.UpdateRolePower : Api.AddRole, params },
     { errorMessageMode: 'none' },
   );
 

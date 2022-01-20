@@ -17,6 +17,12 @@ export const columns: BasicColumn[] = [
     width: 200,
   },
   {
+    title: '角色值',
+    dataIndex: 'role',
+    ifShow: false,
+    width: 200,
+  },
+  {
     title: '创建时间',
     dataIndex: 'created_at',
     width: 250,
@@ -119,17 +125,28 @@ export const formSchema: FormSchema[] = [
     component: 'InputTextArea',
   },
   {
+    field: 'role',
+    label: '角色值',
+    component: 'RadioButtonGroup',
+    defaultValue: '1',
+    componentProps: {
+      options: [
+        { label: '超级管理员', value: '1' },
+        { label: '管理员', value: '2' },
+        { label: '客服主管', value: '3' },
+        { label: '客服', value: '4' },
+        { label: '用户', value: '5' },
+      ],
+    },
+  },
+  {
     label: ' ',
     field: 'menu',
     slot: 'menu',
     component: 'Input',
+    defaultValue: [],
   },
-  // {
-  //   field: 'roleValue',
-  //   label: '角色值',
-  //   required: true,
-  //   component: 'Input',
-  // },
+
   // {
   //   field: 'status',
   //   label: '状态',
