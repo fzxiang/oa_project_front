@@ -1,7 +1,7 @@
 // import { getAllRoleList /*isAccountExist*/ } from '/@/api/demo/system';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-import { shopListApi } from '/@/api/shopManage/shop';
+import { searchShop, shopListApi } from '/@/api/shopManage/shop';
 
 export const columns: BasicColumn[] = [
   {
@@ -79,6 +79,19 @@ export const formSchemas: FormSchema[] = [
       {
         required: true,
         message: '请输入店铺名称',
+      },
+      {
+        validator(_, value) {
+          return new Promise((resolve, reject) => {
+            searchShop({ shop_name: value })
+              .then(() => {
+                reject('已存在改店铺名！');
+              })
+              .catch(() => {
+                resolve();
+              });
+          });
+        },
       },
       // {
       //   validator(_, value) {
