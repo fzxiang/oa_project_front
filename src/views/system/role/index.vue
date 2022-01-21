@@ -30,7 +30,7 @@
   import { defineComponent, reactive, ref, computed, onMounted } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { deleteRoleApi, getRoleListByPage } from '/@/api/system/system';
+  import { deleteRoleApi, getAllRoleApi } from '/@/api/system/system';
 
   import { useDrawer } from '/@/components/Drawer';
   import RoleDrawer from './RoleDrawer.vue';
@@ -47,9 +47,13 @@
         data: [],
         origin: [],
       });
-      const [registerTable, { updateTableDataRecord }] = useTable({
+      const [
+        registerTable,
+        {
+          /*updateTableDataRecord*/
+        },
+      ] = useTable({
         title: '角色列表',
-        // api: getRoleListByPage,
         loading: loading,
         dataSource: computed(() => dataSource.data),
         handleSearchInfoFn,
@@ -107,13 +111,17 @@
 
       async function handleGetList() {
         loading.value = true;
-        const res = await getRoleListByPage();
+        const res = await getAllRoleApi();
         dataSource.data = res;
         dataSource.origin = res;
         loading.value = false;
       }
 
-      function handleSuccess({ isUpdate, values }) {
+      function handleSuccess(
+        {
+          /*isUpdate, values*/
+        },
+      ) {
         handleGetList().then(() => {});
         //
         // if (isUpdate) {

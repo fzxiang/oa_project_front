@@ -10,6 +10,8 @@ import {
   RolePageListGetResultModel,
   RoleListGetResultModel,
   AddRoleParams,
+  UserListGetResultModel,
+  AddEditUserParams,
 } from './model/systemModel';
 import { defHttp } from '/@/utils/http/axios';
 
@@ -19,11 +21,18 @@ enum Api {
   DeptList = '/system/getDeptList',
   setRoleStatus = '/system/setRoleStatus',
   MenuList = '/system/getMenuList',
-  RolePageList = '/getRoleList',
+  RolePageList = '/system/getRoleListByPage',
   GetAllRoleList = '/system/getAllRoleList',
-  AddRole = '/addRole',
-  DeleteRole = '/delRole',
-  UpdateRolePower = '/updateRolePower',
+  GET_AUL_ROLE = '/getRoleList',
+  ADD_ROLE = '/addRole',
+  DELETE_ROLE = '/delRole',
+  UPDATE_ROLE_POWER = '/updateRolePower',
+  GET_ALL_USER = '/getUsers',
+  ADD_USER = '/addUser',
+  UPDATE_USER = '/updateUser',
+  INIT_PWD = '/initPwd',
+  DELETE_USER = '/delUser',
+  UPDATE_USER_POWER = '/updatePower',
 }
 
 export const getAccountList = (params: AccountParams) =>
@@ -47,11 +56,20 @@ export const setRoleStatus = (id: number, status: string) =>
 export const isAccountExist = (account: string) =>
   defHttp.post({ url: Api.IsAccountExist, params: { account } }, { errorMessageMode: 'none' });
 
+// 业务
+export const getAllRoleApi = () =>
+  defHttp.get<RolePageListGetResultModel>({ url: Api.GET_AUL_ROLE });
+
 export const AddEditRoleApi = (params: AddRoleParams) =>
-  defHttp.post(
-    { url: params.id ? Api.UpdateRolePower : Api.AddRole, params },
-    { errorMessageMode: 'none' },
-  );
+  defHttp.post({ url: params.id ? Api.UPDATE_ROLE_POWER : Api.ADD_ROLE, params });
 
 export const deleteRoleApi = (params: { id: string }) =>
-  defHttp.post({ url: Api.DeleteRole, params }, { errorMessageMode: 'none' });
+  defHttp.post({ url: Api.DELETE_ROLE, params }, { errorMessageMode: 'none' });
+
+export const getAllUserApi = () => defHttp.get<UserListGetResultModel>({ url: Api.GET_ALL_USER });
+
+export const deleteUserApi = (params: { uId: string }) =>
+  defHttp.post({ url: Api.DELETE_USER, params });
+
+export const AddEditUserApi = (params: AddEditUserParams) =>
+  defHttp.post({ url: params.id ? Api.UPDATE_USER : Api.ADD_USER, params });

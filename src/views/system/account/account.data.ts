@@ -4,24 +4,19 @@ import { FormSchema } from '/@/components/Table';
 
 export const columns: BasicColumn[] = [
   {
+    title: 'id',
+    dataIndex: 'user_id',
+    width: 80,
+  },
+  {
     title: '用户名',
-    dataIndex: 'account',
-    width: 120,
+    dataIndex: 'username',
+    width: 200,
   },
   {
     title: '昵称',
     dataIndex: 'nickname',
-    width: 120,
-  },
-  /*{
-    title: '邮箱',
-    dataIndex: 'email',
-    width: 120,
-  },*/
-  {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    width: 180,
+    width: 200,
   },
   {
     title: '角色',
@@ -29,18 +24,27 @@ export const columns: BasicColumn[] = [
     width: 200,
   },
   {
-    title: '备注',
-    dataIndex: 'remark',
+    title: '创建时间',
+    dataIndex: 'created_at',
   },
+  {
+    title: '更新时间',
+    dataIndex: 'updated_at',
+  },
+  /*{
+  title: '邮箱',
+  dataIndex: 'email',
+  width: 120,
+},*/
 ];
 
 export const searchFormSchema: FormSchema[] = [
-  {
-    field: 'account',
-    label: '用户名',
-    component: 'Input',
-    colProps: { span: 8 },
-  },
+  // {
+  //   field: 'username',
+  //   label: '用户名',
+  //   component: 'Input',
+  //   colProps: { span: 8 },
+  // },
   {
     field: 'nickname',
     label: '昵称',
@@ -74,21 +78,20 @@ export const accountFormSchema: FormSchema[] = [
     ],
   },
   {
+    field: 'user_id',
+    label: 'id',
+    component: 'Input',
+    ifShow: false,
+  },
+  {
     field: 'nickname',
     label: '昵称',
     component: 'Input',
     required: true,
   },
   {
-    field: 'password',
-    label: '密码',
-    component: 'InputPassword',
-    required: true,
-    // ifShow: false,
-  },
-  {
     label: '角色',
-    field: 'role',
+    field: 'role_id',
     component: 'ApiSelect',
     componentProps: {
       api: getAllRoleList,

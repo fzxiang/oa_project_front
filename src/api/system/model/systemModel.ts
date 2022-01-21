@@ -58,6 +58,13 @@ export interface AddRoleParams {
   menu: [string | number];
 }
 
+export interface AddEditUserParams {
+  id?: number;
+  remarks: string;
+  roleName: string;
+  menu: [string | number];
+}
+
 export interface RoleListItem {
   id: string;
   roleName: string;
@@ -65,6 +72,23 @@ export interface RoleListItem {
   status: number;
   orderNo: string;
   createTime: string;
+}
+
+export interface UserListItem {
+  user_id: number;
+  role_id: number;
+  shop_id: number;
+  nickname: string;
+  updated_at: string;
+  created_at: string;
+}
+export interface AddEditUserParams {
+  user_id: number;
+  role_id: number;
+  shop_id: number;
+  nickname: string;
+  updated_at: string;
+  created_at: string;
 }
 
 /**
@@ -79,3 +103,5 @@ export type MenuListGetResultModel = BasicFetchResult<MenuListItem>;
 export type RolePageListGetResultModel = BasicFetchResult<RoleListItem>;
 
 export type RoleListGetResultModel = RoleListItem[];
+
+export type UserListGetResultModel = BasicFetchResult<UserListItem>;
