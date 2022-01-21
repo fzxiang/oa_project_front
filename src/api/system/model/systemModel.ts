@@ -59,10 +59,10 @@ export interface AddRoleParams {
 }
 
 export interface AddEditUserParams {
-  id?: number;
-  remarks: string;
-  roleName: string;
-  menu: [string | number];
+  uId?: number;
+  username: string;
+  nickname: string;
+  role_id: number;
 }
 
 export interface RoleListItem {
@@ -75,14 +75,6 @@ export interface RoleListItem {
 }
 
 export interface UserListItem {
-  user_id: number;
-  role_id: number;
-  shop_id: number;
-  nickname: string;
-  updated_at: string;
-  created_at: string;
-}
-export interface AddEditUserParams {
   user_id: number;
   role_id: number;
   shop_id: number;

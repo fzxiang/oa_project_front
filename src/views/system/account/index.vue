@@ -19,7 +19,7 @@
               onClick: handleEdit.bind(null, record),
             },
             {
-              icon: 'clarity:note-edit-line',
+              icon: 'ant-design:safety-certificate-outline',
               tooltip: '权限',
               // onClick: handleEdit.bind(null, record),
             },
@@ -132,7 +132,11 @@
         return params;
       }
 
-      function handleSuccess({ isUpdate, values }) {
+      function handleSuccess(
+        {
+          /*isUpdate, values*/
+        },
+      ) {
         handleGetList().then(() => {});
 
         /* if (isUpdate) {

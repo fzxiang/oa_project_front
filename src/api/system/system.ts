@@ -72,4 +72,4 @@ export const deleteUserApi = (params: { uId: string }) =>
   defHttp.post({ url: Api.DELETE_USER, params });
 
 export const AddEditUserApi = (params: AddEditUserParams) =>
-  defHttp.post({ url: params.id ? Api.UPDATE_USER : Api.ADD_USER, params });
+  defHttp.post({ url: params.uId ? Api.UPDATE_USER : Api.ADD_USER, params });

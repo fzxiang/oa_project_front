@@ -1,4 +1,4 @@
-import { getAllRoleList /*isAccountExist*/ } from '/@/api/system/system';
+import { getAllRoleApi /*isAccountExist*/ } from '/@/api/system/system';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 
@@ -20,8 +20,14 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '角色',
-    dataIndex: 'role',
+    dataIndex: 'role_name',
     width: 200,
+  },
+  {
+    title: '角色ID',
+    dataIndex: 'role_id',
+    width: 200,
+    ifShow: false,
   },
   {
     title: '创建时间',
@@ -31,11 +37,6 @@ export const columns: BasicColumn[] = [
     title: '更新时间',
     dataIndex: 'updated_at',
   },
-  /*{
-  title: '邮箱',
-  dataIndex: 'email',
-  width: 120,
-},*/
 ];
 
 export const searchFormSchema: FormSchema[] = [
@@ -94,10 +95,16 @@ export const accountFormSchema: FormSchema[] = [
     field: 'role_id',
     component: 'ApiSelect',
     componentProps: {
-      api: getAllRoleList,
-      labelField: 'roleName',
-      valueField: 'roleValue',
+      api: getAllRoleApi,
+      labelField: 'role_name',
+      valueField: 'id',
     },
+    required: true,
+  },
+  {
+    label: '密码',
+    field: 'password',
+    component: 'InputPassword',
     required: true,
   },
   // {
