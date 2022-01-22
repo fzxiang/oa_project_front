@@ -22,7 +22,7 @@
               icon: 'ant-design:safety-certificate-outline',
               tooltip: '权限',
               color: 'success',
-              // onClick: handleEdit.bind(null, record),
+              onClick: handlePermission.bind(null, record),
             },
             {
               icon: 'ant-design:key-outlined',
@@ -47,6 +47,7 @@
       </template>
     </BasicTable>
     <AccountModal @register="registerModal" @success="handleSuccess" />
+    <AccountDrawer @register="registerDrawer" @success="handlePermission" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -56,17 +57,20 @@
   import { deleteUserApi, getAllUserApi, resetPasswordApi } from '/@/api/system/system';
   import { PageWrapper } from '/@/components/Page';
   import { useModal } from '/@/components/Modal';
+  import { useDrawer } from '/@/components/Drawer';
   import AccountModal from './AccountModal.vue';
 
   import { columns, searchFormSchema } from './account.data';
   import { useGo } from '/@/hooks/web/usePage';
+  import AccountDrawer from './AccountDrawer.vue';
 
   export default defineComponent({
     name: 'AccountManagement',
-    components: { BasicTable, PageWrapper, /*DeptTree,*/ AccountModal, TableAction },
+    components: { BasicTable, PageWrapper, /*DeptTree,*/ AccountModal, TableAction, AccountDrawer },
     setup() {
       const go = useGo();
       const [registerModal, { openModal }] = useModal();
+      const [registerDrawer, { openDrawer }] = useDrawer();
       const loading = ref<boolean>(false);
       const dataSource = reactive<any>({
         data: [],
@@ -161,6 +165,9 @@
       //   searchInfo.deptId = deptId;
       //   reload();
       // }
+      function handlePermission(record) {
+        openDrawer(true, record);
+      }
 
       async function handleRestAccount(record) {
         loading.value = true;
@@ -178,9 +185,11 @@
       }
 
       return {
+        registerDrawer,
         handleRestAccount,
         registerTable,
         registerModal,
+        handlePermission,
         handleSearchInfoFn,
         handleCreate,
         handleEdit,

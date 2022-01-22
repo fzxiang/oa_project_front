@@ -77,3 +77,7 @@ export const AddEditUserApi = (params: AddEditUserParams) =>
 export const resetPasswordApi = (params) => {
   defHttp.post({ url: Api.INIT_PWD, params }, { successMessageMode: 'notification' });
 };
+
+export const updateUserPowerApi = (params) => {
+  defHttp.post({ url: Api.UPDATE_USER_POWER, params }, { successMessageMode: 'notification' });
+};
