@@ -33,6 +33,7 @@ enum Api {
   INIT_PWD = '/initPwd',
   DELETE_USER = '/delUser',
   UPDATE_USER_POWER = '/updatePower',
+  GET_USER_POWER = '/getPowerOfUser',
 }
 
 export const getAccountList = (params: AccountParams) =>
@@ -74,10 +75,11 @@ export const deleteUserApi = (params: { uId: string }) =>
 export const AddEditUserApi = (params: AddEditUserParams) =>
   defHttp.post({ url: params.user_id ? Api.UPDATE_USER : Api.ADD_USER, params });
 
-export const resetPasswordApi = (params) => {
+export const resetPasswordApi = (params) =>
   defHttp.post({ url: Api.INIT_PWD, params }, { successMessageMode: 'notification' });
-};
 
-export const updateUserPowerApi = (params) => {
+export const updateUserPowerApi = (params) =>
   defHttp.post({ url: Api.UPDATE_USER_POWER, params }, { successMessageMode: 'notification' });
-};
+
+export const getUserPowerApi = (params: { user_id: number | string }) =>
+  defHttp.get({ url: Api.GET_USER_POWER, params });

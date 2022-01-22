@@ -21,7 +21,7 @@
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree } from '/@/components/Tree';
   import { routeModuleList } from '/@/router/routes';
-  import { updateUserPowerApi } from '/@/api/system/system';
+  import { updateUserPowerApi, getUserPowerApi } from '/@/api/system/system';
   import { shopListApi } from '/@/api/shopManage/shop';
 
   export default defineComponent({
@@ -36,7 +36,8 @@
 
       const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
         // await resetFields();
-        await setDrawerProps({ confirmLoading: false });
+        const res = await setDrawerProps({ confirmLoading: false });
+        debugger;
         // 需要在setFieldsValue之前先填充treeData，否则Tree组件可能会报key not exist警告
         if (unref(treeData).length === 0) {
           const shopData = await shopListApi();
@@ -53,6 +54,7 @@
           });
         }
 
+        treeValue.value = await getUserPower(data.user_id);
         record.value = data;
         // await setFieldsValue({
         //   ...data.record,
@@ -64,21 +66,32 @@
           return {
             id: pid + '~' + item.meta.menu,
             title: item.meta.title,
-            children: item.children ? getMenuHandle(item.children, pid + '~' + item.meta.menu) : [],
+            children: item.children ? getMenuHandle(item.children, pid) : [],
           };
         });
+      }
+      async function getUserPower(user_id: string | number): Promise<string[]> {
+        const res = await getUserPowerApi({ user_id });
+        const arr: any[] = [];
+
+        res.forEach((item) => {
+          item.menu.forEach((key) => {
+            arr.push(`${item.shop}~${key}`);
+          });
+        });
+        return arr;
       }
       async function handleSubmit() {
         try {
           // 拼接数据
           treeValue.value.forEach((item) => {
-            const match = item.match(/(\S+)~(\S+)~(\S+)/i);
+            const match = item.match(/(\S+)~(\S+)/i);
             if (match) {
               const { power } = collect.find((item) => {
                 return item.shop_id === match[1];
               });
-              !power.includes(match[2]) && power.push(match[2]);
-              power.push(match[3]);
+              // !power.includes(match[2]) && power.push(match[2]);
+              power.push(match[2]);
             }
           });
 
@@ -89,7 +102,6 @@
             uId: record.value.user_id,
             powerJson: collect,
           };
-          console.log(params);
           await updateUserPowerApi(params);
           closeDrawer();
           emit('success', { values: {} });
