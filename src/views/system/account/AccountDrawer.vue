@@ -32,12 +32,11 @@
       const treeData = ref<any[]>([]);
       const treeValue = ref<any[]>([]);
       const collect: any[] = [];
-      const record = ref<any[]>();
+      const record = ref<any>({});
 
       const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
         // await resetFields();
-        const res = await setDrawerProps({ confirmLoading: false });
-        debugger;
+        setDrawerProps({ confirmLoading: false });
         // 需要在setFieldsValue之前先填充treeData，否则Tree组件可能会报key not exist警告
         if (unref(treeData).length === 0) {
           const shopData = await shopListApi();
@@ -53,7 +52,7 @@
             };
           });
         }
-
+        console.log();
         treeValue.value = await getUserPower(data.user_id);
         record.value = data;
         // await setFieldsValue({
@@ -98,8 +97,7 @@
           setDrawerProps({ confirmLoading: true });
           // TODO custom api
           const params = {
-            // ts-ignore
-            uId: record.value.user_id,
+            uId: record.value?.user_id,
             powerJson: collect,
           };
           await updateUserPowerApi(params);
