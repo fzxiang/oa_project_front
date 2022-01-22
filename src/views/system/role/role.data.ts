@@ -20,7 +20,6 @@ export const columns: BasicColumn[] = [
     title: '角色值',
     dataIndex: 'role',
     ifShow: false,
-    width: 200,
   },
   {
     title: '创建时间',
@@ -35,6 +34,7 @@ export const columns: BasicColumn[] = [
   {
     title: '备注',
     dataIndex: 'remarks',
+    width: 250,
   },
   {
     title: '菜单权限',
