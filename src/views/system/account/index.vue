@@ -21,7 +21,17 @@
             {
               icon: 'ant-design:safety-certificate-outline',
               tooltip: '权限',
+              color: 'success',
               // onClick: handleEdit.bind(null, record),
+            },
+            {
+              icon: 'ant-design:key-outlined',
+              tooltip: '重置密码',
+              color: 'warning',
+              popConfirm: {
+                title: '是否重置该账户密码？',
+                confirm: handleRestAccount.bind(null, record),
+              },
             },
             {
               icon: 'ant-design:delete-outlined',
@@ -43,7 +53,7 @@
   import { computed, defineComponent, onMounted, reactive, ref } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { deleteUserApi, getAllUserApi } from '/@/api/system/system';
+  import { deleteUserApi, getAllUserApi, resetPasswordApi } from '/@/api/system/system';
   import { PageWrapper } from '/@/components/Page';
   import { useModal } from '/@/components/Modal';
   import AccountModal from './AccountModal.vue';
@@ -84,7 +94,7 @@
         bordered: true,
         handleSearchInfoFn,
         actionColumn: {
-          width: 120,
+          width: 180,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -154,6 +164,13 @@
       //   reload();
       // }
 
+      async function handleRestAccount(record) {
+        loading.value = true;
+        const params = { uId: record.user_id };
+        await resetPasswordApi(params);
+        loading.value = false;
+      }
+
       onMounted(() => {
         handleGetList().then(() => {});
       });
@@ -163,6 +180,7 @@
       }
 
       return {
+        handleRestAccount,
         registerTable,
         registerModal,
         handleSearchInfoFn,

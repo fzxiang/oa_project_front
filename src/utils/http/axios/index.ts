@@ -20,7 +20,7 @@ import { useUserStoreWithOut } from '/@/store/modules/user';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
-const { createMessage, createErrorModal } = useMessage();
+const { createMessage, createErrorModal, notification, createSuccessModal } = useMessage();
 
 /**
  * @description: 数据处理，方便区分多种处理方式
@@ -152,6 +152,20 @@ const transform: AxiosTransform = {
    * @description: 响应拦截器处理
    */
   responseInterceptors: (res: AxiosResponse<any>) => {
+    const { status, data, config } = res || {};
+    // @ts-ignore
+    const successMessageMode = config?.requestOptions?.successMessageMode || 'none';
+    if (data && status === 200) {
+      if (data.code === 0) {
+        if (successMessageMode === 'modal') {
+          createSuccessModal({ title: '操作成功', content: data.message });
+        } else if (successMessageMode === 'notification') {
+          notification.success({ message: '操作成功', description: data.message });
+        } else if (successMessageMode === 'message') {
+          createMessage.success(data.message);
+        }
+      }
+    }
     return res;
   },
 

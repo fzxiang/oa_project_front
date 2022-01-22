@@ -45,6 +45,7 @@
           {
             field: 'password',
             show: !unref(isUpdate),
+            required: false,
           },
         ]);
       });
@@ -55,9 +56,8 @@
         try {
           const values = await validate();
           setModalProps({ confirmLoading: true });
-          console.log(values);
           // TODO custom api
-          await AddEditUserApi({ ...values });
+          await AddEditUserApi({ ...values, user_id: rowId.value });
           closeModal();
           emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
         } finally {

@@ -59,7 +59,7 @@ export interface AddRoleParams {
 }
 
 export interface AddEditUserParams {
-  uId?: number;
+  user_id?: number;
   username: string;
   nickname: string;
   role_id: number;

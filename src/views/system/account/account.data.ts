@@ -79,8 +79,8 @@ export const accountFormSchema: FormSchema[] = [
     ],
   },
   {
-    field: 'user_id',
-    label: 'id',
+    field: '用户ID',
+    label: 'user_id',
     component: 'Input',
     ifShow: false,
   },
