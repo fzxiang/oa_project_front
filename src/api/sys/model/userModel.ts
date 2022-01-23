@@ -1,3 +1,5 @@
+import type { Permission } from '/#/store';
+
 /**
  * @description: Login interface parameters
  */
@@ -28,7 +30,7 @@ export interface LoginResultModel {
  * @description: Get user information return value
  */
 export interface GetUserInfoModel {
-  roles: RoleInfo[];
+  roles?: RoleInfo[] | undefined;
   // 用户id
   userId: string | number;
   // 用户名
@@ -39,6 +41,8 @@ export interface GetUserInfoModel {
   avatar: string;
   // 介绍
   desc?: string;
+  permission: Permission[];
+  selectedShop: number;
 }
 
 export interface ChangePwdParams {

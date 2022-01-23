@@ -37,8 +37,8 @@ export interface UserInfo {
   avatar: string;
   desc?: string;
   homePath?: string;
-  roles: RoleInfo[];
-  selectedShop: string;
+  roles?: RoleInfo[] | undefined;
+  selectedShop: number;
   permission: Permission[];
 }
 
@@ -50,7 +50,8 @@ export interface BeforeMiniState {
 }
 
 interface Permission {
-  shop: string;
+  shop: number;
   menu: [string];
   shopName: string;
+  userId?: number;
 }
