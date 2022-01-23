@@ -6,40 +6,67 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: 'ID',
       dataIndex: 'id',
-      fixed: 'left',
+      ifShow: false,
       width: 200,
     },
     {
-      title: '姓名',
-      dataIndex: 'name',
+      title: '发单号',
+      dataIndex: 'invoice',
+      fixed: 'left',
       width: 150,
+      // filters: [
+      //   { text: 'Male', value: 'male' },
+      //   { text: 'Female', value: 'female' },
+      // ],
+    },
+    {
+      title: '接单客服',
+      dataIndex: 'customerContact',
+      fixed: 'left',
+      width: 150,
+    },
+    {
+      title: '订单编号',
+      dataIndex: 'aliOrder',
+      width: 150,
+      // defaultHidden: true,
+    },
+    {
+      title: '结算状态',
+      dataIndex: 'settleState',
+      width: 120,
       filters: [
-        { text: 'Male', value: 'male' },
-        { text: 'Female', value: 'female' },
+        { text: '已结算', value: '1' },
+        { text: '未结算', value: '2' },
+        { text: '暂缓结算', value: '3' },
       ],
     },
     {
-      title: '地址',
-      dataIndex: 'address',
+      title: '会员名',
+      dataIndex: 'memberName',
+      width: 150,
     },
     {
-      title: '编号',
-      dataIndex: 'no',
+      title: '淘宝价格',
+      dataIndex: 'taobaoPrice',
       width: 150,
-      sorter: true,
-      defaultHidden: true,
     },
     {
-      title: '开始时间',
+      title: '写手派单总价',
+      dataIndex: 'overviewFilePrice',
       width: 150,
-      sorter: true,
-      dataIndex: 'beginTime',
     },
     {
-      title: '结束时间',
+      title: '付款时间',
       width: 150,
       sorter: true,
-      dataIndex: 'endTime',
+      dataIndex: 'paymentTime',
+    },
+    {
+      title: '收货时间',
+      width: 150,
+      sorter: true,
+      dataIndex: 'receivingTime',
     },
   ];
 }
@@ -70,90 +97,6 @@ export function getBasicShortColumns(): BasicColumn[] {
   ];
 }
 
-export function getMultipleHeaderColumns(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 200,
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      width: 120,
-    },
-    {
-      title: '地址',
-      dataIndex: 'address',
-      sorter: true,
-      children: [
-        {
-          title: '编号',
-          dataIndex: 'no',
-          width: 120,
-          filters: [
-            { text: 'Male', value: 'male', children: [] },
-            { text: 'Female', value: 'female', children: [] },
-          ],
-        },
-
-        {
-          title: '开始时间',
-          dataIndex: 'beginTime',
-          width: 120,
-        },
-        {
-          title: '结束时间',
-          dataIndex: 'endTime',
-          width: 120,
-        },
-      ],
-    },
-  ];
-}
-
-export function getCustomHeaderColumns(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 200,
-    },
-    {
-      // title: '姓名',
-      dataIndex: 'name',
-      width: 120,
-      slots: { title: 'customTitle' },
-    },
-    {
-      // title: '地址',
-      dataIndex: 'address',
-      width: 120,
-      slots: { title: 'customAddress' },
-      sorter: true,
-    },
-
-    {
-      title: '编号',
-      dataIndex: 'no',
-      width: 120,
-      filters: [
-        { text: 'Male', value: 'male', children: [] },
-        { text: 'Female', value: 'female', children: [] },
-      ],
-    },
-    {
-      title: '开始时间',
-      dataIndex: 'beginTime',
-      width: 120,
-    },
-    {
-      title: '结束时间',
-      dataIndex: 'endTime',
-      width: 120,
-    },
-  ];
-}
 const renderContent = ({ text, index }: { text: any; index: number }) => {
   const obj: any = {
     children: text,
@@ -222,39 +165,67 @@ export function getMergeHeaderColumns(): BasicColumn[] {
     },
   ];
 }
-export const getAdvanceSchema = (itemNumber = 6): FormSchema[] => {
-  const arr: any = [];
-  for (let index = 0; index < itemNumber; index++) {
-    arr.push({
-      field: `field${index}`,
-      label: `字段${index}`,
+
+export const getFormConfig: Partial<FormProps> = {
+  labelWidth: 100,
+  schemas: [
+    {
+      field: 'memberName',
+      label: '淘宝ID(会员名)',
       component: 'Input',
-      colProps: {
-        xl: 12,
-        xxl: 8,
+      colProps: { span: 8 },
+    },
+    {
+      field: 'invoice',
+      label: '发单号',
+      component: 'Input',
+      colProps: { span: 8 },
+    },
+    {
+      field: 'aliOrder',
+      label: '淘宝订单编号',
+      component: 'Input',
+      colProps: { span: 8 },
+    },
+    {
+      field: 'settleState',
+      label: '结算状态',
+      component: 'RadioButtonGroup',
+      colProps: { span: 8 },
+      componentProps: {
+        options: [
+          { label: '全部', value: 0 },
+          { label: '已结算', value: 1 },
+          { label: '未结算', value: 2 },
+          { label: '暂缓结算', value: 3 },
+        ],
       },
-    });
-  }
-  return arr;
+    },
+    {
+      field: 'orderTime',
+      label: '订单付款时间',
+      component: 'RangePicker',
+      colProps: { span: 8 },
+    },
+
+    {
+      field: 'paymentTime',
+      label: '订单付款时间',
+      component: 'RangePicker',
+      colProps: { span: 8 },
+    },
+    // {
+    //   field: `field11`,
+    //   label: `Slot示例`,
+    //   component: 'Select',
+    //   slot: 'custom',
+    //   colProps: {
+    //     xl: 12,
+    //     xxl: 8,
+    //   },
+    // },
+  ],
 };
-export function getFormConfig(): Partial<FormProps> {
-  return {
-    labelWidth: 100,
-    schemas: [
-      ...getAdvanceSchema(5),
-      {
-        field: `field11`,
-        label: `Slot示例`,
-        component: 'Select',
-        slot: 'custom',
-        colProps: {
-          xl: 12,
-          xxl: 8,
-        },
-      },
-    ],
-  };
-}
 export function getBasicData() {
   const data: any = (() => {
     const arr: any = [];
@@ -271,36 +242,5 @@ export function getBasicData() {
     }
     return arr;
   })();
-  return data;
-}
-
-export function getTreeTableData() {
-  const data: any = (() => {
-    const arr: any = [];
-    for (let index = 0; index < 40; index++) {
-      arr.push({
-        id: `${index}`,
-        name: 'John Brown',
-        age: `1${index}`,
-        no: `${index + 10}`,
-        address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-        beginTime: new Date().toLocaleString(),
-        endTime: new Date().toLocaleString(),
-        children: [
-          {
-            id: `l2-${index}`,
-            name: 'John Brown',
-            age: `1${index}`,
-            no: `${index + 10}`,
-            address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-            beginTime: new Date().toLocaleString(),
-            endTime: new Date().toLocaleString(),
-          },
-        ],
-      });
-    }
-    return arr;
-  })();
-
   return data;
 }
