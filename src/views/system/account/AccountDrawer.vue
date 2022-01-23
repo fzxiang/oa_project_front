@@ -37,6 +37,7 @@
       const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
         // await resetFields();
         setDrawerProps({ confirmLoading: false });
+        treeValue.value = await getUserPower(data.user_id);
         // 需要在setFieldsValue之前先填充treeData，否则Tree组件可能会报key not exist警告
         if (unref(treeData).length === 0) {
           const shopData = await shopListApi();
@@ -52,8 +53,6 @@
             };
           });
         }
-        console.log();
-        treeValue.value = await getUserPower(data.user_id);
         record.value = data;
         // await setFieldsValue({
         //   ...data.record,
