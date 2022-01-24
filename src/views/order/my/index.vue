@@ -1,45 +1,33 @@
 <template>
-  <BasicTable
-    @register="registerTable"
-    :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-  >
+  <BasicTable @register="registerTable">
     <template #form-custom> custom-slot </template>
-    <template #headerTop>
-      <a-alert type="info" show-icon>
-        <template #message>
-          <template v-if="checkedKeys.length > 0">
-            <span>已选中{{ checkedKeys.length }}条记录(可跨页)</span>
-            <a-button type="link" @click="checkedKeys = []" size="small">清空</a-button>
-          </template>
-          <template v-else>
-            <span>未选中任何项目</span>
-          </template>
-        </template>
-      </a-alert>
+    <template #headerTop> </template>
+    <template #expandedRowRender="{ record }">
+      <span>No: {{ record.no }} </span>
     </template>
     <template #toolbar>
-      <a-button type="primary" @click="getFormValues">获取表单数据</a-button>
+      <a-button type="primary" @click="getFormValues">添加订单</a-button>
+      <a-button @click="getFormValues">导出订单</a-button>
+      <a-button type="success" @click="getFormValues">上传总览附件</a-button>
+      <a-button type="warning" @click="getFormValues">上传退款附件</a-button>
     </template>
   </BasicTable>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './tableData';
-  import { Alert } from 'ant-design-vue';
-
   import { demoListApi } from '/@/api/demo/table';
 
   export default defineComponent({
-    components: { BasicTable, AAlert: Alert },
+    components: { BasicTable },
     setup() {
-      const checkedKeys = ref<Array<string | number>>([]);
       const [registerTable, { getForm }] = useTable({
-        title: '开启搜索区域',
+        title: '订单列表',
         api: demoListApi,
         columns: getBasicColumns(),
         useSearchForm: true,
-        formConfig: getFormConfig(),
+        formConfig: getFormConfig,
         showTableSetting: true,
         tableSetting: { fullScreen: true },
         showIndexColumn: false,
@@ -50,16 +38,9 @@
         console.log(getForm().getFieldsValue());
       }
 
-      function onSelectChange(selectedRowKeys: (string | number)[]) {
-        console.log(selectedRowKeys);
-        checkedKeys.value = selectedRowKeys;
-      }
-
       return {
         registerTable,
         getFormValues,
-        checkedKeys,
-        onSelectChange,
       };
     },
   });

@@ -52,7 +52,6 @@
             };
           });
         }
-        console.log();
         treeValue.value = await getUserPower(data.user_id);
         record.value = data;
         // await setFieldsValue({
