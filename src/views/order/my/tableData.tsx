@@ -166,66 +166,68 @@ export function getMergeHeaderColumns(): BasicColumn[] {
   ];
 }
 
-export const getFormConfig: Partial<FormProps> = {
-  labelWidth: 100,
-  schemas: [
-    {
-      field: 'memberName',
-      label: '淘宝ID(会员名)',
-      component: 'Input',
-      colProps: { span: 8 },
-    },
-    {
-      field: 'invoice',
-      label: '发单号',
-      component: 'Input',
-      colProps: { span: 8 },
-    },
-    {
-      field: 'aliOrder',
-      label: '淘宝订单编号',
-      component: 'Input',
-      colProps: { span: 8 },
-    },
-    {
-      field: 'settleState',
-      label: '结算状态',
-      component: 'RadioButtonGroup',
-      colProps: { span: 8 },
-      componentProps: {
-        options: [
-          { label: '全部', value: 0 },
-          { label: '已结算', value: 1 },
-          { label: '未结算', value: 2 },
-          { label: '暂缓结算', value: 3 },
-        ],
+export function getFormConfig(): Partial<FormProps> {
+  return {
+    labelWidth: 100,
+    schemas: [
+      {
+        field: 'memberName',
+        label: '淘宝ID(会员名)',
+        component: 'Input',
+        colProps: { span: 8 },
       },
-    },
-    {
-      field: 'orderTime',
-      label: '订单付款时间',
-      component: 'RangePicker',
-      colProps: { span: 8 },
-    },
+      {
+        field: 'invoice',
+        label: '发单号',
+        component: 'Input',
+        colProps: { span: 8 },
+      },
+      {
+        field: 'aliOrder',
+        label: '淘宝订单编号',
+        component: 'Input',
+        colProps: { span: 8 },
+      },
+      {
+        field: 'settleState',
+        label: '结算状态',
+        component: 'RadioButtonGroup',
+        colProps: { span: 8 },
+        componentProps: {
+          options: [
+            { label: '全部', value: 0 },
+            { label: '已结算', value: 1 },
+            { label: '未结算', value: 2 },
+            { label: '暂缓结算', value: 3 },
+          ],
+        },
+      },
+      {
+        field: 'pTime',
+        label: '订单付款时间',
+        component: 'RangePicker',
+        colProps: { span: 8 },
+      },
 
-    {
-      field: 'paymentTime',
-      label: '订单付款时间',
-      component: 'RangePicker',
-      colProps: { span: 8 },
-    },
-    // {
-    //   field: `field11`,
-    //   label: `Slot示例`,
-    //   component: 'Select',
-    //   slot: 'custom',
-    //   colProps: {
-    //     xl: 12,
-    //     xxl: 8,
-    //   },
-    // },
-  ],
-};
+      {
+        field: 'rTime',
+        label: '确认收货时间',
+        component: 'RangePicker',
+        colProps: { span: 8 },
+      },
+      // {
+      //   field: `field11`,
+      //   label: `Slot示例`,
+      //   component: 'Select',
+      //   slot: 'custom',
+      //   colProps: {
+      //     xl: 12,
+      //     xxl: 8,
+      //   },
+      // },
+    ],
+  };
+}
 export function getBasicData() {
   const data: any = (() => {
     const arr: any = [];

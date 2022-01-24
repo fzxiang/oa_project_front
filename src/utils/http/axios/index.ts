@@ -146,7 +146,7 @@ const transform: AxiosTransform = {
       (config as Recordable).headers.Authorization = options.authenticationScheme
         ? `${options.authenticationScheme} ${token}`
         : token;
-      (config as Recordable).headers.Shop = userInfo.selectedShop || '';
+      (config as Recordable).headers.Shop = userInfo?.selectedShop || '';
     }
     return config;
   },
