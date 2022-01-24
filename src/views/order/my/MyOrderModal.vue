@@ -49,7 +49,7 @@
         ]);
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增账号' : '编辑账号'));
+      const getTitle = computed(() => (!unref(isUpdate) ? '新增订单' : '编辑订单'));
 
       async function handleSubmit() {
         try {
