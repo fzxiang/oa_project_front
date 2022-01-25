@@ -1,30 +1,51 @@
 <template>
-  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit">
+  <BasicModal
+    width="80%"
+    v-bind="$attrs"
+    @register="registerModal"
+    :title="getTitle"
+    @ok="handleSubmit"
+  >
+    <OrderForm />
+    <a-button block @click="addHandle">添加写手</a-button>
+    <WriterForm />
+    <Divider orientation="left">其他</Divider>
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
 <script lang="ts">
+  import { Divider } from 'ant-design-vue';
   import { defineComponent, ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  // import { accountFormSchema } from './tableData.data';
   import { AddEditUserApi } from '/@/api/system/system';
+  import OrderForm from './OrderForm.vue';
+  import WriterForm from './WriterForm.vue';
 
   export default defineComponent({
     name: 'MyOrderModal',
-    components: { BasicModal, BasicForm },
+    components: { BasicModal, BasicForm, Divider, OrderForm, WriterForm },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
 
       const [registerForm, { setFieldsValue, updateSchema, resetFields, validate }] = useForm({
-        labelWidth: 100,
-        // schemas: accountFormSchema,
-        showActionButtonGroup: false,
-        actionColOptions: {
-          span: 23,
+        schemas: [
+          {
+            field: 'remarks',
+            label: '备注（最大3000）',
+            component: 'InputTextArea',
+            componentProps: {
+              disabled: true,
+            },
+          },
+        ],
+        labelWidth: 150,
+        baseColProps: {
+          span: 24,
         },
+        showActionButtonGroup: false,
       });
 
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
@@ -54,6 +75,7 @@
       async function handleSubmit() {
         try {
           const values = await validate();
+          console.log(values);
           setModalProps({ confirmLoading: true });
           // TODO custom api
           await AddEditUserApi({ ...values, user_id: rowId.value });
@@ -63,8 +85,10 @@
           setModalProps({ confirmLoading: false });
         }
       }
-
-      return { registerModal, registerForm, getTitle, handleSubmit };
+      function addHandle(field) {
+        console.log(field);
+      }
+      return { registerModal, registerForm, getTitle, handleSubmit, addHandle };
     },
   });
 </script>

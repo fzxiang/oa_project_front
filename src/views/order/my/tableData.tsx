@@ -71,101 +71,6 @@ export function getBasicColumns(): BasicColumn[] {
   ];
 }
 
-export function getBasicShortColumns(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      width: 150,
-      dataIndex: 'id',
-      sorter: true,
-      sortOrder: 'ascend',
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      width: 120,
-    },
-    {
-      title: '地址',
-      dataIndex: 'address',
-    },
-    {
-      title: '编号',
-      dataIndex: 'no',
-      width: 80,
-    },
-  ];
-}
-
-const renderContent = ({ text, index }: { text: any; index: number }) => {
-  const obj: any = {
-    children: text,
-    attrs: {},
-  };
-  if (index === 9) {
-    obj.attrs.colSpan = 0;
-  }
-  return obj;
-};
-export function getMergeHeaderColumns(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 300,
-      customRender: renderContent,
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      width: 300,
-      customRender: renderContent,
-    },
-    {
-      title: '地址',
-      dataIndex: 'address',
-      colSpan: 2,
-      width: 120,
-      sorter: true,
-      customRender: ({ text, index }: { text: any; index: number }) => {
-        const obj: any = {
-          children: text,
-          attrs: {},
-        };
-        if (index === 2) {
-          obj.attrs.rowSpan = 2;
-        }
-        if (index === 3) {
-          obj.attrs.colSpan = 0;
-        }
-        return obj;
-      },
-    },
-    {
-      title: '编号',
-      dataIndex: 'no',
-      colSpan: 0,
-      filters: [
-        { text: 'Male', value: 'male', children: [] },
-        { text: 'Female', value: 'female', children: [] },
-      ],
-      customRender: renderContent,
-    },
-    {
-      title: '开始时间',
-      dataIndex: 'beginTime',
-      width: 200,
-      customRender: renderContent,
-    },
-    {
-      title: '结束时间',
-      dataIndex: 'endTime',
-      width: 200,
-      customRender: renderContent,
-    },
-  ];
-}
-
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
@@ -228,21 +133,179 @@ export function getFormConfig(): Partial<FormProps> {
     ],
   };
 }
-export function getBasicData() {
-  const data: any = (() => {
-    const arr: any = [];
-    for (let index = 0; index < 40; index++) {
-      arr.push({
-        id: `${index}`,
-        name: 'John Brown',
-        age: `1${index}`,
-        no: `${index + 10}`,
-        address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-        beginTime: new Date().toLocaleString(),
-        endTime: new Date().toLocaleString(),
-      });
-    }
-    return arr;
-  })();
-  return data;
-}
+
+export const orderInfoForm_1: FormSchema[] = [
+  {
+    field: 'aliOrder',
+    label: '淘宝订单编号',
+    component: 'Input',
+    required: true,
+  },
+];
+
+export const orderInfoForm_2: FormSchema[] = [
+  {
+    field: 'invoice',
+    label: '发单号',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'memberName',
+    label: '会员名',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'taobaoPrice',
+    label: '淘宝价格',
+    colProps: { span: 8 },
+    component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'customrContact',
+    label: '客户微信或QQ',
+    colProps: { span: 8 },
+    component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'orderOutline',
+    label: '订单概要',
+    colProps: { span: 16 },
+    component: 'InputTextArea',
+    componentProps: {
+      disabled: true,
+    },
+  },
+];
+
+export const writerInfoForm_1: FormSchema[] = [
+  {
+    field: 'writerNum',
+    label: '手机号',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+  },
+];
+
+export const writerInfoForm_2: FormSchema[] = [
+  {
+    field: 'name',
+    label: '写手姓名',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'writerPrice',
+    label: '写手派单价',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'alipayAccount',
+    label: '写手支付宝',
+    colProps: { span: 8 },
+    component: 'Input',
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'qqAccount',
+    label: '写手QQ',
+    colProps: { span: 8 },
+    component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'wechatAccount',
+    label: '写手微信',
+    colProps: { span: 8 },
+    component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'writerSituation',
+    label: '写手情况',
+    colProps: { span: 8 },
+    component: 'Select',
+    componentProps: {
+      disabled: true,
+      options: [
+        {
+          label: '拖稿',
+          value: 1,
+        },
+        {
+          label: '失联',
+          value: 2,
+        },
+        {
+          label: '拒绝修改',
+          value: 3,
+        },
+        {
+          label: '态度差',
+          value: 4,
+        },
+      ],
+    },
+  },
+  {
+    field: 'writerQuality',
+    label: '写手质量',
+    colProps: { span: 8 },
+    component: 'Select',
+    componentProps: {
+      disabled: true,
+      options: [
+        {
+          label: '好',
+          value: 1,
+        },
+        {
+          label: '中',
+          value: 2,
+        },
+        {
+          label: '差',
+          value: 3,
+        },
+      ],
+    },
+  },
+  {
+    field: '',
+    label: '',
+    colProps: { span: 24 },
+    component: 'Divider',
+  },
+];
