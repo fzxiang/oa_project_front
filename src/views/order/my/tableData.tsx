@@ -201,7 +201,7 @@ export const writerInfoForm: FormSchema[] = [
   {
     field: 'writerNum',
     label: '手机号',
-    component: 'I',
+    component: 'InputSearch',
     colProps: { span: 8 },
     required: true,
   },
