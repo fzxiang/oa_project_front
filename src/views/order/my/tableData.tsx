@@ -74,6 +74,10 @@ export function getBasicColumns(): BasicColumn[] {
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
+    fieldMapToTime: [
+      ['pTime', ['pStartTime', 'pEndTime'], 'YYYY-MM-DD'],
+      ['rTime', ['rStartTime', 'rEndTime'], 'YYYY-MM-DD'],
+    ],
     schemas: [
       {
         field: 'memberName',
@@ -134,16 +138,16 @@ export function getFormConfig(): Partial<FormProps> {
   };
 }
 
-export const orderInfoForm_1: FormSchema[] = [
+export const orderInfoForm: FormSchema[] = [
   {
     field: 'aliOrder',
     label: '淘宝订单编号',
-    component: 'Input',
+    component: 'InputSearch',
+    colProps: {
+      span: 17,
+    },
     required: true,
   },
-];
-
-export const orderInfoForm_2: FormSchema[] = [
   {
     field: 'invoice',
     label: '发单号',

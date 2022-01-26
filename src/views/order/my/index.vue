@@ -35,14 +35,6 @@
           return { searchParams: info };
         },
         handleSearchInfoFn(info) {
-          if (info.pTime.length > 0) {
-            info.pStartTime = info.pTime[0];
-            info.pEndTime = info.pTime[1];
-          }
-          if (info.pTime.length > 0) {
-            info.rStartTime = info.rTime[0];
-            info.rEndTime = info.rTime[1];
-          }
           return info;
         },
         useSearchForm: true,

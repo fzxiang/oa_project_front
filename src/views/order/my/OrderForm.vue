@@ -1,15 +1,15 @@
 <template>
   <div>
     <Divider orientation="left">订单信息</Divider>
-    <BasicForm @register="registerForm_1" />
-    <BasicForm @register="registerForm_2" />
+    <BasicForm @register="registerForm" />
   </div>
 </template>
 <script lang="ts">
+  import { defineComponent, ref, unref, nextTick } from 'vue';
   import { Divider } from 'ant-design-vue';
-  import { defineComponent, ref, unref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { orderInfoForm_1, orderInfoForm_2 } from './tableData';
+  import { orderInfoForm } from './tableData';
+  import { checkOrderApi } from '/@/api/order/my';
 
   export default defineComponent({
     name: 'OrderForm',
@@ -19,27 +19,36 @@
       const isUpdate = ref(true);
       const rowId = ref('');
 
-      const [registerForm_1] = useForm({
-        schemas: orderInfoForm_1,
-        labelWidth: 150,
-        baseColProps: {
-          span: 12,
-        },
-        showResetButton: false,
-        showSubmitButton: true,
-        submitButtonOptions: {
-          text: '检验订单',
-        },
-        showActionButtonGroup: true,
-      });
-
-      const [registerForm_2, { validate }] = useForm({
-        schemas: orderInfoForm_2,
+      const [registerForm, { validate, updateSchema }] = useForm({
+        schemas: orderInfoForm,
         labelWidth: 150,
         baseColProps: {
           span: 12,
         },
         showActionButtonGroup: false,
+      });
+
+      const handleCheckOrder = async ({ updateSchema }) => {
+        return {
+          enterButton: '校验订单',
+          placeholder: '请先输入订单进行校验',
+          onSearch: async (value) => {
+            const res = await checkOrderApi({ aliOrder: value });
+            if (res?.length > 0) {
+            } else {
+              updateSchema({
+                field: '',
+              });
+            }
+          },
+        };
+      };
+      nextTick(() => {
+        // 检验玩家
+        updateSchema({
+          field: 'aliOrder',
+          componentProps: handleCheckOrder,
+        });
       });
 
       async function handleSubmit() {
@@ -50,7 +59,7 @@
         }
       }
 
-      return { registerForm_1, registerForm_2, handleSubmit };
+      return { registerForm, handleSubmit };
     },
   });
 </script>
