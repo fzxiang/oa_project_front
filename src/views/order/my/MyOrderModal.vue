@@ -6,9 +6,9 @@
     :title="getTitle"
     @ok="handleSubmit"
   >
-    <OrderForm @success="handleSuccess" />
+    <OrderForm :data="orderInfo.order" @success="handleSuccess" />
     <a-button block @click="addHandle">添加写手</a-button>
-    <WriterForm @success="handleSuccess" />
+    <WriterForm :data="orderInfo.writer" @success="handleSuccess" />
     <Divider orientation="left">其他</Divider>
     <BasicForm @register="registerForm" />
   </BasicModal>
@@ -97,7 +97,15 @@
       function addHandle(field) {
         console.log(field);
       }
-      return { registerModal, registerForm, getTitle, handleSubmit, addHandle, handleSuccess };
+      return {
+        registerModal,
+        registerForm,
+        getTitle,
+        handleSubmit,
+        addHandle,
+        handleSuccess,
+        orderInfo,
+      };
     },
   });
 </script>

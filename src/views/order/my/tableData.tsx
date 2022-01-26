@@ -102,6 +102,7 @@ export function getFormConfig(): Partial<FormProps> {
         label: '结算状态',
         component: 'RadioButtonGroup',
         colProps: { span: 8 },
+        defaultValue: 0,
         componentProps: {
           options: [
             { label: '全部', value: 0 },

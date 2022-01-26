@@ -10,7 +10,8 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { orderInfoForm } from './tableData';
   import { checkOrderApi } from '/@/api/order/my';
-
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { isEmpty } from '/@/utils/is';
   export default defineComponent({
     name: 'OrderForm',
     components: { BasicForm, Divider },
@@ -18,8 +19,8 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
-
-      const [registerForm, { validate, updateSchema }] = useForm({
+      const { notification } = useMessage();
+      const [registerForm, { validate, updateSchema, setFieldsValue }] = useForm({
         schemas: orderInfoForm,
         labelWidth: 150,
         baseColProps: {
@@ -28,26 +29,41 @@
         showActionButtonGroup: false,
       });
 
-      const handleCheckOrder = async ({ updateSchema }) => {
-        return {
-          enterButton: '校验订单',
-          placeholder: '请先输入订单进行校验',
-          onSearch: async (value) => {
-            const res = await checkOrderApi({ aliOrder: value });
-            if (res?.length > 0) {
-            } else {
-              updateSchema({
-                field: '',
-              });
-            }
-          },
-        };
-      };
       nextTick(() => {
+        console.log(_.data);
+        if (isEmpty(_.data)) {
+          // 编辑
+          setFieldsValue(_.data);
+          updateSchema([
+            { field: 'invoice', componentProps: { disabled: false } },
+            { field: 'invoice', componentProps: { disabled: false } },
+            { field: 'taobaoPrice', componentProps: { disabled: false } },
+            { field: 'customrContact', componentProps: { disabled: false } },
+            { field: 'orderOutline', componentProps: { disabled: false } },
+            { field: 'memberName', componentProps: { disabled: false } },
+          ]);
+        }
         // 检验玩家
         updateSchema({
           field: 'aliOrder',
-          componentProps: handleCheckOrder,
+          componentProps: {
+            enterButton: '校验订单',
+            placeholder: '请先输入订单进行校验',
+            onSearch: async (value) => {
+              const res = await checkOrderApi({ aliOrder: value });
+              if (res?.length > 0) {
+                notification.error({ message: '提示', description: '已存在改订单！' });
+              } else {
+                updateSchema([
+                  { field: 'invoice', componentProps: { disabled: false } },
+                  { field: 'taobaoPrice', componentProps: { disabled: false } },
+                  { field: 'customrContact', componentProps: { disabled: false } },
+                  { field: 'orderOutline', componentProps: { disabled: false } },
+                  { field: 'memberName', componentProps: { disabled: false } },
+                ]);
+              }
+            },
+          },
         });
       });
 
