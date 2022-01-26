@@ -34,7 +34,7 @@ enum Api {
   UPDATE_WRITER = '/updateWriter',
 }
 
-export const addOrderApi = (params: OrderParamsModel) =>
+export const addOrderApi = (params: { orderInfo: OrderParamsModel }) =>
   defHttp.post<OrderResultModel>(
     { url: Api.ADD_ORDER, params },
     { successMessageMode: 'notification' },
@@ -60,3 +60,6 @@ export const exportOrderApi = (params: SearchOrderPageModel) =>
 
 export const searchOrderApi = (params: SearchOrderPageModel) =>
   defHttp.get<SearchOrderResultModel>({ url: Api.SEARCH_ORDER, params });
+
+export const checkWriterApi = (params: { writerNum: string }) =>
+  defHttp.post({ url: Api.CHECK_WRITER, params }, { successMessageMode: 'notification' });

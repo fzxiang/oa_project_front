@@ -197,17 +197,14 @@ export const orderInfoForm: FormSchema[] = [
   },
 ];
 
-export const writerInfoForm_1: FormSchema[] = [
+export const writerInfoForm: FormSchema[] = [
   {
     field: 'writerNum',
     label: '手机号',
-    component: 'Input',
+    component: 'I',
     colProps: { span: 8 },
     required: true,
   },
-];
-
-export const writerInfoForm_2: FormSchema[] = [
   {
     field: 'name',
     label: '写手姓名',

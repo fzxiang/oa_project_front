@@ -1,18 +1,18 @@
 <template>
-  <div>
+  <div v-for="item in [1, 2, 3]" :key="item">
     <Divider orientation="left">
       写手信息 - 1
       <a-button type="link" color="error" @click="deleteHandle">删除写手</a-button>
     </Divider>
-    <BasicForm @register="registerForm_1" />
-    <BasicForm @register="registerForm_2" />
+    <BasicForm @register="registerForm" />
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref } from 'vue';
+  import { defineComponent, ref, unref, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { writerInfoForm_1, writerInfoForm_2 } from './tableData';
+  import { writerInfoForm } from './tableData';
   import { Divider } from 'ant-design-vue';
+  import { checkWriterApi } from '/@/api/order/my';
 
   export default defineComponent({
     name: 'WriterForm',
@@ -22,30 +22,36 @@
       const isUpdate = ref(true);
       const rowId = ref('');
 
-      const [registerForm_1] = useForm({
-        schemas: writerInfoForm_1,
-        labelWidth: 150,
-        baseColProps: {
-          span: 12,
-        },
-        showResetButton: false,
-        showSubmitButton: true,
-        submitButtonOptions: {
-          text: '检验写手',
-          color: 'success',
-        },
-        // showResetButton: false,
-        // showSubmitButton: false,
-        // showActionButtonGroup: true,
-      });
-
-      const [registerForm_2, { validate }] = useForm({
-        schemas: writerInfoForm_2,
+      const [registerForm, { updateSchema, validate }] = useForm({
+        schemas: writerInfoForm,
         labelWidth: 150,
         baseColProps: {
           span: 12,
         },
         showActionButtonGroup: false,
+      });
+
+      const handleCheckOrder = async ({ updateSchema }) => {
+        return {
+          enterButton: '校验写手',
+          placeholder: '请先输入写手的手机号',
+          onSearch: async (value) => {
+            const res = await checkWriterApi({ writerNum: value });
+            if (res?.length > 0) {
+            } else {
+              // updateSchema({
+              //   field: '',
+              // });
+            }
+          },
+        };
+      };
+      nextTick(() => {
+        // 检验玩家
+        updateSchema({
+          field: 'writerNum',
+          componentProps: handleCheckOrder,
+        });
       });
 
       async function handleSubmit() {
@@ -64,7 +70,7 @@
         console.log(field);
       }
 
-      return { registerForm_1, deleteHandle, checkHandle, registerForm_2, handleSubmit };
+      return { registerForm, deleteHandle, checkHandle, handleSubmit };
     },
   });
 </script>

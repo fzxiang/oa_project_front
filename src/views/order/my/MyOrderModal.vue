@@ -6,16 +6,16 @@
     :title="getTitle"
     @ok="handleSubmit"
   >
-    <OrderForm />
+    <OrderForm @success="handleSuccess" />
     <a-button block @click="addHandle">添加写手</a-button>
-    <WriterForm />
+    <WriterForm @success="handleSuccess" />
     <Divider orientation="left">其他</Divider>
     <BasicForm @register="registerForm" />
   </BasicModal>
 </template>
 <script lang="ts">
   import { Divider } from 'ant-design-vue';
-  import { defineComponent, ref, computed, unref } from 'vue';
+  import { defineComponent, ref, computed, unref, reactive } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { AddEditUserApi } from '/@/api/system/system';
@@ -30,6 +30,11 @@
       const isUpdate = ref(true);
       const rowId = ref('');
 
+      const orderInfo = reactive({
+        order: {},
+        writer: [],
+        other: {},
+      });
       const [registerForm, { setFieldsValue, updateSchema, resetFields, validate }] = useForm({
         schemas: [
           {
@@ -70,6 +75,10 @@
         ]);
       });
 
+      function handleSuccess(value) {
+        console.log(value);
+      }
+
       const getTitle = computed(() => (!unref(isUpdate) ? '新增订单' : '编辑订单'));
 
       async function handleSubmit() {
@@ -88,7 +97,7 @@
       function addHandle(field) {
         console.log(field);
       }
-      return { registerModal, registerForm, getTitle, handleSubmit, addHandle };
+      return { registerModal, registerForm, getTitle, handleSubmit, addHandle, handleSuccess };
     },
   });
 </script>
