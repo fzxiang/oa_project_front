@@ -6,11 +6,19 @@
     :title="getTitle"
     @ok="handleSubmit"
   >
-    <OrderForm :data="orderInfo.order" @success="handleSuccess" />
-    <a-button block @click="addHandle">添加写手</a-button>
-    <WriterForm :data="orderInfo.writer" @success="handleSuccess" />
+    <BasicForm @register="registerFormOrder" />
+    <a-button block @click="handleAdd" :disabled="disabled">添加写手</a-button>
+    <div v-if="orderInfo.writer.length !== 0">
+      <div v-for="(item, index) in orderInfo.writer" :key="item">
+        <Divider orientation="left">
+          写手信息 - {{ index + 1 }}
+          <a-button type="link" color="error" @click="handleDelete(index)">删除写手</a-button>
+        </Divider>
+        <BasicForm @register="registerFormWriter[index][0]" />
+      </div>
+    </div>
     <Divider orientation="left">其他</Divider>
-    <BasicForm @register="registerForm" />
+    <BasicForm @register="registerFormOther" />
   </BasicModal>
 </template>
 <script lang="ts">
@@ -18,24 +26,67 @@
   import { defineComponent, ref, computed, unref, reactive } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { AddEditUserApi } from '/@/api/system/system';
-  import OrderForm from './OrderForm.vue';
-  import WriterForm from './WriterForm.vue';
+  import { OrderInfoModel } from '/@/api/order/model/myModel';
+  import { orderInfoForm, writerInfoForm } from './tableData';
+  import { checkOrderApi, checkWriterApi } from '/@/api/order/my';
+  import { useMessage } from '/@/hooks/web/useMessage';
+  import { nextTick } from 'process';
+  const { notification } = useMessage();
 
   export default defineComponent({
     name: 'MyOrderModal',
-    components: { BasicModal, BasicForm, Divider, OrderForm, WriterForm },
+    components: { BasicModal, BasicForm, Divider },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
+      const disabled = ref(false);
 
-      const orderInfo = reactive({
-        order: {},
+      const orderInfo = reactive<OrderInfoModel>({
+        order: {
+          aliOrder: '',
+          invoice: '',
+          memberName: '',
+          taobaoPrice: '',
+          customerContact: '',
+          orderOutline: '',
+        },
         writer: [],
-        other: {},
+        other: {
+          remarks: '',
+        },
       });
-      const [registerForm, { setFieldsValue, updateSchema, resetFields, validate }] = useForm({
+
+      // 订单
+      const [
+        registerFormOrder,
+        {
+          // validate: validateOrder,
+          updateSchema: updateSchemaOrder,
+          // setFieldsValue: setFieldsValueOrder,
+          // setProps: setPropsOrder,
+        },
+      ] = useForm({
+        schemas: orderInfoForm,
+        labelWidth: 150,
+        baseColProps: {
+          span: 12,
+        },
+        showActionButtonGroup: false,
+      });
+      // 写手
+      const registerFormWriter = reactive<any>([]);
+
+      //其他
+      const [
+        registerFormOther,
+        {
+          // setFieldsValue: setFieldsValueOther,
+          // updateSchema: updateSchemaOther,
+          // resetFields: resetFieldsOther,
+          // validate: validateOther,
+        },
+      ] = useForm({
         schemas: [
           {
             field: 'remarks',
@@ -54,27 +105,67 @@
       });
 
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-        await resetFields();
+        // resetFields();
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
 
+        // 检验玩家
+        updateSchemaOrder({
+          field: 'aliOrder',
+          componentProps: {
+            enterButton: '校验订单',
+            placeholder: '请先输入订单进行校验',
+            onSearch: handleCheckOrder,
+          },
+        });
+        updateSchemaOrder([
+          { field: 'invoice', componentProps: { disabled: disabled.value } },
+          { field: 'taobaoPrice', componentProps: { disabled: disabled.value } },
+          { field: 'customrContact', componentProps: { disabled: disabled.value } },
+          { field: 'orderOutline', componentProps: { disabled: disabled.value } },
+          { field: 'memberName', componentProps: { disabled: disabled.value } },
+        ]);
+
         if (unref(isUpdate)) {
+          disabled.value = false;
           setModalProps({});
           rowId.value = data.record.user_id;
-          await setFieldsValue({
-            ...data.record,
-          });
+
+          // await setFieldsValue({
+          //   ...data.record,
+          // });
+        } else {
+          disabled.value = true;
         }
 
-        await updateSchema([
-          {
-            field: 'password',
-            show: !unref(isUpdate),
-            required: false,
-          },
-        ]);
+        // await updateSchema([
+        //   {
+        //     field: 'password',
+        //     show: !unref(isUpdate),
+        //     required: false,
+        //   },
+        // ]);
       });
 
+      async function handleCheckOrder(value) {
+        const res = await checkOrderApi({ aliOrder: value });
+        if (res?.length > 0) {
+          notification.error({ message: '提示', description: '已存在改订单！' });
+          disabled.value = true;
+        } else {
+          disabled.value = false;
+        }
+      }
+
+      async function handleCheckWriter(value) {
+        const res = await checkWriterApi({ writerNum: value });
+        if (res?.length > 0) {
+          notification.error({ message: '提示', description: '已存在改订单！' });
+          disabled.value = true;
+        } else {
+          disabled.value = false;
+        }
+      }
       function handleSuccess(value) {
         console.log(value);
       }
@@ -83,28 +174,72 @@
 
       async function handleSubmit() {
         try {
-          const values = await validate();
-          console.log(values);
+          // const values = await validateWriter();
+          // console.log(values);
           setModalProps({ confirmLoading: true });
           // TODO custom api
-          await AddEditUserApi({ ...values, user_id: rowId.value });
+          // await AddEditUserApi({ ...values, user_id: rowId.value });
           closeModal();
-          emit('success', { isUpdate: unref(isUpdate), values: { ...values, id: rowId.value } });
+          emit('success', {
+            isUpdate: unref(isUpdate),
+            // values: { ...values, id: rowId.value }
+          });
         } finally {
           setModalProps({ confirmLoading: false });
         }
       }
-      function addHandle(field) {
-        console.log(field);
+
+      function handleAdd() {
+        orderInfo.writer?.push({
+          writerNum: '',
+          name: '',
+          writerAccount: '',
+          alipayAccount: '',
+          qqAccount: '',
+          wechatAccount: '',
+          writerSituation: 1,
+          writerQuality: 1,
+        });
+
+        registerFormWriter.push(
+          useForm({
+            schemas: writerInfoForm,
+            labelWidth: 150,
+            baseColProps: {
+              span: 12,
+            },
+            showActionButtonGroup: false,
+          }),
+        );
+
+        nextTick(() => {
+          updateSchemaOrder([
+            { field: 'invoice', componentProps: { disabled: disabled.value } },
+            { field: 'taobaoPrice', componentProps: { disabled: disabled.value } },
+            { field: 'customrContact', componentProps: { disabled: disabled.value } },
+            { field: 'orderOutline', componentProps: { disabled: disabled.value } },
+            { field: 'memberName', componentProps: { disabled: disabled.value } },
+          ]);
+        });
       }
+
+      function handleDelete(index) {
+        orderInfo.writer?.splice(index, 1);
+        registerFormWriter.splice(index, 1);
+      }
+
       return {
+        disabled,
         registerModal,
-        registerForm,
+        registerFormOrder,
+        registerFormWriter,
+        registerFormOther,
         getTitle,
-        handleSubmit,
-        addHandle,
-        handleSuccess,
         orderInfo,
+        handleSubmit,
+        handleSuccess,
+        handleAdd,
+        handleDelete,
       };
     },
   });

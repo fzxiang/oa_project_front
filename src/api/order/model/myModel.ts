@@ -32,6 +32,14 @@ export interface WriterItemsParams {
   writerQuality: number;
 }
 
+export interface OrderInfoModel {
+  order: OrderiItemsParams;
+  writer?: WriterItemsParams[];
+  other: {
+    remarks: string;
+  };
+}
+
 export type UpdateOrderParamsModel<T> = {
   type: number;
   fileData: T;

@@ -1,14 +1,17 @@
 <template>
-  <div v-for="item in [1, 2, 3]" :key="item">
-    <Divider orientation="left">
-      写手信息 - 1
-      <a-button type="link" color="error" @click="deleteHandle">删除写手</a-button>
-    </Divider>
-    <BasicForm @register="registerForm" />
+  <a-button block @click="addHandle">添加写手</a-button>
+  <div v-if="orderInfo.writer.length !== 0">
+    <div v-for="item in orderInfo.writer" :key="item">
+      <Divider orientation="left">
+        写手信息 - 1
+        <a-button type="link" color="error" @click="deleteHandle">删除写手</a-button>
+      </Divider>
+      <BasicForm @register="registerForm" />
+    </div>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref, nextTick } from 'vue';
+  import { defineComponent, ref, unref, nextTick, inject } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { writerInfoForm } from './tableData';
   import { Divider } from 'ant-design-vue';
@@ -21,8 +24,9 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const rowId = ref('');
+      const orderInfo = inject('orderInfo');
 
-      const [registerForm, { updateSchema, validate }] = useForm({
+      const [registerForm, { updateSchema, validate, resetFields }] = useForm({
         schemas: writerInfoForm,
         labelWidth: 150,
         baseColProps: {
@@ -46,9 +50,12 @@
           },
         };
       };
-      nextTick(() => {
+
+      nextTick(async () => {
+        await resetFields();
+
         // 检验玩家
-        updateSchema({
+        await updateSchema({
           field: 'writerNum',
           componentProps: handleCheckOrder,
         });
@@ -70,7 +77,18 @@
         console.log(field);
       }
 
-      return { registerForm, deleteHandle, checkHandle, handleSubmit };
+      function addHandle(field) {
+        console.log(field);
+      }
+
+      return {
+        registerForm,
+        deleteHandle,
+        checkHandle,
+        handleSubmit,
+        addHandle,
+        orderInfo,
+      };
     },
   });
 </script>

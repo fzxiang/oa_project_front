@@ -1,11 +1,11 @@
 <template>
   <div>
     <Divider orientation="left">订单信息</Divider>
-    <BasicForm @register="registerForm" />
+    <BasicForm :model="orderInfo.order" @register="registerForm" />
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref, nextTick } from 'vue';
+  import { defineComponent, ref, unref, nextTick, inject } from 'vue';
   import { Divider } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { orderInfoForm } from './tableData';
@@ -29,11 +29,11 @@
         showActionButtonGroup: false,
       });
 
+      const orderInfo = inject('orderInfo');
       nextTick(() => {
-        console.log(_.data);
-        if (isEmpty(_.data)) {
+        if (isEmpty(orderInfo)) {
           // 编辑
-          setFieldsValue(_.data);
+          setFieldsValue(orderInfo.order);
           updateSchema([
             { field: 'invoice', componentProps: { disabled: false } },
             { field: 'invoice', componentProps: { disabled: false } },
@@ -75,7 +75,7 @@
         }
       }
 
-      return { registerForm, handleSubmit };
+      return { registerForm, handleSubmit, orderInfo };
     },
   });
 </script>
