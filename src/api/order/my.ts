@@ -7,6 +7,7 @@ import {
   SearchOrderPageModel,
 } from './model/myModel';
 import { defHttp } from '/@/utils/http/axios';
+import { downloadByUrl } from '/@/utils/file/download';
 
 enum Api {
   // 添加订单(订单信息(orderInfo(json格式)))
@@ -51,12 +52,11 @@ export const checkOrderApi = (params: { aliOrder: string }) =>
 
 export const uploadOrderFileApi = (params: UpdateOrderParamsModel<UpdateOrderFileData>) =>
   defHttp.post<OrderResultModel>(
-    { url: Api.UPLOAD_ORDER_FILE, params },
+    { url: Api.UPLOAD_ORDER_FILE, params, timeout: 600 * 1000 },
     { successMessageMode: 'notification' },
   );
 
-export const exportOrderApi = (params: SearchOrderPageModel) =>
-  defHttp.get({ url: Api.EXPORT_ORDER, params }, { successMessageMode: 'notification' });
+export const exportOrderApi = (url: string) => downloadByUrl({ url: Api.EXPORT_ORDER + url });
 
 export const searchOrderApi = (params: SearchOrderPageModel) =>
   defHttp.get<SearchOrderResultModel>({ url: Api.SEARCH_ORDER, params });

@@ -42,13 +42,13 @@ export interface OrderInfoModel {
 
 export type UpdateOrderParamsModel<T> = {
   type: number;
-  fileData: T;
+  fileData: T[];
 };
 export interface UpdateOrderFileData {
   aliOrder: string;
   paymentMer?: number;
   confirmTime?: string;
-  prymentTime?: string;
+  paymentTime?: string;
   refundState?: string;
   refundMod?: string;
   actualPayment?: number;
