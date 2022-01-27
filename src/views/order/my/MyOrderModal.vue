@@ -8,8 +8,8 @@
   >
     <BasicForm @register="registerFormOrder" />
     <a-button block @click="handleAdd" :disabled="disabled">添加写手</a-button>
-    <div v-if="orderInfo.writer.length !== 0">
-      <div v-for="(item, index) in orderInfo.writer" :key="item">
+    <div v-if="orderInfo.writer?.length !== 0">
+      <div v-for="(item, index) in orderInfo.writer" :key="item.writerNum">
         <Divider orientation="left">
           写手信息 - {{ index + 1 }}
           <a-button type="link" color="error" @click="handleDelete(index)">删除写手</a-button>
@@ -61,10 +61,10 @@
       const [
         registerFormOrder,
         {
-          // validate: validateOrder,
           updateSchema: updateSchemaOrder,
+          setProps: setPropsOrder,
+          // validate: validateOrder,
           // setFieldsValue: setFieldsValueOrder,
-          // setProps: setPropsOrder,
         },
       ] = useForm({
         schemas: orderInfoForm,
@@ -108,24 +108,6 @@
         // resetFields();
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
-
-        // 检验玩家
-        updateSchemaOrder({
-          field: 'aliOrder',
-          componentProps: {
-            enterButton: '校验订单',
-            placeholder: '请先输入订单进行校验',
-            onSearch: handleCheckOrder,
-          },
-        });
-        updateSchemaOrder([
-          { field: 'invoice', componentProps: { disabled: disabled.value } },
-          { field: 'taobaoPrice', componentProps: { disabled: disabled.value } },
-          { field: 'customrContact', componentProps: { disabled: disabled.value } },
-          { field: 'orderOutline', componentProps: { disabled: disabled.value } },
-          { field: 'memberName', componentProps: { disabled: disabled.value } },
-        ]);
-
         if (unref(isUpdate)) {
           disabled.value = false;
           setModalProps({});
@@ -137,33 +119,32 @@
         } else {
           disabled.value = true;
         }
+        // 检验玩家
+        await setPropsOrder({ disabled: disabled.value });
 
-        // await updateSchema([
-        //   {
-        //     field: 'password',
-        //     show: !unref(isUpdate),
-        //     required: false,
-        //   },
-        // ]);
+        await updateSchemaOrder({
+          field: 'aliOrder',
+          componentProps: {
+            enterButton: '校验订单',
+            placeholder: '请先输入订单进行校验',
+            onSearch: async (value) => {
+              const res = await checkOrderApi({ aliOrder: value });
+              if (res?.length > 0) {
+                notification.error({ message: '提示', description: '已存在改订单！' });
+                disabled.value = true;
+              } else {
+                disabled.value = false;
+              }
+            },
+            disabled: false,
+          },
+        });
       });
-
-      async function handleCheckOrder(value) {
-        const res = await checkOrderApi({ aliOrder: value });
-        if (res?.length > 0) {
-          notification.error({ message: '提示', description: '已存在改订单！' });
-          disabled.value = true;
-        } else {
-          disabled.value = false;
-        }
-      }
 
       async function handleCheckWriter(value) {
         const res = await checkWriterApi({ writerNum: value });
         if (res?.length > 0) {
-          notification.error({ message: '提示', description: '已存在改订单！' });
-          disabled.value = true;
-        } else {
-          disabled.value = false;
+          // disabled.value = true;
         }
       }
       function handleSuccess(value) {
@@ -200,7 +181,14 @@
           writerSituation: 1,
           writerQuality: 1,
         });
-
+        const [register, {}] = useForm({
+          schemas: writerInfoForm,
+          labelWidth: 150,
+          baseColProps: {
+            span: 12,
+          },
+          showActionButtonGroup: false,
+        });
         registerFormWriter.push(
           useForm({
             schemas: writerInfoForm,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Divider orientation="left">订单信息</Divider>
-    <BasicForm :model="orderInfo.order" @register="registerForm" />
+    <BasicForm @register="registerForm" />
   </div>
 </template>
 <script lang="ts">
@@ -33,7 +33,7 @@
       nextTick(() => {
         if (isEmpty(orderInfo)) {
           // 编辑
-          setFieldsValue(orderInfo.order);
+          setFieldsValue(orderInfo);
           updateSchema([
             { field: 'invoice', componentProps: { disabled: false } },
             { field: 'invoice', componentProps: { disabled: false } },
