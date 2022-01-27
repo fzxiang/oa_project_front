@@ -23,14 +23,13 @@
 </template>
 <script lang="ts">
   import { Divider } from 'ant-design-vue';
-  import { defineComponent, ref, computed, unref, reactive } from 'vue';
+  import { defineComponent, ref, computed, unref, reactive, nextTick } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { OrderInfoModel } from '/@/api/order/model/myModel';
   import { orderInfoForm, writerInfoForm } from './tableData';
   import { checkOrderApi, checkWriterApi } from '/@/api/order/my';
   import { useMessage } from '/@/hooks/web/useMessage';
-  import { nextTick } from 'process';
   const { notification } = useMessage();
 
   export default defineComponent({
@@ -62,7 +61,8 @@
         registerFormOrder,
         {
           updateSchema: updateSchemaOrder,
-          setProps: setPropsOrder,
+          resetFields: resetFieldsOrder,
+          // setProps: setPropsOrder,
           // validate: validateOrder,
           // setFieldsValue: setFieldsValueOrder,
         },
@@ -105,7 +105,15 @@
       });
 
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-        // resetFields();
+        await resetFieldsOrder();
+        await updateSchemaOrder([
+          { field: 'invoice', componentProps: { disabled: true } },
+          { field: 'invoice', componentProps: { disabled: true } },
+          { field: 'taobaoPrice', componentProps: { disabled: true } },
+          { field: 'customrContact', componentProps: { disabled: true } },
+          { field: 'orderOutline', componentProps: { disabled: true } },
+          { field: 'memberName', componentProps: { disabled: true } },
+        ]);
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
         if (unref(isUpdate)) {
@@ -120,7 +128,6 @@
           disabled.value = true;
         }
         // 检验玩家
-        await setPropsOrder({ disabled: disabled.value });
 
         await updateSchemaOrder({
           field: 'aliOrder',
@@ -133,6 +140,14 @@
                 notification.error({ message: '提示', description: '已存在改订单！' });
                 disabled.value = true;
               } else {
+                await updateSchemaOrder([
+                  { field: 'invoice', componentProps: { disabled: false } },
+                  { field: 'invoice', componentProps: { disabled: false } },
+                  { field: 'taobaoPrice', componentProps: { disabled: false } },
+                  { field: 'customrContact', componentProps: { disabled: false } },
+                  { field: 'orderOutline', componentProps: { disabled: false } },
+                  { field: 'memberName', componentProps: { disabled: false } },
+                ]);
                 disabled.value = false;
               }
             },
@@ -141,12 +156,6 @@
         });
       });
 
-      async function handleCheckWriter(value) {
-        const res = await checkWriterApi({ writerNum: value });
-        if (res?.length > 0) {
-          // disabled.value = true;
-        }
-      }
       function handleSuccess(value) {
         console.log(value);
       }
@@ -181,7 +190,7 @@
           writerSituation: 1,
           writerQuality: 1,
         });
-        const [register, {}] = useForm({
+        const userFormWriter = useForm({
           schemas: writerInfoForm,
           labelWidth: 150,
           baseColProps: {
@@ -189,26 +198,30 @@
           },
           showActionButtonGroup: false,
         });
-        registerFormWriter.push(
-          useForm({
-            schemas: writerInfoForm,
-            labelWidth: 150,
-            baseColProps: {
-              span: 12,
+        userFormWriter[1].updateSchema({
+          field: 'writerNum',
+          componentProps: {
+            enterButton: '校验写手',
+            placeholder: '请先输入写手的手机号',
+            onSearch: async (value) => {
+              const res = await checkWriterApi({ writerNum: value });
+              if (res?.length === 0) {
+                notification.error({ message: '提示', description: '不存在该写手！' });
+              } else {
+                await userFormWriter[1].updateSchema([
+                  { field: 'invoice', componentProps: { disabled: false } },
+                  { field: 'invoice', componentProps: { disabled: false } },
+                  { field: 'taobaoPrice', componentProps: { disabled: false } },
+                  { field: 'customrContact', componentProps: { disabled: false } },
+                  { field: 'orderOutline', componentProps: { disabled: false } },
+                  { field: 'memberName', componentProps: { disabled: false } },
+                ]);
+              }
             },
-            showActionButtonGroup: false,
-          }),
-        );
-
-        nextTick(() => {
-          updateSchemaOrder([
-            { field: 'invoice', componentProps: { disabled: disabled.value } },
-            { field: 'taobaoPrice', componentProps: { disabled: disabled.value } },
-            { field: 'customrContact', componentProps: { disabled: disabled.value } },
-            { field: 'orderOutline', componentProps: { disabled: disabled.value } },
-            { field: 'memberName', componentProps: { disabled: disabled.value } },
-          ]);
+            disabled: false,
+          },
         });
+        registerFormWriter.push(userFormWriter);
       }
 
       function handleDelete(index) {
