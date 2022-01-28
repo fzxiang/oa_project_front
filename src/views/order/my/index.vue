@@ -2,7 +2,17 @@
   <div>
     <BasicTable @register="registerTable">
       <template #form-custom> custom-slot </template>
-      <template #headerTop> </template>
+      <template #headerTop>
+        <Space size="large" class="mt-3">
+          <span
+            >淘宝总价格：<Tag color="blue"> {{ price.order }} </Tag> 元</span
+          >
+          <span
+            >写手总价格：<Tag color="blue"> {{ price.writer }} </Tag> 元</span
+          >
+        </Space>
+        <Divider />
+      </template>
       <template #expandedRowRender="{ record }">
         <span>No: {{ record.no }} </span>
       </template>
@@ -25,7 +35,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent, ref, reactive, nextTick } from 'vue';
   import { BasicTable, useTable } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './tableData';
   import { exportOrderApi, searchOrderApi, uploadOrderFileApi } from '/@/api/order/my';
@@ -33,13 +43,17 @@
   import MyOrderModal from './MyOrderModal.vue';
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { Tag, Divider, Space } from 'ant-design-vue';
 
   export default defineComponent({
-    components: { BasicTable, MyOrderModal, ImpExcel },
+    components: { BasicTable, MyOrderModal, ImpExcel, Tag, Divider, Space },
     setup() {
       const { createErrorModal } = useMessage();
-
-      const [registerTable, { getForm }] = useTable({
+      const price = reactive({
+        order: 0,
+        writer: 0,
+      });
+      const [registerTable, { getForm, getRawDataSource }] = useTable({
         title: '订单列表',
         api: searchOrderApi,
         columns: getBasicColumns(),
@@ -49,14 +63,19 @@
         handleSearchInfoFn(info) {
           return info;
         },
+        clickToRowSelect: true,
         useSearchForm: true,
         formConfig: getFormConfig(),
         showTableSetting: true,
         tableSetting: { fullScreen: true },
         showIndexColumn: false,
         rowKey: 'id',
+        afterFetch: async () => {
+          const data = await getRawDataSource();
+          price.order = data.tbTotalPrice;
+          price.writer = data.writerTotalPrice;
+        },
       });
-
       const [registerModal, { openModal }] = useModal();
 
       function addOrderHandle() {
@@ -119,6 +138,7 @@
         }
       }
       return {
+        price,
         registerModal,
         addOrderHandle,
         registerTable,

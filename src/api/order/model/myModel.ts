@@ -3,7 +3,7 @@ import { BasicPageParams, BasicPostFormResult } from '../../model/baseModel';
 export type OrderParamsModel = {
   order: OrderiItemsParams;
   writer: WriterItemsParams[];
-  othter: {
+  other: {
     remarks: string;
   };
 };

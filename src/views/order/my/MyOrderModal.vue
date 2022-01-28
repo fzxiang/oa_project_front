@@ -23,12 +23,12 @@
 </template>
 <script lang="ts">
   import { Divider } from 'ant-design-vue';
-  import { defineComponent, ref, computed, unref, reactive, nextTick } from 'vue';
+  import { defineComponent, ref, computed, unref, reactive } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { OrderInfoModel } from '/@/api/order/model/myModel';
   import { orderInfoForm, writerInfoForm } from './tableData';
-  import { checkOrderApi, checkWriterApi } from '/@/api/order/my';
+  import { addOrderApi, checkOrderApi, checkWriterApi } from '/@/api/order/my';
   import { useMessage } from '/@/hooks/web/useMessage';
   const { notification } = useMessage();
 
@@ -62,8 +62,8 @@
         {
           updateSchema: updateSchemaOrder,
           resetFields: resetFieldsOrder,
+          validate: validateOrder,
           // setProps: setPropsOrder,
-          // validate: validateOrder,
           // setFieldsValue: setFieldsValueOrder,
         },
       ] = useForm({
@@ -84,7 +84,7 @@
           // setFieldsValue: setFieldsValueOther,
           // updateSchema: updateSchemaOther,
           // resetFields: resetFieldsOther,
-          // validate: validateOther,
+          validate: validateOther,
         },
       ] = useForm({
         schemas: [
@@ -164,11 +164,19 @@
 
       async function handleSubmit() {
         try {
-          // const values = await validateWriter();
-          // console.log(values);
+          const writer = registerFormWriter.map(async (item) => {
+            return await item[1].validate();
+          });
+          const orderInfo = {
+            order: await validateOrder(),
+            writer: writer,
+            other: await validateOther(),
+          };
           setModalProps({ confirmLoading: true });
           // TODO custom api
-          // await AddEditUserApi({ ...values, user_id: rowId.value });
+          await addOrderApi({
+            orderInfo: orderInfo,
+          });
           closeModal();
           emit('success', {
             isUpdate: unref(isUpdate),
