@@ -17,7 +17,7 @@
         <span>No: {{ record.no }} </span>
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="addOrderHandle">添加订单</a-button>
+        <a-button type="primary" @click="handleAdd">添加订单</a-button>
         <a-button type="default" @click="handleExport">导出订单</a-button>
         <ImpExcel @success="loadDataSuccess1" dateFormat="YYYY-MM-DD">
           <a-button :loading="loadingData1" :disabled="loadingData1" type="primary" color="success"
@@ -30,13 +30,24 @@
           >
         </ImpExcel>
       </template>
+
+      <template #action="{ record }">
+        <TableAction
+          :actions="[
+            {
+              icon: 'clarity:note-edit-line',
+              onClick: handleEdit.bind(null, record),
+            },
+          ]"
+        />
+      </template>
     </BasicTable>
     <MyOrderModal @register="registerModal" />
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, reactive, nextTick } from 'vue';
-  import { BasicTable, useTable } from '/@/components/Table';
+  import { defineComponent, ref, reactive } from 'vue';
+  import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './tableData';
   import { exportOrderApi, searchOrderApi, uploadOrderFileApi } from '/@/api/order/my';
   import { useModal } from '/@/components/Modal';
@@ -46,7 +57,7 @@
   import { Tag, Divider, Space } from 'ant-design-vue';
 
   export default defineComponent({
-    components: { BasicTable, MyOrderModal, ImpExcel, Tag, Divider, Space },
+    components: { BasicTable, MyOrderModal, TableAction, ImpExcel, Tag, Divider, Space },
     setup() {
       const { createErrorModal } = useMessage();
       const price = reactive({
@@ -60,28 +71,44 @@
         beforeFetch(info) {
           return { searchParams: info };
         },
+        afterFetch: async () => {
+          const data = await getRawDataSource();
+          price.order = data.tbTotalPrice;
+          price.writer = data.writerTotalPrice;
+        },
         handleSearchInfoFn(info) {
           return info;
         },
-        clickToRowSelect: true,
+        // clickToRowSelect: true,
         useSearchForm: true,
         formConfig: getFormConfig(),
         showTableSetting: true,
         tableSetting: { fullScreen: true },
         showIndexColumn: false,
         rowKey: 'id',
-        afterFetch: async () => {
-          const data = await getRawDataSource();
-          price.order = data.tbTotalPrice;
-          price.writer = data.writerTotalPrice;
+        actionColumn: {
+          width: 80,
+          title: '操作',
+          dataIndex: 'action',
+          slots: { customRender: 'action' },
+          fixed: 'right',
         },
       });
+
+      // const [registerTableItem, {}] = useTable({});
       const [registerModal, { openModal }] = useModal();
 
-      function addOrderHandle() {
+      function handleAdd() {
         console.log('添加订单');
         openModal(true, {
           isUpdate: false,
+        });
+      }
+
+      function handleEdit(record: Recordable) {
+        openModal(true, {
+          record,
+          isUpdate: true,
         });
       }
       function handleExport() {
@@ -129,8 +156,8 @@
           });
           const res = await uploadOrderFileApi({ type: 2, fileData: fileData });
           // console.log(res);
-          if (res.length !== 0) {
-            createErrorModal({ title: '以下订单处理错误', content: res.join() });
+          if (res?.result?.length !== 0) {
+            createErrorModal({ title: '以下订单处理错误', content: res.result.join() });
           }
           loadingData2.value = false;
         } catch (e) {
@@ -140,9 +167,10 @@
       return {
         price,
         registerModal,
-        addOrderHandle,
         registerTable,
+        handleAdd,
         handleExport,
+        handleEdit,
         loadDataSuccess1,
         loadDataSuccess2,
         loadingData1,

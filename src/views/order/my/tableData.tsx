@@ -35,11 +35,12 @@ export function getBasicColumns(): BasicColumn[] {
       title: '结算状态',
       dataIndex: 'settleState',
       width: 120,
-      filters: [
-        { text: '已结算', value: '1' },
-        { text: '未结算', value: '2' },
-        { text: '暂缓结算', value: '3' },
-      ],
+      format: new Map([
+        [0, '全部'],
+        [1, '已结算'],
+        [2, '未结算'],
+        [3, '暂缓结算'],
+      ]),
     },
     {
       title: '会员名',
@@ -59,7 +60,7 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '付款时间',
       width: 150,
-      sorter: true,
+      // sorter: true,
       dataIndex: 'paymentTime',
     },
     {
