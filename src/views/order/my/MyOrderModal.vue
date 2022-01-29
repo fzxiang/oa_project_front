@@ -42,7 +42,6 @@
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
-      const rowId = ref('');
       const disabled = ref(false);
 
       const orderInfo = reactive<OrderInfoModel>({
@@ -67,8 +66,7 @@
           updateSchema: updateSchemaOrder,
           resetFields: resetFieldsOrder,
           validate: validateOrder,
-          // setProps: setPropsOrder,
-          // setFieldsValue: setFieldsValueOrder,
+          setFieldsValue: setFieldsValueOrder,
         },
       ] = useForm({
         schemas: orderInfoForm,
@@ -84,10 +82,14 @@
       const [
         registerFormWriter,
         {
+          setFieldsValue: setFieldsValueWriter,
+          resetFields: resetFieldsWriter,
           appendSchemaByField: appendSchemaByFieldWriter,
           validate: validateWriter,
           getFieldsValue,
           updateSchema: updateSchemaWriter,
+          removeSchemaByFiled: removeSchemaByFiledWriter,
+          setProps: setPropsWriter,
         },
       ] = useForm({
         schemas: [],
@@ -135,7 +137,19 @@
       }
 
       function handleDelete(index) {
-        console.log(index);
+        removeSchemaByFiledWriter([
+          `writerNum_${index}`,
+          `name_${index}`,
+          `writerPrice_${index}`,
+          `alipayAccount_${index}`,
+          `qqAccount_${index}`,
+          `wechatAccount_${index}`,
+          `writerSituation_${index}`,
+          `writerQuality_${index}`,
+          // `divider_${index}`,
+          // `add_${index}`,
+        ]);
+        // setPropsWriter();
         // orderInfo.writer?.splice(index, 1);
         // registerFormWriter.splice(index, 1);
       }
@@ -144,9 +158,9 @@
       const [
         registerFormOther,
         {
-          // setFieldsValue: setFieldsValueOther,
+          setFieldsValue: setFieldsValueOther,
           // updateSchema: updateSchemaOther,
-          // resetFields: resetFieldsOther,
+          resetFields: resetFieldsOther,
           validate: validateOther,
         },
       ] = useForm({
@@ -166,53 +180,58 @@
 
       // 初始化
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-        await resetFieldsOrder();
-        await updateSchemaOrder([
-          { field: 'invoice', componentProps: { disabled: true } },
-          { field: 'taobaoPrice', componentProps: { disabled: true } },
-          { field: 'customrContact', componentProps: { disabled: true } },
-          { field: 'orderOutline', componentProps: { disabled: true } },
-          { field: 'memberName', componentProps: { disabled: true } },
-        ]);
-        setModalProps({ confirmLoading: false });
+        setModalProps({ confirmLoading: true });
         isUpdate.value = !!data?.isUpdate;
+
+        await updateSchemaOrder([
+          { field: 'invoice', componentProps: { disabled: !isUpdate.value } },
+          { field: 'taobaoPrice', componentProps: { disabled: !isUpdate.value } },
+          { field: 'customrContact', componentProps: { disabled: !isUpdate.value } },
+          { field: 'orderOutline', componentProps: { disabled: !isUpdate.value } },
+          { field: 'memberName', componentProps: { disabled: !isUpdate.value } },
+          {
+            field: 'aliOrder',
+            componentProps: {
+              enterButton: '校验订单',
+              placeholder: '请先输入订单进行校验',
+              onSearch: async (value) => {
+                const res = await checkOrderApi({ aliOrder: value });
+                if (res?.length > 0) {
+                  notification.error({ message: '提示', description: '已存在改订单！' });
+                  disabled.value = true;
+                } else {
+                  await updateSchemaOrder([
+                    { field: 'invoice', componentProps: { disabled: false } },
+                    { field: 'taobaoPrice', componentProps: { disabled: false } },
+                    { field: 'customrContact', componentProps: { disabled: false } },
+                    { field: 'orderOutline', componentProps: { disabled: false } },
+                    { field: 'memberName', componentProps: { disabled: false } },
+                  ]);
+                  disabled.value = false;
+                }
+              },
+              disabled: false,
+            },
+          },
+        ]);
+
+        // 区分编辑和新增
         if (unref(isUpdate)) {
           disabled.value = false;
-          setModalProps({});
-          rowId.value = data.record.user_id;
-
+          console.log('编辑订单');
+          await setFieldsValueOrder(data?.record);
+          await setFieldsValueOther(data?.record);
           // await setFieldsValue({
           //   ...data.record,
           // });
         } else {
+          await resetFieldsOrder();
+          await resetFieldsWriter();
+          await resetFieldsOther();
           disabled.value = true;
         }
-        // 检验玩家
 
-        await updateSchemaOrder({
-          field: 'aliOrder',
-          componentProps: {
-            enterButton: '校验订单',
-            placeholder: '请先输入订单进行校验',
-            onSearch: async (value) => {
-              const res = await checkOrderApi({ aliOrder: value });
-              if (res?.length > 0) {
-                notification.error({ message: '提示', description: '已存在改订单！' });
-                disabled.value = true;
-              } else {
-                await updateSchemaOrder([
-                  { field: 'invoice', componentProps: { disabled: false } },
-                  { field: 'taobaoPrice', componentProps: { disabled: false } },
-                  { field: 'customrContact', componentProps: { disabled: false } },
-                  { field: 'orderOutline', componentProps: { disabled: false } },
-                  { field: 'memberName', componentProps: { disabled: false } },
-                ]);
-                disabled.value = false;
-              }
-            },
-            disabled: false,
-          },
-        });
+        setModalProps({ confirmLoading: false });
       });
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增订单' : '编辑订单'));
@@ -239,7 +258,6 @@
             });
           }
 
-          console.log('order', order, 'writer:', writer, 'other:', other);
           setModalProps({ confirmLoading: true });
           // TODO custom api
           await addOrderApi({
@@ -252,7 +270,6 @@
           closeModal();
           emit('success', {
             isUpdate: unref(isUpdate),
-            // values: { ...values, id: rowId.value }
           });
         } finally {
           setModalProps({ confirmLoading: false });

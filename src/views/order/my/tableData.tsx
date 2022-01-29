@@ -315,7 +315,7 @@ export const writerInfoForm = (index: number): FormSchema[] => [
     },
   },
   {
-    field: '',
+    field: `divider_${index}`,
     label: '',
     colProps: { span: 24 },
     component: 'Divider',
