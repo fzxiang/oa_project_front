@@ -4,10 +4,7 @@ import {
   UpdateOrderParamsModel,
   UpdateOrderFileData,
   SearchOrderResultModel,
-  SearchWriterPageModel,
   SearchOrderPageModel,
-  SearchWriterResultModel,
-  WriterParamsModel,
 } from './model/myModel';
 import { defHttp } from '/@/utils/http/axios';
 import { downloadByUrl } from '/@/utils/file/download';
@@ -27,15 +24,10 @@ enum Api {
   // 检索(searchParams json格式(pageNumber(第几页), pageSize(每页几条数据), aliOrder(淘宝编号), invoice(发单号), memberName(会员名),
   // settleState(结算状态), pStartTime, pEndTime, rStartTime, rEndTime))
   SEARCH_ORDER = '/searchOrder',
-  // 写手对应订单补偿状态(orderId(订单唯一ID)，writerId(写手唯一ID)，state(0:暂无补偿，1:稿费补偿))
+  // 写手对应订单补偿状态(id(订单唯一ID)，writerId(写手唯一ID)，state(0:暂无补偿，1:稿费补偿))
   UPDATE_ORDER_REDRESS = '/updateOrderRedress',
   // 检验写手(写手手机号(writerNum))
   CHECK_WRITER = '/checkWriter',
-  // pageNumber不传代表获取所有
-  // 写手总览检索(searchParams json格式(pageNumber(第几页), pageSize(每页几条数据), writerNum(手机号), qqAccount(qq号), wechatAccount(微信号)
-  SEARCH_WRITER = '/searchWriter',
-  // 写手信息编辑(id(写手唯一ID) writerInfo json格式)
-  UPDATE_WRITER = '/updateWriter',
   GET_TABLE_CHILD = '/getWritersOfOrder',
 }
 
@@ -68,11 +60,5 @@ export const searchOrderApi = (params: SearchOrderPageModel) =>
 export const checkWriterApi = (params: { writerNum: string }) =>
   defHttp.get({ url: Api.CHECK_WRITER, params }, { successMessageMode: 'notification' });
 
-export const searchWriterApi = (params: SearchWriterPageModel) =>
-  defHttp.get<SearchWriterResultModel>({ url: Api.SEARCH_WRITER, params });
-
-export const updateWriterApi = (params: WriterParamsModel) =>
-  defHttp.post<any>({ url: Api.UPDATE_WRITER, params }, { successMessageMode: 'notification' });
-
-export const searchChildApi = (params: { orderId: number }) =>
+export const searchChildApi = (params: { id: number }) =>
   defHttp.post<any>({ url: Api.GET_TABLE_CHILD, params });

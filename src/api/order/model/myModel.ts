@@ -84,10 +84,12 @@ export interface SearchWriterParamsModel {
 }
 export interface WriterParamsModel {
   id?: number;
-  name: string;
-  alipayAccount: string;
-  qqAccount: string;
-  wechatAccount: string;
+  writerInfo: {
+    name: string;
+    alipayAccount: string;
+    qqAccount: string;
+    wechatAccount: string;
+  };
 }
 export type SearchWriterPageModel = BasicPageParams & SearchWriterParamsModel;
 

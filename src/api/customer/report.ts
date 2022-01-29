@@ -11,7 +11,6 @@ import { downloadByUrl } from '/@/utils/file/download';
 enum Api {
   // 获取全部客服
   GET_CUSTOMER = '/getUsersOfPower',
-  GET_TABLE_CHILD = '/getWritersOfOrder',
   // 添加订单(订单信息(orderInfo(json格式)))
   ADD = '/add',
   // 编辑订单(订单信息(orderInfo(json格式(数据中需要有原本订单ID和写手ID))))
@@ -32,9 +31,6 @@ enum Api {
   CHECK_WRITER = '/updateRedress',
 }
 export const getCustomerApi = () => defHttp.get<any>({ url: Api.GET_CUSTOMER });
-
-export const searchChildApi = (params: { orderId: number }) =>
-  defHttp.post({ url: Api.GET_TABLE_CHILD, params });
 
 export const searchApi = (params: { searchParmas: any }) =>
   defHttp.get<any>({ url: Api.SEARCH, params });

@@ -68,7 +68,7 @@
         order: 0,
         writer: 0,
       });
-      const orderRowId = ref('');
+      const rowId = ref('');
       const [registerTable, { getForm, getRawDataSource }] = useTable({
         title: '订单列表',
         api: searchOrderApi,
@@ -100,7 +100,8 @@
         },
         onExpand: async (isExpand, record) => {
           if (isExpand) {
-            orderRowId.value = record.aliOrder;
+            console.log(record);
+            rowId.value = record.id;
           }
         },
       });
@@ -114,7 +115,7 @@
         useSearchForm: false,
         showTableSetting: false,
         beforeFetch() {
-          return { orderId: orderRowId.value };
+          return { id: rowId.value };
         },
       });
 

@@ -11,24 +11,28 @@
           ]"
         />
       </template>
+      <template #expandedRowRender="{}">
+        <BasicTable @register="registerTableChild" />
+      </template>
     </BasicTable>
     <WriterModal @register="registerModal" />
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getBasicColumns, getFormConfig } from './tableData';
-  import { searchWriterApi } from '/@/api/order/my';
+  import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
+  import { searchApi, searchChildApi } from '/@/api/order/writer';
   import { useModal } from '/@/components/Modal';
   import WriterModal from './WriterModal.vue';
 
   export default defineComponent({
     components: { BasicTable, WriterModal, TableAction },
     setup() {
+      const rowId = ref('');
       const [registerTable, { getRawDataSource }] = useTable({
         title: '写手列表',
-        api: searchWriterApi,
+        api: searchApi,
         columns: getBasicColumns(),
         beforeFetch(info) {
           return { searchParams: info };
@@ -54,8 +58,22 @@
           slots: { customRender: 'action' },
           fixed: 'right',
         },
+        onExpand: async (isExpand, record) => {
+          if (isExpand) {
+            console.log(record);
+            rowId.value = record.id;
+          }
+        },
       });
 
+      const [registerTableChild] = useTable({
+        title: '关联订单',
+        api: searchChildApi,
+        columns: getBasicColumnsChild(),
+        beforeFetch() {
+          return { id: rowId.value };
+        },
+      });
       // const [registerTableItem, {}] = useTable({});
       const [registerModal, { openModal }] = useModal();
       function handleEdit(record: Recordable) {
@@ -66,6 +84,7 @@
       }
 
       return {
+        registerTableChild,
         registerModal,
         registerTable,
         handleEdit,

@@ -102,3 +102,42 @@ export const writerInfoForm: FormSchema[] = [
     component: 'Input',
   },
 ];
+
+export function getBasicColumnsChild(): BasicColumn[] {
+  return [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      ifShow: false,
+      width: 200,
+    },
+    {
+      title: '写手名',
+      dataIndex: 'name',
+      fixed: 'left',
+      width: 150,
+    },
+    {
+      title: '写手手机',
+      dataIndex: 'writerNum',
+      fixed: 'left',
+      width: 150,
+    },
+    {
+      title: '写手QQ',
+      dataIndex: 'qqAccount',
+      width: 150,
+      // defaultHidden: true,
+    },
+    {
+      title: '写手微信',
+      dataIndex: 'wechatAccount',
+      width: 120,
+    },
+    {
+      title: '写手支付宝',
+      dataIndex: 'alipayAccount',
+      width: 150,
+    },
+  ];
+}
