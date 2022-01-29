@@ -38,6 +38,7 @@ export interface UserInfo {
   desc?: string;
   homePath?: string;
   roles?: RoleInfo[] | undefined;
+  role?: number | string;
   selectedShop: number;
   permission: Permission[];
 }

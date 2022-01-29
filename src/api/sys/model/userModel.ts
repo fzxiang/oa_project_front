@@ -43,6 +43,7 @@ export interface GetUserInfoModel {
   desc?: string;
   permission: Permission[];
   selectedShop: number;
+  role?: string | number;
 }
 
 export interface ChangePwdParams {
