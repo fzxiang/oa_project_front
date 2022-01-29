@@ -30,7 +30,7 @@ enum Api {
   // 写手对应订单补偿状态(orderId(订单唯一ID)，writerId(写手唯一ID)，state(0:暂无补偿，1:稿费补偿))
   UPDATE_ORDER_REDRESS = '/updateOrderRedress',
   // 检验写手(写手手机号(writerNum))
-  CHECK_WRITER = '/updateOrderRedress',
+  CHECK_WRITER = '/checkWriter',
   // pageNumber不传代表获取所有
   // 写手总览检索(searchParams json格式(pageNumber(第几页), pageSize(每页几条数据), writerNum(手机号), qqAccount(qq号), wechatAccount(微信号)
   SEARCH_WRITER = '/searchWriter',
@@ -65,7 +65,7 @@ export const searchOrderApi = (params: SearchOrderPageModel) =>
   defHttp.get<SearchOrderResultModel>({ url: Api.SEARCH_ORDER, params });
 
 export const checkWriterApi = (params: { writerNum: string }) =>
-  defHttp.post({ url: Api.CHECK_WRITER, params }, { successMessageMode: 'notification' });
+  defHttp.get({ url: Api.CHECK_WRITER, params }, { successMessageMode: 'notification' });
 
 export const searchWriterApi = (params: SearchWriterPageModel) =>
   defHttp.get<SearchWriterResultModel>({ url: Api.SEARCH_WRITER, params });

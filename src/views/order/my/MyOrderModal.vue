@@ -6,23 +6,27 @@
     :title="getTitle"
     @ok="handleSubmit"
   >
+    <Divider orientation="left"> 写手信息 </Divider>
+
     <BasicForm @register="registerFormOrder" />
-    <a-button block @click="handleAdd" :disabled="disabled">添加写手</a-button>
-    <div v-if="orderInfo.writer?.length !== 0">
-      <div v-for="(item, index) in orderInfo.writer" :key="item.writerNum">
-        <Divider orientation="left">
-          写手信息 - {{ index + 1 }}
-          <a-button type="link" color="error" @click="handleDelete(index)">删除写手</a-button>
-        </Divider>
-        <BasicForm @register="registerFormWriter[index][0]" />
-      </div>
-    </div>
+    <a-button type="dashed" block @click="handleAdd" :disabled="disabled">添加写手</a-button>
+
+    <Divider orientation="left"> 写手信息 </Divider>
+    <BasicForm @register="registerFormWriter">
+      <template #add="{ field }">
+        <Space>
+          <a-button @click="handleCheck(field)">检验写手</a-button>
+          <a-button color="error" @click="handleDelete(field)">删除写手</a-button>
+        </Space>
+      </template>
+    </BasicForm>
+
     <Divider orientation="left">其他</Divider>
     <BasicForm @register="registerFormOther" />
   </BasicModal>
 </template>
 <script lang="ts">
-  import { Divider } from 'ant-design-vue';
+  import { Divider, Space } from 'ant-design-vue';
   import { defineComponent, ref, computed, unref, reactive } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
@@ -34,7 +38,7 @@
 
   export default defineComponent({
     name: 'MyOrderModal',
-    components: { BasicModal, BasicForm, Divider },
+    components: { BasicModal, BasicForm, Divider, Space },
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const isUpdate = ref(true);
@@ -74,8 +78,67 @@
         },
         showActionButtonGroup: false,
       });
+
       // 写手
-      const registerFormWriter = reactive<any>([]);
+      const writerIndex = ref(0);
+      const [
+        registerFormWriter,
+        {
+          appendSchemaByField: appendSchemaByFieldWriter,
+          validate: validateWriter,
+          getFieldsValue,
+          updateSchema: updateSchemaWriter,
+        },
+      ] = useForm({
+        schemas: [],
+        labelWidth: 150,
+        baseColProps: {
+          span: 12,
+        },
+        showActionButtonGroup: false,
+      });
+
+      function handleAdd() {
+        orderInfo.writer?.push({
+          writerNum: '',
+          name: '',
+          writerAccount: '',
+          alipayAccount: '',
+          qqAccount: '',
+          wechatAccount: '',
+          writerSituation: 1,
+          writerQuality: 1,
+        });
+        const field = writerInfoForm(writerIndex.value);
+        writerIndex.value = writerIndex.value + 1;
+        console.log('field: ', field);
+        field.forEach((item) => appendSchemaByFieldWriter(item, ''));
+      }
+
+      async function handleCheck(index) {
+        const params = await getFieldsValue();
+        const writerNum = params[`writerNum_${index}`];
+        const res = await checkWriterApi({ writerNum });
+        if (res.lenght !== 0) {
+          updateSchemaWriter([
+            { field: `name_${index}`, componentProps: { disabled: false } },
+            { field: `writerPrice_${index}`, componentProps: { disabled: false } },
+            { field: `alipayAccount_${index}`, componentProps: { disabled: false } },
+            { field: `qqAccount_${index}`, componentProps: { disabled: false } },
+            { field: `wechatAccount_${index}`, componentProps: { disabled: false } },
+            { field: `writerSituation_${index}`, componentProps: { disabled: false } },
+            { field: `writerQuality_${index}`, componentProps: { disabled: false } },
+          ]);
+        } else {
+        }
+        console.log(res);
+      }
+
+      function handleDelete(index) {
+        console.log(index);
+        // orderInfo.writer?.splice(index, 1);
+        // registerFormWriter.splice(index, 1);
+      }
 
       //其他
       const [
@@ -92,9 +155,6 @@
             field: 'remarks',
             label: '备注（最大3000）',
             component: 'InputTextArea',
-            componentProps: {
-              disabled: true,
-            },
           },
         ],
         labelWidth: 150,
@@ -104,10 +164,10 @@
         showActionButtonGroup: false,
       });
 
+      // 初始化
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         await resetFieldsOrder();
         await updateSchemaOrder([
-          { field: 'invoice', componentProps: { disabled: true } },
           { field: 'invoice', componentProps: { disabled: true } },
           { field: 'taobaoPrice', componentProps: { disabled: true } },
           { field: 'customrContact', componentProps: { disabled: true } },
@@ -142,7 +202,6 @@
               } else {
                 await updateSchemaOrder([
                   { field: 'invoice', componentProps: { disabled: false } },
-                  { field: 'invoice', componentProps: { disabled: false } },
                   { field: 'taobaoPrice', componentProps: { disabled: false } },
                   { field: 'customrContact', componentProps: { disabled: false } },
                   { field: 'orderOutline', componentProps: { disabled: false } },
@@ -156,26 +215,39 @@
         });
       });
 
-      function handleSuccess(value) {
-        console.log(value);
-      }
-
       const getTitle = computed(() => (!unref(isUpdate) ? '新增订单' : '编辑订单'));
 
+      // 提交
       async function handleSubmit() {
         try {
-          const writer = registerFormWriter.map(async (item) => {
-            return await item[1].validate();
-          });
-          const orderInfo = {
-            order: await validateOrder(),
-            writer: writer,
-            other: await validateOther(),
-          };
+          console.log(validateWriter());
+          const order = await validateOrder();
+          const allWriter = await validateWriter();
+          const other = await validateOther();
+
+          const writer: any[] = [];
+          for (let i = 0; i < writerIndex.value; i++) {
+            writer.push({
+              writerNum: allWriter[`writerNum_${i}`],
+              name: allWriter[`name_${i}`],
+              writerPrice: allWriter[`writerPrice_${i}`],
+              alipayAccount: allWriter[`alipayAccount_${i}`],
+              qqAccount: allWriter[`qqAccount_${i}`],
+              wechatAccount: allWriter[`wechatAccount_${i}`],
+              writerSituation: allWriter[`writerSituation_${i}`],
+              writerQuality: allWriter[`writerQuality_${i}`],
+            });
+          }
+
+          console.log('order', order, 'writer:', writer, 'other:', other);
           setModalProps({ confirmLoading: true });
           // TODO custom api
           await addOrderApi({
-            orderInfo: orderInfo,
+            orderInfo: {
+              order,
+              writer,
+              other,
+            },
           });
           closeModal();
           emit('success', {
@@ -187,56 +259,6 @@
         }
       }
 
-      function handleAdd() {
-        orderInfo.writer?.push({
-          writerNum: '',
-          name: '',
-          writerAccount: '',
-          alipayAccount: '',
-          qqAccount: '',
-          wechatAccount: '',
-          writerSituation: 1,
-          writerQuality: 1,
-        });
-        const userFormWriter = useForm({
-          schemas: writerInfoForm,
-          labelWidth: 150,
-          baseColProps: {
-            span: 12,
-          },
-          showActionButtonGroup: false,
-        });
-        userFormWriter[1].updateSchema({
-          field: 'writerNum',
-          componentProps: {
-            enterButton: '校验写手',
-            placeholder: '请先输入写手的手机号',
-            onSearch: async (value) => {
-              const res = await checkWriterApi({ writerNum: value });
-              if (res?.length === 0) {
-                notification.error({ message: '提示', description: '不存在该写手！' });
-              } else {
-                await userFormWriter[1].updateSchema([
-                  { field: 'invoice', componentProps: { disabled: false } },
-                  { field: 'invoice', componentProps: { disabled: false } },
-                  { field: 'taobaoPrice', componentProps: { disabled: false } },
-                  { field: 'customrContact', componentProps: { disabled: false } },
-                  { field: 'orderOutline', componentProps: { disabled: false } },
-                  { field: 'memberName', componentProps: { disabled: false } },
-                ]);
-              }
-            },
-            disabled: false,
-          },
-        });
-        registerFormWriter.push(userFormWriter);
-      }
-
-      function handleDelete(index) {
-        orderInfo.writer?.splice(index, 1);
-        registerFormWriter.splice(index, 1);
-      }
-
       return {
         disabled,
         registerModal,
@@ -246,9 +268,9 @@
         getTitle,
         orderInfo,
         handleSubmit,
-        handleSuccess,
         handleAdd,
         handleDelete,
+        handleCheck,
       };
     },
   });

@@ -199,16 +199,25 @@ export const orderInfoForm: FormSchema[] = [
   },
 ];
 
-export const writerInfoForm: FormSchema[] = [
+export const writerInfoForm = (index: number): FormSchema[] => [
   {
-    field: 'writerNum',
+    field: `writerNum_${index}`,
     label: '手机号',
-    component: 'InputSearch',
+    component: 'Input',
     colProps: { span: 8 },
     required: true,
   },
   {
-    field: 'name',
+    field: `${index}`,
+    component: 'Input',
+    label: ' ',
+    colProps: {
+      span: 16,
+    },
+    slot: 'add',
+  },
+  {
+    field: `name_${index}`,
     label: '写手姓名',
     component: 'Input',
     colProps: { span: 8 },
@@ -218,7 +227,7 @@ export const writerInfoForm: FormSchema[] = [
     },
   },
   {
-    field: 'writerPrice',
+    field: `writerPrice_${index}`,
     label: '写手派单价',
     component: 'Input',
     colProps: { span: 8 },
@@ -228,7 +237,7 @@ export const writerInfoForm: FormSchema[] = [
     },
   },
   {
-    field: 'alipayAccount',
+    field: `alipayAccount_${index}`,
     label: '写手支付宝',
     colProps: { span: 8 },
     component: 'Input',
@@ -238,7 +247,7 @@ export const writerInfoForm: FormSchema[] = [
     },
   },
   {
-    field: 'qqAccount',
+    field: `qqAccount_${index}`,
     label: '写手QQ',
     colProps: { span: 8 },
     component: 'Input',
@@ -247,7 +256,7 @@ export const writerInfoForm: FormSchema[] = [
     },
   },
   {
-    field: 'wechatAccount',
+    field: `wechatAccount_${index}`,
     label: '写手微信',
     colProps: { span: 8 },
     component: 'Input',
@@ -256,7 +265,7 @@ export const writerInfoForm: FormSchema[] = [
     },
   },
   {
-    field: 'writerSituation',
+    field: `writerSituation_${index}`,
     label: '写手情况',
     colProps: { span: 8 },
     component: 'Select',
@@ -283,7 +292,7 @@ export const writerInfoForm: FormSchema[] = [
     },
   },
   {
-    field: 'writerQuality',
+    field: `writerQuality_${index}`,
     label: '写手质量',
     colProps: { span: 8 },
     component: 'Select',
