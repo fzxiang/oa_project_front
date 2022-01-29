@@ -75,3 +75,20 @@ export type SearchOrderResultModel = SearchOrderParamsModel &
     accepetUser: number;
     remarks;
   };
+
+// 写手总览
+export interface SearchWriterParamsModel {
+  writerNum: string;
+  qqAccount: string;
+  wechatAccount: string;
+}
+export interface WriterParamsModel {
+  id?: number;
+  name: string;
+  alipayAccount: string;
+  qqAccount: string;
+  wechatAccount: string;
+}
+export type SearchWriterPageModel = BasicPageParams & SearchWriterParamsModel;
+
+export type SearchWriterResultModel = any;

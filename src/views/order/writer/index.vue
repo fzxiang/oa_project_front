@@ -1,65 +1,74 @@
 <template>
-  <BasicTable
-    @register="registerTable"
-    :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-  >
-    <template #form-custom> custom-slot </template>
-    <template #headerTop>
-      <a-alert type="info" show-icon>
-        <template #message>
-          <template v-if="checkedKeys.length > 0">
-            <span>已选中{{ checkedKeys.length }}条记录(可跨页)</span>
-            <a-button type="link" @click="checkedKeys = []" size="small">清空</a-button>
-          </template>
-          <template v-else>
-            <span>未选中任何项目</span>
-          </template>
-        </template>
-      </a-alert>
-    </template>
-    <template #toolbar>
-      <a-button type="primary" @click="getFormValues">获取表单数据</a-button>
-    </template>
-  </BasicTable>
+  <div>
+    <BasicTable @register="registerTable">
+      <template #action="{ record }">
+        <TableAction
+          :actions="[
+            {
+              icon: 'clarity:note-edit-line',
+              onClick: handleEdit.bind(null, record),
+            },
+          ]"
+        />
+      </template>
+    </BasicTable>
+    <WriterModal @register="registerModal" />
+  </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
-  import { BasicTable, useTable } from '/@/components/Table';
+  import { defineComponent } from 'vue';
+  import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './tableData';
-  import { Alert } from 'ant-design-vue';
-
-  import { demoListApi } from '/@/api/demo/table';
+  import { searchWriterApi } from '/@/api/order/my';
+  import { useModal } from '/@/components/Modal';
+  import WriterModal from './WriterModal.vue';
 
   export default defineComponent({
-    components: { BasicTable, AAlert: Alert },
+    components: { BasicTable, WriterModal, TableAction },
     setup() {
-      const checkedKeys = ref<Array<string | number>>([]);
-      const [registerTable, { getForm }] = useTable({
-        title: '开启搜索区域',
-        api: demoListApi,
+      const [registerTable, { getRawDataSource }] = useTable({
+        title: '写手列表',
+        api: searchWriterApi,
         columns: getBasicColumns(),
+        beforeFetch(info) {
+          return { searchParams: info };
+        },
+        afterFetch: async () => {
+          const data = await getRawDataSource();
+          console.log(data);
+        },
+        handleSearchInfoFn(info) {
+          return info;
+        },
+        // clickToRowSelect: true,
         useSearchForm: true,
         formConfig: getFormConfig(),
         showTableSetting: true,
         tableSetting: { fullScreen: true },
         showIndexColumn: false,
         rowKey: 'id',
+        actionColumn: {
+          width: 80,
+          title: '操作',
+          dataIndex: 'action',
+          slots: { customRender: 'action' },
+          fixed: 'right',
+        },
       });
 
-      function getFormValues() {
-        console.log(getForm().getFieldsValue());
-      }
-
-      function onSelectChange(selectedRowKeys: (string | number)[]) {
-        console.log(selectedRowKeys);
-        checkedKeys.value = selectedRowKeys;
+      // const [registerTableItem, {}] = useTable({});
+      const [registerModal, { openModal }] = useModal();
+      function handleEdit(record: Recordable) {
+        openModal(true, {
+          record,
+          isUpdate: true,
+        });
       }
 
       return {
+        registerModal,
         registerTable,
-        getFormValues,
-        checkedKeys,
-        onSelectChange,
+        handleEdit,
       };
     },
   });

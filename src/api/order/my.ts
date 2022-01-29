@@ -4,7 +4,10 @@ import {
   UpdateOrderParamsModel,
   UpdateOrderFileData,
   SearchOrderResultModel,
+  SearchWriterPageModel,
   SearchOrderPageModel,
+  SearchWriterResultModel,
+  WriterParamsModel,
 } from './model/myModel';
 import { defHttp } from '/@/utils/http/axios';
 import { downloadByUrl } from '/@/utils/file/download';
@@ -41,7 +44,7 @@ export const addOrderApi = (params: { orderInfo: OrderParamsModel }) =>
     { successMessageMode: 'notification' },
   );
 
-export const updateOrderApi = (params: OrderParamsModel) =>
+export const updateOrderApi = (params: { orderInfo: OrderParamsModel }) =>
   defHttp.post<OrderParamsModel>(
     { url: Api.UPDATE_ORDER, params },
     { successMessageMode: 'notification' },
@@ -63,3 +66,9 @@ export const searchOrderApi = (params: SearchOrderPageModel) =>
 
 export const checkWriterApi = (params: { writerNum: string }) =>
   defHttp.post({ url: Api.CHECK_WRITER, params }, { successMessageMode: 'notification' });
+
+export const searchWriterApi = (params: SearchWriterPageModel) =>
+  defHttp.get<SearchWriterResultModel>({ url: Api.SEARCH_WRITER, params });
+
+export const updateWriterApi = (params: WriterParamsModel) =>
+  defHttp.post<any>({ url: Api.UPDATE_WRITER, params }, { successMessageMode: 'notification' });
