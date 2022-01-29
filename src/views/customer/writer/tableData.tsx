@@ -1,3 +1,4 @@
+import { getWriterApi } from '/@/api/customer/writer';
 import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 
@@ -152,9 +153,9 @@ export function getFormConfig(): Partial<FormProps> {
         component: 'ApiSelect',
         colProps: { span: 8 },
         componentProps: {
-          api: getAllWriterApi,
-          labelField: 'roleName',
-          valueField: 'roleValue',
+          api: getWriterApi,
+          labelField: 'writerId',
+          valueField: 'id',
         },
       },
       {
