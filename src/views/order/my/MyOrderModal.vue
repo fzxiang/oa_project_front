@@ -32,7 +32,7 @@
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { OrderInfoModel } from '/@/api/order/model/myModel';
   import { orderInfoForm, writerInfoForm } from './tableData';
-  import { addOrderApi, checkOrderApi, checkWriterApi } from '/@/api/order/my';
+  import { addOrderApi, checkOrderApi, checkWriterApi, updateOrderApi } from '/@/api/order/my';
   import { useMessage } from '/@/hooks/web/useMessage';
   const { notification } = useMessage();
 
@@ -260,13 +260,24 @@
 
           setModalProps({ confirmLoading: true });
           // TODO custom api
-          await addOrderApi({
-            orderInfo: {
-              order,
-              writer,
-              other,
-            },
-          });
+          if (isUpdate.value) {
+            await updateOrderApi({
+              orderInfo: {
+                order,
+                writer,
+                other,
+              },
+            });
+          } else {
+            await addOrderApi({
+              orderInfo: {
+                order,
+                writer,
+                other,
+              },
+            });
+          }
+
           closeModal();
           emit('success', {
             isUpdate: unref(isUpdate),
