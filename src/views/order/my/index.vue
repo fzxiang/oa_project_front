@@ -1,7 +1,6 @@
 <template>
   <div>
     <BasicTable @register="registerTable">
-      <template #form-custom> custom-slot </template>
       <template #headerTop>
         <Space size="large" class="mt-3">
           <span
@@ -13,8 +12,8 @@
         </Space>
         <Divider />
       </template>
-      <template #expandedRowRender="{ record }">
-        <span>No: {{ record.no }} </span>
+      <template #expandedRowRender="{}">
+        <BasicTable @register="registerTableChild" />
       </template>
       <template #toolbar>
         <a-button type="primary" @click="handleAdd">添加订单</a-button>
@@ -48,8 +47,13 @@
 <script lang="ts">
   import { defineComponent, ref, reactive } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getBasicColumns, getFormConfig } from './tableData';
-  import { exportOrderApi, searchOrderApi, uploadOrderFileApi } from '/@/api/order/my';
+  import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
+  import {
+    exportOrderApi,
+    searchOrderApi,
+    uploadOrderFileApi,
+    searchChildApi,
+  } from '/@/api/order/my';
   import { useModal } from '/@/components/Modal';
   import MyOrderModal from './MyOrderModal.vue';
   import { ImpExcel, ExcelData } from '/@/components/Excel';
@@ -64,10 +68,12 @@
         order: 0,
         writer: 0,
       });
+      const orderRowId = ref('');
       const [registerTable, { getForm, getRawDataSource }] = useTable({
         title: '订单列表',
         api: searchOrderApi,
         columns: getBasicColumns(),
+        scroll: { x: 2000 },
         beforeFetch(info) {
           return { searchParams: info };
         },
@@ -79,7 +85,6 @@
         handleSearchInfoFn(info) {
           return info;
         },
-        // clickToRowSelect: true,
         useSearchForm: true,
         formConfig: getFormConfig(),
         showTableSetting: true,
@@ -91,7 +96,25 @@
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
-          fixed: 'right',
+          // fixed: 'right',
+        },
+        onExpand: async (isExpand, record) => {
+          if (isExpand) {
+            orderRowId.value = record.aliOrder;
+          }
+        },
+      });
+
+      // 子表格
+      const [registerTableChild, {}] = useTable({
+        title: '关联写手',
+        rowKey: 'id',
+        api: searchChildApi,
+        columns: getBasicColumnsChild(),
+        useSearchForm: false,
+        showTableSetting: false,
+        beforeFetch() {
+          return { orderId: orderRowId.value };
         },
       });
 
@@ -164,10 +187,12 @@
           loadingData2.value = false;
         }
       }
+
       return {
         price,
         registerModal,
         registerTable,
+        registerTableChild,
         handleAdd,
         handleExport,
         handleEdit,

@@ -12,7 +12,7 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '发单号',
       dataIndex: 'invoice',
-      fixed: 'left',
+      // fixed: 'left',
       width: 150,
       // filters: [
       //   { text: 'Male', value: 'male' },
@@ -22,19 +22,19 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '接单客服',
       dataIndex: 'customerContact',
-      fixed: 'left',
-      width: 150,
+      // fixed: 'left',
+      // width: 150,
     },
     {
       title: '订单编号',
       dataIndex: 'aliOrder',
-      width: 150,
+      // width: 150,
       // defaultHidden: true,
     },
     {
       title: '结算状态',
       dataIndex: 'settleState',
-      width: 120,
+      // width: 120,
       format: new Map([
         [0, '全部'],
         [1, '已结算'],
@@ -45,7 +45,7 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '会员名',
       dataIndex: 'memberName',
-      width: 150,
+      // width: 150,
     },
     {
       title: '淘宝价格',
@@ -55,19 +55,67 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '写手派单总价',
       dataIndex: 'overviewFilePrice',
-      width: 150,
+      // width: 150,
     },
     {
       title: '付款时间',
-      width: 150,
-      // sorter: true,
+      // width: 150,
       dataIndex: 'paymentTime',
     },
     {
       title: '收货时间',
-      width: 150,
-      sorter: true,
+      // width: 150,
       dataIndex: 'receivingTime',
+    },
+  ];
+}
+
+export function getBasicColumnsChild(): BasicColumn[] {
+  return [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      ifShow: false,
+      width: 200,
+    },
+    {
+      title: '写手名',
+      dataIndex: 'name',
+      fixed: 'left',
+      width: 150,
+    },
+    {
+      title: '写手手机',
+      dataIndex: 'writerNum',
+      fixed: 'left',
+    },
+    {
+      title: '写手QQ',
+      dataIndex: 'qqAccount',
+    },
+    {
+      title: '写手微信',
+      dataIndex: 'wechatAccount',
+    },
+    {
+      title: '写手支付宝',
+      dataIndex: 'alipayAccount',
+    },
+    {
+      title: '写手情况',
+      dataIndex: 'writerSituation',
+    },
+    {
+      title: '写手质量',
+      dataIndex: 'writerQuality',
+    },
+    {
+      title: '补偿状态',
+      dataIndex: 'compensateState',
+    },
+    {
+      title: '结算状态',
+      dataIndex: 'wSettleState',
     },
   ];
 }

@@ -36,6 +36,7 @@ enum Api {
   SEARCH_WRITER = '/searchWriter',
   // 写手信息编辑(id(写手唯一ID) writerInfo json格式)
   UPDATE_WRITER = '/updateWriter',
+  GET_TABLE_CHILD = '/getWritersOfOrder',
 }
 
 export const addOrderApi = (params: { orderInfo: OrderParamsModel }) =>
@@ -72,3 +73,6 @@ export const searchWriterApi = (params: SearchWriterPageModel) =>
 
 export const updateWriterApi = (params: WriterParamsModel) =>
   defHttp.post<any>({ url: Api.UPDATE_WRITER, params }, { successMessageMode: 'notification' });
+
+export const searchChildApi = (params: { orderId: number }) =>
+  defHttp.post<any>({ url: Api.GET_TABLE_CHILD, params });
