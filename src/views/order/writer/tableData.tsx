@@ -76,34 +76,29 @@ export const writerInfoForm: FormSchema[] = [
   {
     field: 'writerNum',
     label: '手机号',
-    component: 'InputSearch',
-    colProps: { span: 8 },
+    component: 'Input',
     required: true,
   },
   {
     field: 'name',
     label: '写手名',
     component: 'Input',
-    colProps: { span: 8 },
     required: true,
   },
   {
     field: 'alipayAccount',
     label: '写手支付宝',
-    colProps: { span: 8 },
     component: 'Input',
     required: true,
   },
   {
     field: 'qqAccount',
     label: '写手QQ',
-    colProps: { span: 8 },
     component: 'Input',
   },
   {
     field: 'wechatAccount',
     label: '写手微信',
-    colProps: { span: 8 },
     component: 'Input',
   },
 ];
