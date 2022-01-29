@@ -1,3 +1,4 @@
+import { getCustomerApi } from '/@/api/customer/report';
 import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 
@@ -6,301 +7,291 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: 'ID',
       dataIndex: 'id',
+      ifShow: false,
+      width: 200,
+    },
+    {
+      title: '发单号',
+      dataIndex: 'invoice',
       fixed: 'left',
-      width: 200,
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
       width: 150,
-      filters: [
-        { text: 'Male', value: 'male' },
-        { text: 'Female', value: 'female' },
-      ],
+      // filters: [
+      //   { text: 'Male', value: 'male' },
+      //   { text: 'Female', value: 'female' },
+      // ],
     },
     {
-      title: '地址',
-      dataIndex: 'address',
+      title: '接单客服',
+      dataIndex: 'customerContact',
+      fixed: 'left',
+      width: 150,
     },
     {
-      title: '编号',
-      dataIndex: 'no',
+      title: '订单编号',
+      dataIndex: 'aliOrder',
+      width: 150,
+      // defaultHidden: true,
+    },
+    {
+      title: '结算状态',
+      dataIndex: 'settleState',
+      width: 120,
+      format: new Map([
+        [0, '全部'],
+        [1, '已结算'],
+        [2, '未结算'],
+        [3, '暂缓结算'],
+      ]),
+    },
+    {
+      title: '会员名',
+      dataIndex: 'memberName',
+      width: 150,
+    },
+    {
+      title: '淘宝价格',
+      dataIndex: 'taobaoPrice',
+      width: 150,
+    },
+    {
+      title: '写手派单总价',
+      dataIndex: 'overviewFilePrice',
+      width: 150,
+    },
+    {
+      title: '付款时间',
+      width: 150,
+      // sorter: true,
+      dataIndex: 'paymentTime',
+    },
+    {
+      title: '收货时间',
       width: 150,
       sorter: true,
-      defaultHidden: true,
-    },
-    {
-      title: '开始时间',
-      width: 150,
-      sorter: true,
-      dataIndex: 'beginTime',
-    },
-    {
-      title: '结束时间',
-      width: 150,
-      sorter: true,
-      dataIndex: 'endTime',
+      dataIndex: 'receivingTime',
     },
   ];
 }
 
-export function getBasicShortColumns(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      width: 150,
-      dataIndex: 'id',
-      sorter: true,
-      sortOrder: 'ascend',
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      width: 120,
-    },
-    {
-      title: '地址',
-      dataIndex: 'address',
-    },
-    {
-      title: '编号',
-      dataIndex: 'no',
-      width: 80,
-    },
-  ];
-}
-
-export function getMultipleHeaderColumns(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 200,
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      width: 120,
-    },
-    {
-      title: '地址',
-      dataIndex: 'address',
-      sorter: true,
-      children: [
-        {
-          title: '编号',
-          dataIndex: 'no',
-          width: 120,
-          filters: [
-            { text: 'Male', value: 'male', children: [] },
-            { text: 'Female', value: 'female', children: [] },
-          ],
-        },
-
-        {
-          title: '开始时间',
-          dataIndex: 'beginTime',
-          width: 120,
-        },
-        {
-          title: '结束时间',
-          dataIndex: 'endTime',
-          width: 120,
-        },
-      ],
-    },
-  ];
-}
-
-export function getCustomHeaderColumns(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 200,
-    },
-    {
-      // title: '姓名',
-      dataIndex: 'name',
-      width: 120,
-      slots: { title: 'customTitle' },
-    },
-    {
-      // title: '地址',
-      dataIndex: 'address',
-      width: 120,
-      slots: { title: 'customAddress' },
-      sorter: true,
-    },
-
-    {
-      title: '编号',
-      dataIndex: 'no',
-      width: 120,
-      filters: [
-        { text: 'Male', value: 'male', children: [] },
-        { text: 'Female', value: 'female', children: [] },
-      ],
-    },
-    {
-      title: '开始时间',
-      dataIndex: 'beginTime',
-      width: 120,
-    },
-    {
-      title: '结束时间',
-      dataIndex: 'endTime',
-      width: 120,
-    },
-  ];
-}
-const renderContent = ({ text, index }: { text: any; index: number }) => {
-  const obj: any = {
-    children: text,
-    attrs: {},
-  };
-  if (index === 9) {
-    obj.attrs.colSpan = 0;
-  }
-  return obj;
-};
-export function getMergeHeaderColumns(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 300,
-      customRender: renderContent,
-    },
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      width: 300,
-      customRender: renderContent,
-    },
-    {
-      title: '地址',
-      dataIndex: 'address',
-      colSpan: 2,
-      width: 120,
-      sorter: true,
-      customRender: ({ text, index }: { text: any; index: number }) => {
-        const obj: any = {
-          children: text,
-          attrs: {},
-        };
-        if (index === 2) {
-          obj.attrs.rowSpan = 2;
-        }
-        if (index === 3) {
-          obj.attrs.colSpan = 0;
-        }
-        return obj;
-      },
-    },
-    {
-      title: '编号',
-      dataIndex: 'no',
-      colSpan: 0,
-      filters: [
-        { text: 'Male', value: 'male', children: [] },
-        { text: 'Female', value: 'female', children: [] },
-      ],
-      customRender: renderContent,
-    },
-    {
-      title: '开始时间',
-      dataIndex: 'beginTime',
-      width: 200,
-      customRender: renderContent,
-    },
-    {
-      title: '结束时间',
-      dataIndex: 'endTime',
-      width: 200,
-      customRender: renderContent,
-    },
-  ];
-}
-export const getAdvanceSchema = (itemNumber = 6): FormSchema[] => {
-  const arr: any = [];
-  for (let index = 0; index < itemNumber; index++) {
-    arr.push({
-      field: `field${index}`,
-      label: `字段${index}`,
-      component: 'Input',
-      colProps: {
-        xl: 12,
-        xxl: 8,
-      },
-    });
-  }
-  return arr;
-};
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
+    fieldMapToTime: [
+      ['pTime', ['pStartTime', 'pEndTime'], 'YYYY-MM-DD'],
+      ['rTime', ['rStartTime', 'rEndTime'], 'YYYY-MM-DD'],
+    ],
     schemas: [
-      ...getAdvanceSchema(5),
       {
-        field: `field11`,
-        label: `Slot示例`,
-        component: 'Select',
-        slot: 'custom',
-        colProps: {
-          xl: 12,
-          xxl: 8,
+        field: 'pTime',
+        label: '订单付款时间',
+        component: 'RangePicker',
+        colProps: { span: 8 },
+      },
+      {
+        field: 'settleState',
+        label: '结算状态',
+        component: 'RadioButtonGroup',
+        colProps: { span: 12 },
+        defaultValue: 0,
+        componentProps: {
+          options: [
+            { label: '全部', value: 0 },
+            { label: '已结算', value: 1 },
+            { label: '未结算', value: 2 },
+            { label: '暂缓结算', value: 3 },
+          ],
+        },
+      },
+      {
+        field: 'rTime',
+        label: '确认收货时间',
+        component: 'RangePicker',
+        colProps: { span: 8 },
+      },
+      {
+        field: 'memberName',
+        label: '选择客服',
+        component: 'ApiSelect',
+        colProps: { span: 16 },
+        componentProps: {
+          api: getCustomerApi,
+          labelField: 'roleName',
+          valueField: 'roleValue',
         },
       },
     ],
   };
 }
-export function getBasicData() {
-  const data: any = (() => {
-    const arr: any = [];
-    for (let index = 0; index < 40; index++) {
-      arr.push({
-        id: `${index}`,
-        name: 'John Brown',
-        age: `1${index}`,
-        no: `${index + 10}`,
-        address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-        beginTime: new Date().toLocaleString(),
-        endTime: new Date().toLocaleString(),
-      });
-    }
-    return arr;
-  })();
-  return data;
-}
 
-export function getTreeTableData() {
-  const data: any = (() => {
-    const arr: any = [];
-    for (let index = 0; index < 40; index++) {
-      arr.push({
-        id: `${index}`,
-        name: 'John Brown',
-        age: `1${index}`,
-        no: `${index + 10}`,
-        address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-        beginTime: new Date().toLocaleString(),
-        endTime: new Date().toLocaleString(),
-        children: [
-          {
-            id: `l2-${index}`,
-            name: 'John Brown',
-            age: `1${index}`,
-            no: `${index + 10}`,
-            address: 'New York No. 1 Lake ParkNew York No. 1 Lake Park',
-            beginTime: new Date().toLocaleString(),
-            endTime: new Date().toLocaleString(),
-          },
-        ],
-      });
-    }
-    return arr;
-  })();
+export const orderInfoForm: FormSchema[] = [
+  {
+    field: 'aliOrder',
+    label: '淘宝订单编号',
+    component: 'InputSearch',
+    colProps: {
+      span: 17,
+    },
+    required: true,
+  },
+  {
+    field: 'invoice',
+    label: '发单号',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'memberName',
+    label: '会员名',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'taobaoPrice',
+    label: '淘宝价格',
+    colProps: { span: 8 },
+    component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'customrContact',
+    label: '客户微信或QQ',
+    colProps: { span: 8 },
+    component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'orderOutline',
+    label: '订单概要',
+    colProps: { span: 16 },
+    component: 'InputTextArea',
+    componentProps: {
+      disabled: true,
+    },
+  },
+];
 
-  return data;
-}
+export const writerInfoForm: FormSchema[] = [
+  {
+    field: 'writerNum',
+    label: '手机号',
+    component: 'InputSearch',
+    colProps: { span: 8 },
+    required: true,
+  },
+  {
+    field: 'name',
+    label: '写手姓名',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'writerPrice',
+    label: '写手派单价',
+    component: 'Input',
+    colProps: { span: 8 },
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'alipayAccount',
+    label: '写手支付宝',
+    colProps: { span: 8 },
+    component: 'Input',
+    required: true,
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'qqAccount',
+    label: '写手QQ',
+    colProps: { span: 8 },
+    component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'wechatAccount',
+    label: '写手微信',
+    colProps: { span: 8 },
+    component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
+  },
+  {
+    field: 'writerSituation',
+    label: '写手情况',
+    colProps: { span: 8 },
+    component: 'Select',
+    componentProps: {
+      disabled: true,
+      options: [
+        {
+          label: '拖稿',
+          value: 1,
+        },
+        {
+          label: '失联',
+          value: 2,
+        },
+        {
+          label: '拒绝修改',
+          value: 3,
+        },
+        {
+          label: '态度差',
+          value: 4,
+        },
+      ],
+    },
+  },
+  {
+    field: 'writerQuality',
+    label: '写手质量',
+    colProps: { span: 8 },
+    component: 'Select',
+    componentProps: {
+      disabled: true,
+      options: [
+        {
+          label: '好',
+          value: 1,
+        },
+        {
+          label: '中',
+          value: 2,
+        },
+        {
+          label: '差',
+          value: 3,
+        },
+      ],
+    },
+  },
+  {
+    field: '',
+    label: '',
+    colProps: { span: 24 },
+    component: 'Divider',
+  },
+];
