@@ -59,8 +59,7 @@
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
-  import { getToken, getUserInfo } from '/@/utils/auth';
-  import type { UserInfo } from '/#/store';
+  import { downloadByData } from '/@/utils/file/download';
 
   export default defineComponent({
     components: { BasicTable, MyOrderModal, TableAction, ImpExcel, Tag, Divider, Space },
@@ -137,16 +136,17 @@
           isUpdate: true,
         });
       }
-      function handleExport() {
-        const token = getToken() as UserInfo;
-        const userInfo = getUserInfo();
-
+      async function handleExport() {
         const params = {
           searchParams: getForm().getFieldsValue(),
-          shop: userInfo?.selectedShop,
-          token: token,
         };
-        exportOrderApi(params);
+        const res = await exportOrderApi(params);
+        console.log(res);
+        downloadByData(
+          res,
+          '下载的文件.xls',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        );
       }
 
       const loadingData1 = ref(false);
