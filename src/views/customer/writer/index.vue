@@ -130,13 +130,13 @@
         try {
           loadingData1.value = true;
           const { results } = excelDataList[0];
-
+          console.log(results);
           const fileData = results.map((item) => {
             return {
               alipayAccount: item['收款方支付宝账号'] || '',
               name: item['收款方姓名'] || '',
               price: item['金额'] || '',
-              invoice: item['订单付款时间'] || item['订单付款时间 '] || '',
+              invoice: item['单号'] || item['单号 '] || '',
             };
           });
           // fileData.length = 200
