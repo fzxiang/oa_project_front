@@ -103,18 +103,39 @@ export function getBasicColumnsChild(): BasicColumn[] {
     {
       title: '写手情况',
       dataIndex: 'writerSituation',
+      format: new Map([
+        [1, '拖稿'],
+        [2, '失联'],
+        [3, '拒绝修改'],
+        [4, '态度差'],
+      ]),
     },
     {
       title: '写手质量',
       dataIndex: 'writerQuality',
+      format: new Map([
+        [1, '好'],
+        [2, '中'],
+        [3, '差'],
+      ]),
     },
     {
       title: '补偿状态',
       dataIndex: 'compensateState',
+      format: new Map([
+        [0, '暂无补偿'],
+        [1, '稿费补偿'],
+      ]),
     },
     {
       title: '结算状态',
       dataIndex: 'wSettleState',
+      format: new Map([
+        [0, '全部'],
+        [1, '已结算'],
+        [2, '未结算'],
+        [3, '暂缓结算'],
+      ]),
     },
   ];
 }
