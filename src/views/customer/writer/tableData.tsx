@@ -1,94 +1,46 @@
 import { getWriterApi } from '/@/api/customer/writer';
 import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-
+/* {
+  "id": 2,
+  "writerNum": "18850105062",
+  "name": "傅子湘",
+  "alipayAccount": "18850105062",
+  "qqAccount": "848026280",
+  "wechatAccount": "18850105062",
+  "writerSituation": 1,
+  "writerQuality": "1",
+  "childOrder": [
+      {
+          "id": 3,
+          "invoice": "123",
+          "acceptUser": 7,
+          "aliOrder": "1232",
+          "wSettleState": 2,
+          "taobaoPrice": 12,
+          "writerPrice": 12,
+          "paymentTime": 0,
+          "receivingTime": 0
+      }
+  ],
+  "orderNum": 1,
+  "totalWriterPrice": 12
+} */
 export function getBasicColumns(): BasicColumn[] {
   return [
     {
       title: 'ID',
       dataIndex: 'id',
       ifShow: false,
-      width: 200,
-    },
-    {
-      title: '发单号',
-      dataIndex: 'invoice',
-      // fixed: 'left',
-      width: 150,
-      // filters: [
-      //   { text: 'Male', value: 'male' },
-      //   { text: 'Female', value: 'female' },
-      // ],
-    },
-    {
-      title: '接单客服',
-      dataIndex: 'customerContact',
-      // fixed: 'left',
-      // width: 150,
-    },
-    {
-      title: '订单编号',
-      dataIndex: 'aliOrder',
-      // width: 150,
-      // defaultHidden: true,
-    },
-    {
-      title: '结算状态',
-      dataIndex: 'settleState',
-      // width: 120,
-      format: new Map([
-        [0, '全部'],
-        [1, '已结算'],
-        [2, '未结算'],
-        [3, '暂缓结算'],
-      ]),
-    },
-    {
-      title: '会员名',
-      dataIndex: 'memberName',
-      // width: 150,
-    },
-    {
-      title: '淘宝价格',
-      dataIndex: 'taobaoPrice',
-      width: 150,
-    },
-    {
-      title: '写手派单总价',
-      dataIndex: 'overviewFilePrice',
-      // width: 150,
-    },
-    {
-      title: '付款时间',
-      // width: 150,
-      dataIndex: 'paymentTime',
-    },
-    {
-      title: '收货时间',
-      // width: 150,
-      dataIndex: 'receivingTime',
-    },
-  ];
-}
-
-export function getBasicColumnsChild(): BasicColumn[] {
-  return [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      ifShow: false,
-      width: 200,
     },
     {
       title: '写手名',
       dataIndex: 'name',
-      fixed: 'left',
       width: 150,
     },
     {
-      title: '写手手机',
+      title: '写手手机号',
       dataIndex: 'writerNum',
-      fixed: 'left',
     },
     {
       title: '写手QQ',
@@ -103,26 +55,71 @@ export function getBasicColumnsChild(): BasicColumn[] {
       dataIndex: 'alipayAccount',
     },
     {
-      title: '写手情况',
-      dataIndex: 'writerSituation',
+      title: '订单数',
+      dataIndex: 'orderNum',
     },
     {
-      title: '写手质量',
-      dataIndex: 'writerQuality',
+      title: '总金额',
+      dataIndex: 'totalWriterPrice',
+    },
+    // {
+    //   title: '支付宝二维码',
+    //   dataIndex: 'receivingTime',
+    // },
+  ];
+}
+
+export function getBasicColumnsChild(): BasicColumn[] {
+  return [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      ifShow: false,
+      width: 200,
     },
     {
-      title: '补偿状态',
-      dataIndex: 'compensateState',
+      title: '发单号',
+      dataIndex: 'invoice',
+    },
+    {
+      title: '订单编号',
+      dataIndex: 'aliOrder',
+      fixed: 'left',
+    },
+    {
+      title: '订单付款时间',
+      dataIndex: 'paymentTime',
+    },
+    {
+      title: '订单收货时间',
+      dataIndex: 'receivingTime',
+    },
+    {
+      title: '淘宝价格',
+      dataIndex: 'taobaoPrice',
+    },
+    {
+      title: '写手派单价',
+      dataIndex: 'writerPrice',
+    },
+    {
+      title: '派单客服',
+      dataIndex: 'acceptUser',
     },
     {
       title: '结算状态',
       dataIndex: 'wSettleState',
     },
+    // {
+    //   title: '结算方式',
+    //   dataIndex: 'wSettleState',
+    // },
   ];
 }
 
 export function getFormConfig(): Partial<FormProps> {
   return {
+    autoAdvancedLine: 4,
     labelWidth: 100,
     fieldMapToTime: [
       ['pTime', ['pStartTime', 'pEndTime'], 'YYYY-MM-DD'],
@@ -162,7 +159,7 @@ export function getFormConfig(): Partial<FormProps> {
         field: 'settleState',
         label: '结算状态',
         component: 'RadioButtonGroup',
-        colProps: { span: 8 },
+        colProps: { span: 16 },
         defaultValue: 0,
         componentProps: {
           options: [
@@ -173,12 +170,6 @@ export function getFormConfig(): Partial<FormProps> {
           ],
         },
       },
-      {
-        field: 'pTime',
-        label: '订单付款时间',
-        component: 'RangePicker',
-        colProps: { span: 8 },
-      },
 
       {
         field: 'rTime',
@@ -186,6 +177,13 @@ export function getFormConfig(): Partial<FormProps> {
         component: 'RangePicker',
         colProps: { span: 8 },
       },
+      {
+        field: 'pTime',
+        label: '订单付款时间',
+        component: 'RangePicker',
+        colProps: { span: 8 },
+      },
+
       // {
       //   field: `field11`,
       //   label: `Slot示例`,

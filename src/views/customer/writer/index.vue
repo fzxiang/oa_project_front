@@ -4,31 +4,26 @@
       <template #headerTop>
         <Space size="large" class="mt-3">
           <span
-            >写手总价格:<Tag color="blue"> {{ price.order }} </Tag> 元</span
+            >写手总价格:<Tag color="blue"> {{ price.totalPrice }} </Tag> 元</span
           >
           <span
-            >写手已结算:<Tag color="blue"> {{ price.writer }} </Tag> 元</span
+            >写手已结算:<Tag color="blue"> {{ price.settlePrice }} </Tag> 元</span
           >
           <span
-            >写手未结算:<Tag color="blue"> {{ price.writer }} </Tag> 元</span
+            >写手未结算:<Tag color="blue"> {{ price.noSettlePrice }} </Tag> 元</span
           >
         </Space>
         <Divider />
       </template>
-      <template #expandedRowRender="{}">
-        <BasicTable @register="registerTableChild" />
+      <template #expandedRowRender="{ record }">
+        <BasicTable @register="registerTableChild" :dataSource="record.childOrder" />
       </template>
       <template #toolbar>
-        <a-button type="primary" @click="handleAdd">添加订单</a-button>
-        <a-button type="default" @click="handleExport">导出订单</a-button>
+        <!-- <a-button type="primary" @click="handleAdd">添加订单</a-button> -->
+        <a-button type="default" @click="handleExport">导出</a-button>
         <ImpExcel @success="loadDataSuccess1" dateFormat="YYYY-MM-DD">
           <a-button :loading="loadingData1" :disabled="loadingData1" type="primary" color="success"
-            >上传总览附件</a-button
-          >
-        </ImpExcel>
-        <ImpExcel @success="loadDataSuccess2" dateFormat="YYYY-MM-DD">
-          <a-button :loading="loadingData2" :disabled="loadingData2" type="primary" color="warning"
-            >上传退款附件</a-button
+            >上传已结算订单</a-button
           >
         </ImpExcel>
       </template>
@@ -37,7 +32,9 @@
         <TableAction
           :actions="[
             {
-              icon: 'clarity:note-edit-line',
+              label: '全部结算',
+              color: 'error',
+              type: 'primary',
               onClick: handleEdit.bind(null, record),
             },
           ]"
@@ -50,12 +47,7 @@
   import { defineComponent, ref, reactive } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
-  import {
-    exportOrderApi,
-    searchOrderApi,
-    uploadOrderFileApi,
-    searchChildApi,
-  } from '/@/api/order/my';
+  import { searchApi, exportApi, uploadFileApi } from '/@/api/customer/writer';
   import { useModal } from '/@/components/Modal';
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -66,13 +58,14 @@
     setup() {
       const { createErrorModal } = useMessage();
       const price = reactive({
-        order: 0,
-        writer: 0,
+        totalPrice: 0,
+        settlePrice: 0,
+        noSettlePrice: 0,
       });
-      const rowId = ref('');
+      // const rowId = ref('');
       const [registerTable, { getForm, getRawDataSource }] = useTable({
         title: '订单列表',
-        api: searchOrderApi,
+        api: searchApi,
         columns: getBasicColumns(),
         scroll: { x: 2000 },
         beforeFetch(info) {
@@ -80,8 +73,9 @@
         },
         afterFetch: async () => {
           const data = await getRawDataSource();
-          price.order = data.tbTotalPrice;
-          price.writer = data.writerTotalPrice;
+          price.totalPrice = data.totalPrice;
+          price.settlePrice = data.settlePrice;
+          price.noSettlePrice = data.noSettlePrice;
         },
         handleSearchInfoFn(info) {
           return info;
@@ -97,27 +91,16 @@
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
-          // fixed: 'right',
-        },
-        onExpand: async (isExpand, record) => {
-          if (isExpand) {
-            console.log(record);
-            rowId.value = record.aliOrder;
-          }
         },
       });
 
       // 子表格
-      const [registerTableChild, {}] = useTable({
-        title: '关联写手',
+      const [registerTableChild] = useTable({
+        title: '关联订单',
         rowKey: 'id',
-        api: searchChildApi,
         columns: getBasicColumnsChild(),
         useSearchForm: false,
         showTableSetting: false,
-        beforeFetch() {
-          return { id: rowId.value };
-        },
       });
 
       // const [registerTableItem, {}] = useTable({});
@@ -137,9 +120,8 @@
         });
       }
       function handleExport() {
-        const obj = { searchParams: getForm().getFieldsValue() };
-        const url = '?' + encodeURIComponent(JSON.stringify(obj));
-        exportOrderApi(url);
+        const params = { searchParams: getForm().getFieldsValue() };
+        exportApi(params);
       }
 
       const loadingData1 = ref(false);
@@ -158,7 +140,7 @@
             };
           });
           // fileData.length = 200
-          await uploadOrderFileApi({ type: 1, fileData });
+          await uploadFileApi({ type: 1, fileData });
           loadingData1.value = false;
         } catch (e) {
           loadingData1.value = false;
@@ -179,7 +161,7 @@
               refundMoney: item['买家退款金额'] || '',
             };
           });
-          const res = await uploadOrderFileApi({ type: 2, fileData: fileData });
+          const res = await uploadFileApi({ type: 2, fileData: fileData });
           // console.log(res);
           if (res?.result?.length !== 0) {
             createErrorModal({ title: '以下订单处理错误', content: res.result.join() });
