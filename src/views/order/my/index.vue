@@ -59,6 +59,8 @@
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
+  import { getToken, getUserInfo } from '/@/utils/auth';
+  import type { UserInfo } from '/#/store';
 
   export default defineComponent({
     components: { BasicTable, MyOrderModal, TableAction, ImpExcel, Tag, Divider, Space },
@@ -136,9 +138,15 @@
         });
       }
       function handleExport() {
-        const obj = { searchParams: getForm().getFieldsValue() };
-        const url = '?' + encodeURIComponent(JSON.stringify(obj));
-        exportOrderApi(url);
+        const token = getToken() as UserInfo;
+        const userInfo = getUserInfo();
+
+        const params = {
+          searchParams: getForm().getFieldsValue(),
+          shop: userInfo?.selectedShop,
+          token: token,
+        };
+        exportOrderApi(params);
       }
 
       const loadingData1 = ref(false);
