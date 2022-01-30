@@ -62,7 +62,7 @@
               label: '全部结算',
               color: 'error',
               type: 'primary',
-              onClick: handleEdit.bind(null, record),
+              onClick: handleEditAll.bind(null, record),
             },
           ]"
         />
@@ -74,11 +74,18 @@
   import { defineComponent, ref, reactive, h } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
-  import { searchApi, exportApi, uploadFileApi, updateApi } from '/@/api/customer/writer';
+  import {
+    searchApi,
+    exportApi,
+    uploadFileApi,
+    updateApi,
+    updateAllApi,
+  } from '/@/api/customer/writer';
   import { useModal } from '/@/components/Modal';
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
+  import type { PaginationProps } from 'ant-design-vue';
 
   export default defineComponent({
     components: { BasicTable, TableAction, ImpExcel, Tag, Divider, Space },
@@ -90,7 +97,8 @@
         noSettlePrice: 0,
       });
       // const rowId = ref('');
-      const [registerTable, { getForm, getRawDataSource, reload }] = useTable({
+      // 父表格
+      const [registerTable, { getForm, getRawDataSource, getPaginationRef, reload }] = useTable({
         title: '订单列表',
         api: searchApi,
         columns: getBasicColumns(),
@@ -172,11 +180,36 @@
             await reload();
           },
         });
-        // openModal(true, {
-        //   record,
-        //   isUpdate: true,
-        // });
       }
+
+      function handleEditAll(record: Recordable) {
+        console.log(record);
+
+        createConfirm({
+          iconType: 'warning',
+          title: () => h('span', '温馨提示!'),
+          content: () =>
+            h(
+              'span',
+              `此操作将该写手( ${record.name} )下所有淘宝订单编号, 结算状态修改为: ${MAP[1]}, 是否继续?`,
+            ),
+          onOk: async () => {
+            const searchParams = getForm().getFieldsValue();
+            const page = getPaginationRef() as PaginationProps;
+            if (page !== true) {
+              searchParams.pageNumber = page?.current;
+              searchParams.pageSize = page?.pageSize;
+            }
+            const params = {
+              writeId: record.id,
+              searchParams,
+            };
+            await updateAllApi(params);
+            await reload();
+          },
+        });
+      }
+
       function handleExport() {
         const params = { searchParams: getForm().getFieldsValue() };
         exportApi(params);
@@ -212,6 +245,7 @@
         // handleAdd,
         handleExport,
         handleEdit,
+        handleEditAll,
         loadDataSuccess1,
         loadingData1,
       };
