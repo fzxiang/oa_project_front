@@ -50,4 +50,4 @@ export const uploadFileApi = (params: UpdateParamsModel<UpdateFileData>) =>
     { successMessageMode: 'notification' },
   );
 
-export const exportApi = (url: string) => downloadByUrl({ url: Api.EXPORT + url });
+export const exportApi = (url: string) => downloadByUrl({ url: '/api' + Api.EXPORT + url });

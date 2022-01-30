@@ -8,34 +8,23 @@ export function getBasicColumns(): BasicColumn[] {
       title: 'ID',
       dataIndex: 'id',
       ifShow: false,
-      width: 200,
     },
     {
       title: '发单号',
       dataIndex: 'invoice',
-      fixed: 'left',
-      width: 150,
-      // filters: [
-      //   { text: 'Male', value: 'male' },
-      //   { text: 'Female', value: 'female' },
-      // ],
     },
     {
       title: '接单客服',
       dataIndex: 'customerContact',
-      fixed: 'left',
-      width: 150,
     },
     {
       title: '订单编号',
       dataIndex: 'aliOrder',
-      width: 150,
       // defaultHidden: true,
     },
     {
       title: '结算状态',
       dataIndex: 'settleState',
-      width: 120,
       format: new Map([
         [0, '全部'],
         [1, '已结算'],
@@ -46,28 +35,25 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '会员名',
       dataIndex: 'memberName',
-      width: 150,
     },
     {
       title: '淘宝价格',
       dataIndex: 'taobaoPrice',
-      width: 150,
+    },
+    {
+      title: '客户微信或QQ',
+      dataIndex: 'taobaoPrice',
     },
     {
       title: '写手派单总价',
       dataIndex: 'overviewFilePrice',
-      width: 150,
     },
     {
       title: '付款时间',
-      width: 150,
-      // sorter: true,
       dataIndex: 'paymentTime',
     },
     {
       title: '收货时间',
-      width: 150,
-      sorter: true,
       dataIndex: 'receivingTime',
     },
   ];

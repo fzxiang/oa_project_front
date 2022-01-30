@@ -20,7 +20,7 @@ enum Api {
   // 上传附件(type(1:总揽附件，2:退款附件)，对应字断数据(fileData)(json格式))
   UPLOAD_FILE = '/uploadFile',
   // 导出(searchParams json格式)(同检索)
-  EXPORT = '/export',
+  EXPORT = '/exportCustomer',
   // 1:已结算  2： 未结算  3： 暂缓结算
   // 检索(searchParams json格式(pageNumber(第几页), pageSize(每页几条数据), ali(淘宝编号), invoice(发单号), memberName(会员名),
   // settleState(结算状态), pStartTime, pEndTime, rStartTime, rEndTime))
@@ -50,4 +50,7 @@ export const uploadFileApi = (params: UpdateParamsModel<UpdateFileData>) =>
     { successMessageMode: 'notification' },
   );
 
-export const exportApi = (url: string) => downloadByUrl({ url: Api.EXPORT + url });
+export const exportApi = (url: string) => {
+  console.log('导出url:', Api.EXPORT + url);
+  downloadByUrl({ url: '/api' + Api.EXPORT + url });
+};

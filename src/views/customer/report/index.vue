@@ -41,8 +41,8 @@
   import { defineComponent, ref, reactive } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './tableData';
-  import { exportOrderApi, uploadOrderFileApi } from '/@/api/order/my';
-  import { searchApi } from '/@/api/customer/report';
+  import { uploadOrderFileApi } from '/@/api/order/my';
+  import { searchApi, exportApi } from '/@/api/customer/report';
   import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
@@ -78,7 +78,7 @@
         showIndexColumn: false,
         rowKey: 'id',
         actionColumn: {
-          width: 250,
+          width: 80,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -105,7 +105,7 @@
       function handleExport() {
         const obj = { searchParams: getForm().getFieldsValue() };
         const url = '?' + encodeURIComponent(JSON.stringify(obj));
-        exportOrderApi(url);
+        exportApi(url);
       }
 
       return {

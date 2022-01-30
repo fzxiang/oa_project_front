@@ -52,7 +52,8 @@ export const uploadOrderFileApi = (params: UpdateOrderParamsModel<UpdateOrderFil
     { successMessageMode: 'notification' },
   );
 
-export const exportOrderApi = (url: string) => downloadByUrl({ url: Api.EXPORT_ORDER + url });
+export const exportOrderApi = (url: string) =>
+  downloadByUrl({ url: '/api' + Api.EXPORT_ORDER + url });
 
 export const searchOrderApi = (params: SearchOrderPageModel) =>
   defHttp.get<SearchOrderResultModel>({ url: Api.SEARCH_ORDER, params });
