@@ -7,6 +7,8 @@ import {
   SearchOrderPageModel,
 } from './model/myModel';
 import { defHttp } from '/@/utils/http/axios';
+import { downloadByUrl } from '/@/utils/file/download';
+import { useUserStore } from '/@/store/modules/user';
 
 enum Api {
   // 添加订单(订单信息(orderInfo(json格式)))
@@ -50,6 +52,15 @@ export const uploadOrderFileApi = (params: UpdateOrderParamsModel<UpdateOrderFil
 
 export const exportOrderApi = (params) =>
   defHttp.get({ url: Api.EXPORT, params }, { isTransformResponse: false });
+
+export const exportApi = (params) => {
+  const { getToken, userInfo } = useUserStore();
+  params.token = getToken;
+  params.shop = userInfo?.selectedShop;
+  const url = '/api' + Api.EXPORT + '?obj=' + encodeURIComponent(JSON.stringify(params));
+  console.log(url);
+  downloadByUrl({ url });
+};
 
 export const searchOrderApi = (params: SearchOrderPageModel) =>
   defHttp.get<SearchOrderResultModel>({ url: Api.SEARCH, params });

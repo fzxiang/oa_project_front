@@ -48,18 +48,12 @@
   import { defineComponent, ref, reactive } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
-  import {
-    exportOrderApi,
-    searchOrderApi,
-    uploadOrderFileApi,
-    searchChildApi,
-  } from '/@/api/order/my';
+  import { searchOrderApi, uploadOrderFileApi, searchChildApi, exportApi } from '/@/api/order/my';
   import { useModal } from '/@/components/Modal';
   import MyOrderModal from './MyOrderModal.vue';
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
-  import { downloadByData } from '/@/utils/file/download';
 
   export default defineComponent({
     components: { BasicTable, MyOrderModal, TableAction, ImpExcel, Tag, Divider, Space },
@@ -140,13 +134,7 @@
         const params = {
           searchParams: getForm().getFieldsValue(),
         };
-        const res = await exportOrderApi(params);
-        console.log(res);
-        downloadByData(
-          res,
-          '下载的文件.xls',
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        );
+        exportApi(params);
       }
 
       const loadingData1 = ref(false);
