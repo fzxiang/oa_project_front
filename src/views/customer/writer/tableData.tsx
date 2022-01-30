@@ -148,13 +148,13 @@ export function getFormConfig(): Partial<FormProps> {
         colProps: { span: 8 },
       },
       {
-        field: 'name',
+        field: 'writerId',
         label: '选择写手',
         component: 'ApiSelect',
         colProps: { span: 8 },
         componentProps: {
           api: getWriterApi,
-          labelField: 'writerId',
+          labelField: 'name',
           valueField: 'id',
         },
       },

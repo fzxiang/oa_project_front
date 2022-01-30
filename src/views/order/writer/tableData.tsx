@@ -112,32 +112,40 @@ export function getBasicColumnsChild(): BasicColumn[] {
       width: 200,
     },
     {
-      title: '写手名',
-      dataIndex: 'name',
-      fixed: 'left',
-      width: 150,
+      title: '发单号',
+      dataIndex: 'invoice',
     },
     {
-      title: '写手手机',
-      dataIndex: 'writerNum',
-      fixed: 'left',
-      width: 150,
+      title: '订单编号',
+      dataIndex: 'aliOrder',
     },
     {
-      title: '写手QQ',
-      dataIndex: 'qqAccount',
-      width: 150,
+      title: '付款时间',
+      dataIndex: 'paymentTime',
       // defaultHidden: true,
     },
     {
-      title: '写手微信',
-      dataIndex: 'wechatAccount',
+      title: '淘宝价格',
+      dataIndex: 'taobaoPrice',
       width: 120,
     },
     {
-      title: '写手支付宝',
-      dataIndex: 'alipayAccount',
-      width: 150,
+      title: '写手派单价',
+      dataIndex: 'writerPrice',
+    },
+    {
+      title: '派单客服',
+      dataIndex: 'acceptUser',
+    },
+    {
+      title: '结算状态',
+      dataIndex: 'settleState',
+      format: new Map([
+        [0, '全部'],
+        [1, '已结算'],
+        [2, '未结算'],
+        [3, '暂缓结算'],
+      ]),
     },
   ];
 }

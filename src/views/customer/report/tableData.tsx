@@ -82,16 +82,34 @@ export function getFormConfig(): Partial<FormProps> {
     ],
     schemas: [
       {
+        field: 'memberName',
+        label: '选择客服',
+        component: 'ApiSelect',
+        colProps: { span: 8 },
+        componentProps: {
+          api: getCustomerApi,
+          labelField: 'roleName',
+          valueField: 'roleValue',
+        },
+      },
+      {
         field: 'pTime',
         label: '订单付款时间',
         component: 'RangePicker',
         colProps: { span: 8 },
       },
       {
+        field: 'rTime',
+        label: '确认收货时间',
+        component: 'RangePicker',
+        colProps: { span: 8 },
+      },
+
+      {
         field: 'settleState',
         label: '结算状态',
         component: 'RadioButtonGroup',
-        colProps: { span: 12 },
+        colProps: { span: 8 },
         defaultValue: 0,
         componentProps: {
           options: [
@@ -100,23 +118,6 @@ export function getFormConfig(): Partial<FormProps> {
             { label: '未结算', value: 2 },
             { label: '暂缓结算', value: 3 },
           ],
-        },
-      },
-      {
-        field: 'rTime',
-        label: '确认收货时间',
-        component: 'RangePicker',
-        colProps: { span: 8 },
-      },
-      {
-        field: 'memberName',
-        label: '选择客服',
-        component: 'ApiSelect',
-        colProps: { span: 16 },
-        componentProps: {
-          api: getCustomerApi,
-          labelField: 'roleName',
-          valueField: 'roleValue',
         },
       },
     ],

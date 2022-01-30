@@ -82,7 +82,6 @@ export function getBasicColumnsChild(): BasicColumn[] {
       title: '写手名',
       dataIndex: 'name',
       fixed: 'left',
-      width: 150,
     },
     {
       title: '写手手机',

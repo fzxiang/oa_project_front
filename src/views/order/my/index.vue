@@ -4,10 +4,10 @@
       <template #headerTop>
         <Space size="large" class="mt-3">
           <span
-            >淘宝总价格：<Tag color="blue"> {{ price.order }} </Tag> 元</span
+            >淘宝总价格:<Tag color="blue"> {{ price.order }} </Tag> 元</span
           >
           <span
-            >写手总价格：<Tag color="blue"> {{ price.writer }} </Tag> 元</span
+            >写手总价格:<Tag color="blue"> {{ price.writer }} </Tag> 元</span
           >
         </Space>
         <Divider />
