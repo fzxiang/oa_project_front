@@ -16,7 +16,34 @@
         <Divider />
       </template>
       <template #expandedRowRender="{ record }">
-        <BasicTable @register="registerTableChild" :dataSource="record.childOrder" />
+        <BasicTable @register="registerTableChild" :dataSource="record.childOrder">
+          <template #action="{ record: childRecord }">
+            <TableAction
+              :actions="[
+                {
+                  label: '未结算',
+                  color: 'error',
+                  type: 'link',
+                  ifShow: childRecord.wSettleState !== 2,
+                  onClick: handleEdit.bind(null, childRecord, 1),
+                },
+                {
+                  label: '已结算',
+                  color: 'success',
+                  type: 'link',
+                  ifShow: childRecord.wSettleState !== 1,
+                  onClick: handleEdit.bind(null, childRecord, 2),
+                },
+                {
+                  label: '暂缓结算',
+                  color: 'warning',
+                  type: 'link',
+                  onClick: handleEdit.bind(null, childRecord, 3),
+                },
+              ]"
+            />
+          </template>
+        </BasicTable>
       </template>
       <template #toolbar>
         <!-- <a-button type="primary" @click="handleAdd">添加订单</a-button> -->
@@ -44,26 +71,26 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, reactive } from 'vue';
+  import { defineComponent, ref, reactive, h } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
-  import { searchApi, exportApi, uploadFileApi } from '/@/api/customer/writer';
+  import { searchApi, exportApi, uploadFileApi, updateApi } from '/@/api/customer/writer';
   import { useModal } from '/@/components/Modal';
   import { ImpExcel, ExcelData } from '/@/components/Excel';
-  // import { useMessage } from '/@/hooks/web/useMessage';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
 
   export default defineComponent({
     components: { BasicTable, TableAction, ImpExcel, Tag, Divider, Space },
     setup() {
-      // const { createErrorModal } = useMessage();
+      const { createConfirm } = useMessage();
       const price = reactive({
         totalPrice: 0,
         settlePrice: 0,
         noSettlePrice: 0,
       });
       // const rowId = ref('');
-      const [registerTable, { getForm, getRawDataSource }] = useTable({
+      const [registerTable, { getForm, getRawDataSource, reload }] = useTable({
         title: '订单列表',
         api: searchApi,
         columns: getBasicColumns(),
@@ -101,11 +128,23 @@
         columns: getBasicColumnsChild(),
         useSearchForm: false,
         showTableSetting: false,
+        actionColumn: {
+          width: 150,
+          title: '操作',
+          dataIndex: 'action',
+          slots: { customRender: 'action' },
+          fixed: 'right',
+        },
         pagination: false,
       });
 
       // const [registerTableItem, {}] = useTable({});
-      const [registerModal, { openModal }] = useModal();
+      const [
+        registerModal,
+        {
+          /* openModal */
+        },
+      ] = useModal();
 
       // function handleAdd() {
       //   console.log('添加订单');
@@ -113,12 +152,30 @@
       //     isUpdate: false,
       //   });
       // }
-
-      function handleEdit(record: Recordable) {
-        openModal(true, {
-          record,
-          isUpdate: true,
+      const MAP = {
+        1: '已结算',
+        2: '未结算',
+        3: '暂缓结算',
+      };
+      function handleEdit(record: Recordable, state) {
+        console.log(record, state);
+        createConfirm({
+          iconType: 'warning',
+          title: () => h('span', '温馨提示!'),
+          content: () =>
+            h(
+              'span',
+              `此操作将 淘宝订单编号为: ${record.aliOrder}, 结算状态修改为: ${MAP[state]}, 是否继续?`,
+            ),
+          onOk: async () => {
+            await updateApi({ orderId: record.id, state });
+            await reload();
+          },
         });
+        // openModal(true, {
+        //   record,
+        //   isUpdate: true,
+        // });
       }
       function handleExport() {
         const params = { searchParams: getForm().getFieldsValue() };
