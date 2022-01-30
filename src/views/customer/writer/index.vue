@@ -50,13 +50,13 @@
   import { searchApi, exportApi, uploadFileApi } from '/@/api/customer/writer';
   import { useModal } from '/@/components/Modal';
   import { ImpExcel, ExcelData } from '/@/components/Excel';
-  import { useMessage } from '/@/hooks/web/useMessage';
+  // import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
 
   export default defineComponent({
     components: { BasicTable, TableAction, ImpExcel, Tag, Divider, Space },
     setup() {
-      const { createErrorModal } = useMessage();
+      // const { createErrorModal } = useMessage();
       const price = reactive({
         totalPrice: 0,
         settlePrice: 0,
@@ -107,12 +107,12 @@
       // const [registerTableItem, {}] = useTable({});
       const [registerModal, { openModal }] = useModal();
 
-      function handleAdd() {
-        console.log('添加订单');
-        openModal(true, {
-          isUpdate: false,
-        });
-      }
+      // function handleAdd() {
+      //   console.log('添加订单');
+      //   openModal(true, {
+      //     isUpdate: false,
+      //   });
+      // }
 
       function handleEdit(record: Recordable) {
         openModal(true, {
@@ -152,7 +152,7 @@
         registerModal,
         registerTable,
         registerTableChild,
-        handleAdd,
+        // handleAdd,
         handleExport,
         handleEdit,
         loadDataSuccess1,

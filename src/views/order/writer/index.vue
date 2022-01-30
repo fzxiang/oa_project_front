@@ -30,6 +30,7 @@
     components: { BasicTable, WriterModal, TableAction },
     setup() {
       const rowId = ref('');
+      // 父表格
       const [registerTable, { getRawDataSource }] = useTable({
         title: '写手列表',
         api: searchApi,
@@ -65,7 +66,7 @@
           }
         },
       });
-
+      // 子表格
       const [registerTableChild] = useTable({
         title: '关联订单',
         api: searchChildApi,
@@ -73,6 +74,7 @@
         beforeFetch() {
           return { id: rowId.value };
         },
+        pagination: false,
       });
       // const [registerTableItem, {}] = useTable({});
       const [registerModal, { openModal }] = useModal();

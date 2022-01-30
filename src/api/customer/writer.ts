@@ -1,8 +1,7 @@
 import {
   ParamsModel,
   ResultModel,
-  UpdateParamsModel,
-  UpdateFileData,
+  // UpdateFileData,
   // SearchResultModel,
 } from './model/reportModel';
 import { defHttp } from '/@/utils/http/axios';
@@ -41,5 +40,6 @@ export const exportApi = (params) => {
   params.token = getToken;
   params.shop = userInfo?.selectedShop;
   const url = '/api' + Api.EXPORT + '?obj=' + encodeURIComponent(JSON.stringify(params));
+  console.log(url);
   downloadByUrl({ url });
 };
