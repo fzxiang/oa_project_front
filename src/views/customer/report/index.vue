@@ -67,7 +67,13 @@
   import { Select } from 'ant-design-vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
-  import { searchApi, exportApi, searchChildApi, oneKeyApi } from '/@/api/customer/report';
+  import {
+    searchApi,
+    exportApi,
+    searchChildApi,
+    oneKeyApi,
+    updateApi,
+  } from '/@/api/customer/report';
   // import { useModal } from '/@/components/Modal';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
@@ -87,7 +93,7 @@
       const status = ref(1);
 
       // 父表
-      const [registerTable, { getForm, getRawDataSource, getPaginationRef }] = useTable({
+      const [registerTable, { getForm, getRawDataSource, getPaginationRef, reload }] = useTable({
         title: '客服列表',
         api: searchApi,
         columns: getBasicColumns(),
@@ -141,13 +147,13 @@
       // const [registerTableItem, {}] = useTable({});
       // const [registerModal, { openModal }] = useModal();
       const oneKeyBtn = ref(false);
+      const MAP = {
+        1: '已结算',
+        2: '未结算',
+        3: '暂缓结算',
+      };
       function handleOnekey() {
         // 此操作将修改以下表格内所有客服订单, 结算状态修改为：已结算, 是否继续?
-        const MAP = {
-          1: '已结算',
-          2: '未结算',
-          3: '暂缓结算',
-        };
         createConfirm({
           iconType: 'warning',
           title: () => h('span', '温馨提示!'),
@@ -157,30 +163,45 @@
               `此操作将修改以下表格内所有客服订单, 结算状态修改为: ${MAP[status.value]}, 是否继续?`,
             ),
           onOk: async () => {
-            oneKeyBtn.value = true;
-            const searchParams = getForm().getFieldsValue();
-            const page = getPaginationRef() as PaginationProps;
-            if (page !== true) {
-              searchParams.pageNumber = page?.current;
-              searchParams.pageSize = page?.pageSize;
-            }
+            try {
+              oneKeyBtn.value = true;
+              const searchParams = getForm().getFieldsValue();
+              const page = getPaginationRef() as PaginationProps;
+              if (page !== true) {
+                searchParams.pageNumber = page?.current;
+                searchParams.pageSize = page?.pageSize;
+              }
 
-            const params = {
-              state: status.value,
-              searchParams,
-            };
-            await oneKeyApi(params);
-            oneKeyBtn.value = false;
+              const params = {
+                state: status.value,
+                searchParams,
+              };
+              await oneKeyApi(params);
+            } finally {
+              oneKeyBtn.value = false;
+              await reload();
+            }
           },
         });
       }
 
       function handleEdit(record: Recordable, state: number) {
         console.log(record, state);
-        // openModal(true, {
-        //   record,
-        //   isUpdate: true,
-        // });
+        createConfirm({
+          iconType: 'warning',
+          title: () => h('span', '温馨提示!'),
+          content: () =>
+            h(
+              'span',
+              `此操作将 淘宝订单编号为: ${record.aliOrder}, 结算状态修改为: ${
+                MAP[status.value]
+              }, 是否继续?`,
+            ),
+          onOk: async () => {
+            await updateApi({ orderId: record.id, state });
+            await reload();
+          },
+        });
       }
       function handleExport() {
         const params = { searchParams: getForm().getFieldsValue() };

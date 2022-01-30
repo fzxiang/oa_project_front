@@ -13,7 +13,7 @@ enum Api {
   // 获取全部客服
   GET_CUSTOMER = '/getUsersOfPower',
   ADD = '/add',
-  UPDATE = '/update',
+  UPDATE = '/updateOneOrderState',
   CHECK = '/check',
   UPLOAD_FILE = '/uploadFile',
   EXPORT = '/exportCustomer',
@@ -34,8 +34,8 @@ export const oneKeyApi = (params: any) =>
 export const addApi = (params: { orderInfo: ParamsModel }) =>
   defHttp.post<ResultModel>({ url: Api.ADD, params }, { successMessageMode: 'notification' });
 
-export const updateApi = (params: { orderInfo: ParamsModel }) =>
-  defHttp.post<ParamsModel>({ url: Api.UPDATE, params }, { successMessageMode: 'notification' });
+export const updateApi = (params: { orderId: number; state: number }) =>
+  defHttp.post({ url: Api.UPDATE, params }, { successMessageMode: 'notification' });
 
 export const checkApi = (params: { ali: string }) =>
   defHttp.post({ url: Api.CHECK, params }, { successMessageMode: 'notification' });
