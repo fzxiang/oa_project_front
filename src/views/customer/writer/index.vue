@@ -101,6 +101,7 @@
         columns: getBasicColumnsChild(),
         useSearchForm: false,
         showTableSetting: false,
+        pagination: false,
       });
 
       // const [registerTableItem, {}] = useTable({});
@@ -132,11 +133,10 @@
 
           const fileData = results.map((item) => {
             return {
-              aliOrder: item['订单编号'] || '',
-              paymentMer: item['打款商家金额'] || '',
-              confirmTime: item['确认收货时间'] || '',
-              paymentTime: item['订单付款时间'] || item['订单付款时间 '] || '',
-              actualPaymentPrice: item['买家实际支付金额'] || '',
+              alipayAccount: item['收款方支付宝账号'] || '',
+              name: item['收款方姓名'] || '',
+              price: item['金额'] || '',
+              invoice: item['订单付款时间'] || item['订单付款时间 '] || '',
             };
           });
           // fileData.length = 200
@@ -144,31 +144,6 @@
           loadingData1.value = false;
         } catch (e) {
           loadingData1.value = false;
-        }
-      }
-      const loadingData2 = ref(false);
-      async function loadDataSuccess2(excelDataList: ExcelData[]) {
-        try {
-          loadingData2.value = true;
-          const { results } = excelDataList[0];
-
-          const fileData = results.map((item) => {
-            return {
-              aliOrder: item['订单编号'] || '',
-              refundState: item['退款状态'] || '',
-              refundMod: item['售中或售后'] || '',
-              actualPayment: item['订单付款时间'] || item['订单付款时间 '] || '',
-              refundMoney: item['买家退款金额'] || '',
-            };
-          });
-          const res = await uploadFileApi({ type: 2, fileData: fileData });
-          // console.log(res);
-          if (res?.result?.length !== 0) {
-            createErrorModal({ title: '以下订单处理错误', content: res.result.join() });
-          }
-          loadingData2.value = false;
-        } catch (e) {
-          loadingData2.value = false;
         }
       }
 
@@ -181,9 +156,7 @@
         handleExport,
         handleEdit,
         loadDataSuccess1,
-        loadDataSuccess2,
         loadingData1,
-        loadingData2,
       };
     },
   });

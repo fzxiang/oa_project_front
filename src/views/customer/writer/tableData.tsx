@@ -109,6 +109,12 @@ export function getBasicColumnsChild(): BasicColumn[] {
     {
       title: '结算状态',
       dataIndex: 'wSettleState',
+      format: new Map([
+        [0, '全部'],
+        [1, '已结算'],
+        [2, '未结算'],
+        [3, '暂缓结算'],
+      ]),
     },
     // {
     //   title: '结算方式',

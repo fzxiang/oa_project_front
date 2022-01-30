@@ -46,7 +46,7 @@ export type UpdateParamsModel<T> = {
   fileData: T[];
 };
 export interface UpdateFileData {
-  ali: string;
+  aliOrder: string;
   paymentMer?: number;
   confirmTime?: string;
   paymentTime?: string;
@@ -58,7 +58,7 @@ export interface UpdateFileData {
 
 // 搜索项
 export interface SearchParamsModel {
-  ali: string;
+  aliOrder: string;
   invoice: string;
   memberName: string;
   settleState: number; // 1:已结算  2： 未结算  3： 暂缓结算

@@ -30,7 +30,7 @@ export const addApi = (params: { orderInfo: ParamsModel }) =>
 export const checkApi = (params: { ali: string }) =>
   defHttp.post({ url: Api.CHECK, params }, { successMessageMode: 'notification' });
 
-export const uploadFileApi = (params: UpdateParamsModel<UpdateFileData>) =>
+export const uploadFileApi = (params: any) =>
   defHttp.post<ResultModel>(
     { url: Api.UPLOAD_FILE, params, timeout: 600 * 1000 },
     { successMessageMode: 'notification' },
