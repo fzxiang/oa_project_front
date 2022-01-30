@@ -21,7 +21,7 @@ enum Api {
   UPDATE_REDRESS = '/updateRedress',
   CHECK_WRITER = '/updateRedress',
   GET_TABLE_CHILD = '/getWritersOfOrder',
-  ONE_KEY = '/updateOneOrderState',
+  ONE_KEY = '/updateAllOrderState',
 }
 export const getCustomerApi = () => defHttp.get<any>({ url: Api.GET_CUSTOMER });
 

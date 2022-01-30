@@ -140,7 +140,7 @@
             };
           });
           // fileData.length = 200
-          await uploadFileApi({ type: 1, fileData });
+          await uploadFileApi({ fileData });
           loadingData1.value = false;
         } catch (e) {
           loadingData1.value = false;
