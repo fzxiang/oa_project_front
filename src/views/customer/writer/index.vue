@@ -21,19 +21,20 @@
             <TableAction
               :actions="[
                 {
-                  label: '未结算',
-                  color: 'error',
-                  type: 'link',
-                  ifShow: childRecord.wSettleState !== 2,
-                  onClick: handleEdit.bind(null, childRecord, 1),
-                },
-                {
                   label: '已结算',
                   color: 'success',
                   type: 'link',
                   ifShow: childRecord.wSettleState !== 1,
+                  onClick: handleEdit.bind(null, childRecord, 1),
+                },
+                {
+                  label: '未结算',
+                  color: 'error',
+                  type: 'link',
+                  ifShow: childRecord.wSettleState !== 2,
                   onClick: handleEdit.bind(null, childRecord, 2),
                 },
+
                 {
                   label: '暂缓结算',
                   color: 'warning',

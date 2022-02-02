@@ -37,17 +37,17 @@
         <TableAction
           :actions="[
             {
-              label: '未结算',
-              color: 'error',
-              type: 'link',
-              ifShow: record.settleState !== 2,
-              onClick: handleEdit.bind(null, record, 1),
-            },
-            {
               label: '已结算',
               color: 'success',
               type: 'link',
               ifShow: record.settleState !== 1,
+              onClick: handleEdit.bind(null, record, 1),
+            },
+            {
+              label: '未结算',
+              color: 'error',
+              type: 'link',
+              ifShow: record.settleState !== 2,
               onClick: handleEdit.bind(null, record, 2),
             },
             {
