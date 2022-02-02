@@ -166,7 +166,6 @@
         3: '暂缓结算',
       };
       function handleEdit(record: Recordable, state) {
-        console.log(record, state);
         createConfirm({
           iconType: 'warning',
           title: () => h('span', '温馨提示!'),
