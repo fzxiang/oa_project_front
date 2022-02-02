@@ -193,9 +193,7 @@
           content: () =>
             h(
               'span',
-              `此操作将 淘宝订单编号为: ${record.aliOrder}, 结算状态修改为: ${
-                MAP[status.value]
-              }, 是否继续?`,
+              `此操作将 淘宝订单编号为: ${record.aliOrder}, 结算状态修改为: ${MAP[state]}, 是否继续?`,
             ),
           onOk: async () => {
             await updateApi({ orderId: record.id, state });
