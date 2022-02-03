@@ -25,21 +25,22 @@
                   color: 'success',
                   type: 'link',
                   ifShow: childRecord.wSettleState !== 1,
-                  onClick: handleEdit.bind(null, childRecord, 1),
+                  onClick: handleEdit.bind(null, record, childRecord, 1),
                 },
                 {
                   label: '未结算',
                   color: 'error',
                   type: 'link',
                   ifShow: childRecord.wSettleState !== 2,
-                  onClick: handleEdit.bind(null, childRecord, 2),
+                  onClick: handleEdit.bind(null, record, childRecord, 2),
                 },
 
                 {
                   label: '暂缓结算',
                   color: 'warning',
                   type: 'link',
-                  onClick: handleEdit.bind(null, childRecord, 3),
+                  ifShow: childRecord.wSettleState !== 3,
+                  onClick: handleEdit.bind(null, record, childRecord, 3),
                 },
               ]"
             />
@@ -166,17 +167,18 @@
         2: '未结算',
         3: '暂缓结算',
       };
-      function handleEdit(record: Recordable, state) {
+      function handleEdit(record: Recordable, childRecord, state) {
+        console.log(record, childRecord);
         createConfirm({
           iconType: 'warning',
           title: () => h('span', '温馨提示!'),
           content: () =>
             h(
               'span',
-              `此操作将 淘宝订单编号为: ${record.aliOrder}, 结算状态修改为: ${MAP[state]}, 是否继续?`,
+              `此操作将 淘宝订单编号为: ${childRecord.aliOrder}, 结算状态修改为: ${MAP[state]}, 是否继续?`,
             ),
           onOk: async () => {
-            await updateApi({ orderId: record.id, state });
+            await updateApi({ writeId: record.id, orderId: childRecord.id, state });
             await reload();
           },
         });
