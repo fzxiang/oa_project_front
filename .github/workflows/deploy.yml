@@ -103,6 +103,7 @@ jobs:
 
       - name: Build
         run: |
+          yarn install
           yarn run build
           touch dist/.nojekyll
           cp dist/index.html dist/404.html
