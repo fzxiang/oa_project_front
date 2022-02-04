@@ -31,12 +31,13 @@
     setup(_, { emit }) {
       const treeData = ref<any[]>([]);
       const treeValue = ref<any[]>([]);
-      const collect: any[] = [];
+      let collect: any[] = [];
       const record = ref<any>({});
 
       const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
         // await resetFields();
         setDrawerProps({ confirmLoading: false });
+        collect = [];
         // 需要在setFieldsValue之前先填充treeData，否则Tree组件可能会报key not exist警告
         if (unref(treeData).length === 0) {
           const shopData = await shopListApi();
@@ -81,6 +82,8 @@
       }
       async function handleSubmit() {
         try {
+          setDrawerProps({ confirmLoading: true });
+
           // 拼接数据
           treeValue.value.forEach((item) => {
             const match = item.match(/(\S+)~(\S+)/i);
@@ -93,7 +96,6 @@
             }
           });
 
-          setDrawerProps({ confirmLoading: true });
           // TODO custom api
           const params = {
             uId: record.value?.user_id,
@@ -112,6 +114,7 @@
         registerDrawer,
         handleSubmit,
         treeData,
+        collect,
       };
     },
   });
