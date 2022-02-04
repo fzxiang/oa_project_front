@@ -185,7 +185,7 @@
       }
 
       function handleEditAll(record: Recordable) {
-        console.log(record);
+        // console.log(record);
 
         createConfirm({
           iconType: 'warning',
