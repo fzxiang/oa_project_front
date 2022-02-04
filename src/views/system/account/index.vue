@@ -47,7 +47,7 @@
       </template>
     </BasicTable>
     <AccountModal @register="registerModal" @success="handleSuccess" />
-    <AccountDrawer @register="registerDrawer" @success="handlePermission" />
+    <AccountDrawer @register="registerDrawer" @success="handleSuccess" />
   </PageWrapper>
 </template>
 <script lang="ts">
