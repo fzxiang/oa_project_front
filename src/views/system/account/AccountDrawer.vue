@@ -3,7 +3,7 @@
     v-bind="$attrs"
     @register="registerDrawer"
     showFooter
-    title="权限分配"
+    :title="title"
     width="508px"
     @ok="handleSubmit"
   >
@@ -31,28 +31,28 @@
     setup(_, { emit }) {
       const treeData = ref<any[]>([]);
       const treeValue = ref<any[]>([]);
+      const title = ref<string>('权限分配');
       let collect: any[] = [];
       const record = ref<any>({});
 
       const [registerDrawer, { setDrawerProps, closeDrawer }] = useDrawerInner(async (data) => {
         // await resetFields();
         setDrawerProps({ confirmLoading: false });
+        title.value = '权限分配: ' + data.nickname;
         collect = [];
         // 需要在setFieldsValue之前先填充treeData，否则Tree组件可能会报key not exist警告
-        if (unref(treeData).length === 0) {
-          const shopData = await shopListApi();
-          treeData.value = shopData.map((item) => {
-            collect.push({
-              shop_id: `${item.shop_id}`,
-              power: [],
-            });
-            return {
-              id: `${item.shop_id}`,
-              title: item.shop_name,
-              children: getMenuHandle(routeModuleList, `${item.shop_id}`),
-            };
+        const shopData = await shopListApi();
+        treeData.value = shopData.map((item) => {
+          collect.push({
+            shop_id: `${item.shop_id}`,
+            power: [],
           });
-        }
+          return {
+            id: `${item.shop_id}`,
+            title: item.shop_name,
+            children: getMenuHandle(routeModuleList, `${item.shop_id}`),
+          };
+        });
         treeValue.value = await getUserPower(data.user_id);
         record.value = data;
         // await setFieldsValue({
@@ -110,6 +110,7 @@
       }
 
       return {
+        title,
         treeValue,
         registerDrawer,
         handleSubmit,
