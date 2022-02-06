@@ -15,7 +15,7 @@ export function getBasicColumns(): BasicColumn[] {
     },
     {
       title: '接单客服',
-      dataIndex: 'customerContact',
+      dataIndex: 'acceptUser',
     },
     {
       title: '订单编号',
@@ -42,7 +42,7 @@ export function getBasicColumns(): BasicColumn[] {
     },
     {
       title: '客户微信或QQ',
-      dataIndex: 'taobaoPrice',
+      dataIndex: 'customerContact',
     },
     {
       title: '写手派单总价',
@@ -55,6 +55,10 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '收货时间',
       dataIndex: 'receivingTime',
+    },
+    {
+      title: '备注',
+      dataIndex: 'remarks',
     },
   ];
 }
