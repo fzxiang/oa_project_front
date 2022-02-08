@@ -41,7 +41,7 @@
         />
       </template>
     </BasicTable>
-    <MyOrderModal @register="registerModal" />
+    <MyOrderModal @register="registerModal" @success="hanldeReload" />
   </div>
 </template>
 <script lang="ts">
@@ -64,7 +64,7 @@
         writer: 0,
       });
       const rowId = ref('');
-      const [registerTable, { getForm, getRawDataSource }] = useTable({
+      const [registerTable, { getForm, getRawDataSource, reload }] = useTable({
         title: '订单列表',
         api: searchOrderApi,
         columns: getBasicColumns(),
@@ -154,6 +154,7 @@
           });
           // fileData.length = 200
           await uploadOrderFileApi({ type: 1, fileData });
+          await reload();
           loadingData1.value = false;
         } catch (e) {
           loadingData1.value = false;
@@ -180,9 +181,14 @@
             createErrorModal({ title: '以下订单处理错误', content: res.result.join() });
           }
           loadingData2.value = false;
+          await reload();
         } catch (e) {
           loadingData2.value = false;
         }
+      }
+
+      function hanldeReload() {
+        reload();
       }
 
       return {
@@ -190,6 +196,7 @@
         registerModal,
         registerTable,
         registerTableChild,
+        hanldeReload,
         handleAdd,
         handleExport,
         handleEdit,

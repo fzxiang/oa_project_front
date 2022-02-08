@@ -9,7 +9,7 @@
     <Divider orientation="left"> 写手信息 </Divider>
 
     <BasicForm @register="registerFormOrder" />
-    <a-button type="dashed" block @click="handleAdd" :disabled="disabled">添加写手</a-button>
+    <a-button type="dashed" block @click="handleAdd(true)" :disabled="disabled">添加写手</a-button>
 
     <Divider orientation="left"> 写手信息 </Divider>
     <BasicForm @register="registerFormWriter">
@@ -30,9 +30,14 @@
   import { defineComponent, ref, computed, unref, reactive } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { OrderInfoModel } from '/@/api/order/model/myModel';
   import { orderInfoForm, writerInfoForm } from './tableData';
-  import { addOrderApi, checkOrderApi, checkWriterApi, updateOrderApi } from '/@/api/order/my';
+  import {
+    addOrderApi,
+    checkOrderApi,
+    checkWriterApi,
+    searchChildApi,
+    updateOrderApi,
+  } from '/@/api/order/my';
   import { useMessage } from '/@/hooks/web/useMessage';
   const { notification } = useMessage();
 
@@ -43,21 +48,6 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
       const disabled = ref(false);
-
-      const orderInfo = reactive<OrderInfoModel>({
-        order: {
-          aliOrder: '',
-          invoice: '',
-          memberName: '',
-          taobaoPrice: '',
-          customerContact: '',
-          orderOutline: '',
-        },
-        writer: [],
-        other: {
-          remarks: '',
-        },
-      });
 
       // 订单
       const [
@@ -88,8 +78,8 @@
           validate: validateWriter,
           getFieldsValue,
           updateSchema: updateSchemaWriter,
+          resetSchema: resetSchemaWriter,
           removeSchemaByFiled: removeSchemaByFiledWriter,
-          setProps: setPropsWriter,
         },
       ] = useForm({
         schemas: [],
@@ -100,21 +90,13 @@
         showActionButtonGroup: false,
       });
 
-      function handleAdd() {
-        orderInfo.writer?.push({
-          writerNum: '',
-          name: '',
-          writerAccount: '',
-          alipayAccount: '',
-          qqAccount: '',
-          wechatAccount: '',
-          writerSituation: 1,
-          writerQuality: 1,
-        });
-        const field = writerInfoForm(writerIndex.value);
-        writerIndex.value = writerIndex.value + 1;
-        console.log('field: ', field);
-        field.forEach((item) => appendSchemaByFieldWriter(item, ''));
+      async function handleAdd(disabled = true) {
+        const field = writerInfoForm(writerIndex.value, disabled);
+        writerIndex.value++;
+        for (let i in field) {
+          await appendSchemaByFieldWriter(field[i], '');
+        }
+        console.log('for');
       }
 
       async function handleCheck(index) {
@@ -122,7 +104,7 @@
         const writerNum = params[`writerNum_${index}`];
         const res = await checkWriterApi({ writerNum });
         if (res.lenght !== 0) {
-          updateSchemaWriter([
+          await updateSchemaWriter([
             { field: `name_${index}`, componentProps: { disabled: false } },
             { field: `writerPrice_${index}`, componentProps: { disabled: false } },
             { field: `alipayAccount_${index}`, componentProps: { disabled: false } },
@@ -131,9 +113,7 @@
             { field: `writerSituation_${index}`, componentProps: { disabled: false } },
             { field: `writerQuality_${index}`, componentProps: { disabled: false } },
           ]);
-        } else {
         }
-        console.log(res);
       }
 
       function handleDelete(index) {
@@ -146,12 +126,9 @@
           `wechatAccount_${index}`,
           `writerSituation_${index}`,
           `writerQuality_${index}`,
-          // `divider_${index}`,
-          // `add_${index}`,
+          `${index}`,
+          `divider_${index}`,
         ]);
-        // setPropsWriter();
-        // orderInfo.writer?.splice(index, 1);
-        // registerFormWriter.splice(index, 1);
       }
 
       //其他
@@ -179,60 +156,77 @@
       });
 
       // 初始化
-      const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
-        setModalProps({ confirmLoading: true });
-        isUpdate.value = !!data?.isUpdate;
-
-        await updateSchemaOrder([
-          { field: 'invoice', componentProps: { disabled: !isUpdate.value } },
-          { field: 'taobaoPrice', componentProps: { disabled: !isUpdate.value } },
-          { field: 'customrContact', componentProps: { disabled: !isUpdate.value } },
-          { field: 'orderOutline', componentProps: { disabled: !isUpdate.value } },
-          { field: 'memberName', componentProps: { disabled: !isUpdate.value } },
-          {
-            field: 'aliOrder',
-            componentProps: {
-              enterButton: '校验订单',
-              placeholder: '请先输入订单进行校验',
-              onSearch: async (value) => {
-                const res = await checkOrderApi({ aliOrder: value });
-                if (res?.length > 0) {
-                  notification.error({ message: '提示', description: '已存在改订单！' });
-                  disabled.value = true;
-                } else {
-                  await updateSchemaOrder([
-                    { field: 'invoice', componentProps: { disabled: false } },
-                    { field: 'taobaoPrice', componentProps: { disabled: false } },
-                    { field: 'customrContact', componentProps: { disabled: false } },
-                    { field: 'orderOutline', componentProps: { disabled: false } },
-                    { field: 'memberName', componentProps: { disabled: false } },
-                  ]);
-                  disabled.value = false;
-                }
+      const [registerModal, { setModalProps, closeModal, changeLoading }] = useModalInner(
+        async (data) => {
+          setModalProps({ confirmLoading: true });
+          changeLoading(true);
+          isUpdate.value = !!data?.isUpdate;
+          writerIndex.value = 0;
+          await updateSchemaOrder([
+            { field: 'invoice', componentProps: { disabled: !isUpdate.value } },
+            { field: 'taobaoPrice', componentProps: { disabled: !isUpdate.value } },
+            { field: 'customrContact', componentProps: { disabled: !isUpdate.value } },
+            { field: 'orderOutline', componentProps: { disabled: !isUpdate.value } },
+            { field: 'memberName', componentProps: { disabled: !isUpdate.value } },
+            {
+              field: 'aliOrder',
+              componentProps: {
+                enterButton: '校验订单',
+                placeholder: '请先输入订单进行校验',
+                onSearch: async (value) => {
+                  const res = await checkOrderApi({ aliOrder: value });
+                  if (res?.length > 0) {
+                    notification.error({ message: '提示', description: '已存在改订单！' });
+                    disabled.value = true;
+                  } else {
+                    await updateSchemaOrder([
+                      { field: 'invoice', componentProps: { disabled: false } },
+                      { field: 'taobaoPrice', componentProps: { disabled: false } },
+                      { field: 'customrContact', componentProps: { disabled: false } },
+                      { field: 'orderOutline', componentProps: { disabled: false } },
+                      { field: 'memberName', componentProps: { disabled: false } },
+                    ]);
+                    disabled.value = false;
+                  }
+                },
+                disabled: false,
               },
-              disabled: false,
             },
-          },
-        ]);
+          ]);
 
-        // 区分编辑和新增
-        if (unref(isUpdate)) {
-          disabled.value = false;
-          console.log('编辑订单');
-          await setFieldsValueOrder(data?.record);
-          await setFieldsValueOther(data?.record);
-          // await setFieldsValue({
-          //   ...data.record,
-          // });
-        } else {
-          await resetFieldsOrder();
-          await resetFieldsWriter();
-          await resetFieldsOther();
-          disabled.value = true;
-        }
+          await resetSchemaWriter([]);
 
-        setModalProps({ confirmLoading: false });
-      });
+          if (unref(isUpdate)) {
+            // 编辑
+            disabled.value = false;
+            console.log('编辑订单');
+            await setFieldsValueOrder(data?.record);
+            await setFieldsValueOther(data?.record);
+            const writerData = await searchChildApi({ id: data?.record.id });
+            const params = {};
+            for (let i in writerData) {
+              await handleAdd(false);
+              params['writerNum_' + i] = writerData[i].writerNum;
+              params['name_' + i] = writerData[i].name;
+              params['writerPrice_' + i] = writerData[i].writerPrice;
+              params['alipayAccount_' + i] = writerData[i].alipayAccount;
+              params['qqAccount_' + i] = writerData[i].qqAccount;
+              params['wechatAccount_' + i] = writerData[i].wechatAccount;
+              params['writerSituation_' + i] = writerData[i].writerSituation;
+              params['writerQuality_' + i] = writerData[i].writerQuality;
+            }
+            await setFieldsValueWriter(params);
+          } else {
+            // 新增 - 清空
+            await resetFieldsOrder();
+            await resetFieldsWriter();
+            await resetFieldsOther();
+            disabled.value = true;
+          }
+          changeLoading(false);
+          setModalProps({ confirmLoading: false });
+        },
+      );
 
       const getTitle = computed(() => (!unref(isUpdate) ? '新增订单' : '编辑订单'));
 
@@ -294,7 +288,6 @@
         registerFormWriter,
         registerFormOther,
         getTitle,
-        orderInfo,
         handleSubmit,
         handleAdd,
         handleDelete,

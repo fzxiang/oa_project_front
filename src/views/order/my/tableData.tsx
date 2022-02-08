@@ -21,7 +21,7 @@ export function getBasicColumns(): BasicColumn[] {
     },
     {
       title: '接单客服',
-      dataIndex: 'customerContact',
+      dataIndex: 'acceptUser',
       // fixed: 'left',
       // width: 150,
     },
@@ -267,7 +267,7 @@ export const orderInfoForm: FormSchema[] = [
   },
 ];
 
-export const writerInfoForm = (index: number): FormSchema[] => [
+export const writerInfoForm = (index: number, disabled = true): FormSchema[] => [
   {
     field: `writerNum_${index}`,
     label: '手机号',
@@ -291,7 +291,7 @@ export const writerInfoForm = (index: number): FormSchema[] => [
     colProps: { span: 8 },
     required: true,
     componentProps: {
-      disabled: true,
+      disabled,
     },
   },
   {
@@ -301,7 +301,7 @@ export const writerInfoForm = (index: number): FormSchema[] => [
     colProps: { span: 8 },
     required: true,
     componentProps: {
-      disabled: true,
+      disabled,
     },
   },
   {
@@ -311,7 +311,7 @@ export const writerInfoForm = (index: number): FormSchema[] => [
     component: 'Input',
     required: true,
     componentProps: {
-      disabled: true,
+      disabled,
     },
   },
   {
@@ -320,7 +320,7 @@ export const writerInfoForm = (index: number): FormSchema[] => [
     colProps: { span: 8 },
     component: 'Input',
     componentProps: {
-      disabled: true,
+      disabled,
     },
   },
   {
@@ -329,7 +329,7 @@ export const writerInfoForm = (index: number): FormSchema[] => [
     colProps: { span: 8 },
     component: 'Input',
     componentProps: {
-      disabled: true,
+      disabled,
     },
   },
   {
@@ -338,7 +338,7 @@ export const writerInfoForm = (index: number): FormSchema[] => [
     colProps: { span: 8 },
     component: 'Select',
     componentProps: {
-      disabled: true,
+      disabled,
       options: [
         {
           label: '拖稿',
@@ -365,7 +365,7 @@ export const writerInfoForm = (index: number): FormSchema[] => [
     colProps: { span: 8 },
     component: 'Select',
     componentProps: {
-      disabled: true,
+      disabled,
       options: [
         {
           label: '好',
