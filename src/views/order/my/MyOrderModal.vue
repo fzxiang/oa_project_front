@@ -199,13 +199,13 @@
           if (unref(isUpdate)) {
             // 编辑
             disabled.value = false;
-            console.log('编辑订单');
             await setFieldsValueOrder(data?.record);
             await setFieldsValueOther(data?.record);
             const writerData = await searchChildApi({ id: data?.record.id });
             const params = {};
             for (let i in writerData) {
               await handleAdd(false);
+              params['id_' + i] = writerData[i].id;
               params['writerNum_' + i] = writerData[i].writerNum;
               params['name_' + i] = writerData[i].name;
               params['writerPrice_' + i] = writerData[i].writerPrice;
@@ -233,7 +233,7 @@
       // 提交
       async function handleSubmit() {
         try {
-          console.log(validateWriter());
+          setModalProps({ confirmLoading: true });
           const order = await validateOrder();
           const allWriter = await validateWriter();
           const other = await validateOther();
@@ -241,6 +241,7 @@
           const writer: any[] = [];
           for (let i = 0; i < writerIndex.value; i++) {
             writer.push({
+              id: allWriter[`id_${i}`],
               writerNum: allWriter[`writerNum_${i}`],
               name: allWriter[`name_${i}`],
               writerPrice: allWriter[`writerPrice_${i}`],
@@ -251,8 +252,7 @@
               writerQuality: allWriter[`writerQuality_${i}`],
             });
           }
-
-          setModalProps({ confirmLoading: true });
+          console.log(order);
           // TODO custom api
           if (isUpdate.value) {
             await updateOrderApi({

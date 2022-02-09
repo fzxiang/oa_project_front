@@ -19,6 +19,7 @@ enum Api {
   CHECK_WRITER = '/updateRedress',
   UPDATE = '/updateWriteOrderState',
   UPDATE_ALL = '/quickWriterOrderStatus',
+  SWITCH = '/updateOrderRedress',
 }
 export const getWriterApi = () => defHttp.get<any>({ url: Api.GET_WRITER });
 
@@ -51,3 +52,6 @@ export const updateApi = (params: { writeId: number; orderId: number; state: num
 
 export const updateAllApi = (params) =>
   defHttp.post({ url: Api.UPDATE_ALL, params }, { successMessageMode: 'notification' });
+
+export const switchApi = (params: { writerId: number; orderId: number; state: number }) =>
+  defHttp.post({ url: Api.SWITCH, params }, { successMessageMode: 'notification' });

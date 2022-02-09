@@ -12,8 +12,38 @@
         </Space>
         <Divider />
       </template>
-      <template #expandedRowRender="{}">
-        <BasicTable @register="registerTableChild" />
+      <template #expandedRowRender="{ record: recordOrder }">
+        <BasicTable @register="registerTableChild">
+          <template #action="{ record }">
+            <TableAction
+              :actions="[
+                {
+                  label: '暂无补偿',
+                  ifShow: record.compensateState !== 0,
+                  onClick: handleReparation.bind(null, record, recordOrder, 0),
+                },
+                {
+                  label: '稿费补偿',
+                  color: 'success',
+                  ifShow: record.compensateState !== 1,
+                  onClick: handleReparation.bind(null, record, recordOrder, 1),
+                },
+                {
+                  label: '未结算',
+                  color: 'error',
+                  ifShow: record.wSettleState !== 2,
+                  onClick: handleAccount.bind(null, record, recordOrder, 2),
+                },
+                {
+                  label: '暂缓结算',
+                  color: 'warning',
+                  ifShow: record.wSettleState !== 3,
+                  onClick: handleAccount.bind(null, record, recordOrder, 3),
+                },
+              ]"
+            />
+          </template>
+        </BasicTable>
       </template>
       <template #toolbar>
         <a-button type="primary" @click="handleAdd">添加订单</a-button>
@@ -44,6 +74,7 @@
         <TableAction
           :actions="[
             {
+              label: '编辑',
               icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
             },
@@ -55,7 +86,7 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, reactive } from 'vue';
+  import { defineComponent, ref, reactive, h } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
   import { searchOrderApi, uploadOrderFileApi, searchChildApi, exportApi } from '/@/api/order/my';
@@ -64,6 +95,7 @@
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
+  import { updateApi, switchApi } from '/@/api/customer/writer';
 
   export default defineComponent({
     components: { BasicTable, MyOrderModal, TableAction, ImpExcel, Tag, Divider, Space },
@@ -112,15 +144,23 @@
       });
 
       // 子表格
-      const [registerTableChild, {}] = useTable({
+      const [registerTableChild, { reload: reloadChild }] = useTable({
         title: '关联写手',
         rowKey: 'id',
         api: searchChildApi,
         columns: getBasicColumnsChild(),
         useSearchForm: false,
         showTableSetting: false,
+        pagination: false,
         beforeFetch() {
           return { id: rowId.value };
+        },
+        actionColumn: {
+          width: 150,
+          title: '操作',
+          dataIndex: 'action',
+          slots: { customRender: 'action' },
+          // fixed: 'right',
         },
       });
 
@@ -200,8 +240,46 @@
       function hanldeReload() {
         reload();
       }
-
+      const { createConfirm } = useMessage();
+      const MAP = {
+        1: '已结算',
+        2: '未结算',
+        3: '暂缓结算',
+      };
+      async function handleAccount(record: Recordable, childRecord, state) {
+        console.log(record, childRecord);
+        createConfirm({
+          iconType: 'warning',
+          title: () => h('span', '温馨提示!'),
+          content: () =>
+            h('span', `此操作将该写手( ${record.name} )的结算状态修改为: ${MAP[state]}, 是否继续?`),
+          onOk: async () => {
+            await updateApi({ writeId: record.id, orderId: childRecord.id, state });
+            await reloadChild();
+          },
+        });
+      }
+      async function handleReparation(record: Recordable, childRecord, state) {
+        console.log(record, childRecord);
+        createConfirm({
+          iconType: 'warning',
+          title: () => h('span', '温馨提示!'),
+          content: () =>
+            h(
+              'span',
+              `此操作将该写手( ${record.name} )的结算状态修改为: ${
+                state === 0 ? '暂无补偿' : '稿费补偿'
+              }, 是否继续?`,
+            ),
+          onOk: async () => {
+            await switchApi({ writerId: record.id, orderId: childRecord.id, state });
+            await reloadChild();
+          },
+        });
+      }
       return {
+        handleAccount,
+        handleReparation,
         price,
         registerModal,
         registerTable,

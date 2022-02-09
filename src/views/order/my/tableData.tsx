@@ -54,7 +54,7 @@ export function getBasicColumns(): BasicColumn[] {
     },
     {
       title: '写手派单总价',
-      dataIndex: 'overviewFilePrice',
+      dataIndex: 'writerTotalPrice',
       // width: 150,
     },
     {
@@ -210,6 +210,12 @@ export function getFormConfig(): Partial<FormProps> {
 
 export const orderInfoForm: FormSchema[] = [
   {
+    field: 'id',
+    label: 'id',
+    component: 'Input',
+    show: false,
+  },
+  {
     field: 'aliOrder',
     label: '淘宝订单编号',
     component: 'InputSearch',
@@ -268,6 +274,12 @@ export const orderInfoForm: FormSchema[] = [
 ];
 
 export const writerInfoForm = (index: number, disabled = true): FormSchema[] => [
+  {
+    field: `id_${index}`,
+    label: 'id',
+    component: 'Input',
+    show: false,
+  },
   {
     field: `writerNum_${index}`,
     label: '手机号',
