@@ -130,8 +130,9 @@ export const useUserStore = defineStore({
         const roleList = roles.map((item) => item.value) as RoleEnum[];
         this.setRoleList(roleList);
       } else {
-        userInfo.roles = [];
-        this.setRoleList([]);
+        // 当roles不为数组情况，考虑是number数值情况
+        userInfo.roles = [roles];
+        this.setRoleList([roles]);
       }
       this.setUserInfo(userInfo);
       return userInfo;

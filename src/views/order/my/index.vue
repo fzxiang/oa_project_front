@@ -19,12 +19,22 @@
         <a-button type="primary" @click="handleAdd">添加订单</a-button>
         <a-button type="default" @click="handleExport">导出订单</a-button>
         <ImpExcel @success="loadDataSuccess1" dateFormat="YYYY-MM-DD">
-          <a-button :loading="loadingData1" :disabled="loadingData1" type="primary" color="success"
+          <a-button
+            v-auth="[1, 2, 3]"
+            :loading="loadingData1"
+            :disabled="loadingData1"
+            type="primary"
+            color="success"
             >上传总览附件</a-button
           >
         </ImpExcel>
         <ImpExcel @success="loadDataSuccess2" dateFormat="YYYY-MM-DD">
-          <a-button :loading="loadingData2" :disabled="loadingData2" type="primary" color="warning"
+          <a-button
+            v-auth="[1, 2, 3]"
+            :loading="loadingData2"
+            :disabled="loadingData2"
+            type="primary"
+            color="warning"
             >上传退款附件</a-button
           >
         </ImpExcel>
