@@ -72,14 +72,14 @@ export function getFormConfig(): Partial<FormProps> {
     ],
     schemas: [
       {
-        field: 'memberName',
+        field: 'customerId',
         label: '选择客服',
         component: 'ApiSelect',
         colProps: { span: 8 },
         componentProps: {
           api: getCustomerApi,
-          labelField: 'roleName',
-          valueField: 'roleValue',
+          labelField: 'username',
+          valueField: 'user_id',
         },
       },
       {
