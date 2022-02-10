@@ -122,7 +122,7 @@ export const usePermissionStore = defineStore({
         const { menu } = meta || {};
         if (!menu) return true;
         // @ts-ignore
-        return storePermission.menu.includes(menu);
+        return storePermission?.menu?.includes(menu);
       };
 
       const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {

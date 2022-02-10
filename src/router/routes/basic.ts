@@ -6,6 +6,7 @@ import {
   EXCEPTION_COMPONENT,
   PAGE_NOT_FOUND_NAME,
 } from '/@/router/constant';
+import { AppRouteModule } from '/@/router/types';
 
 // 404 on a page
 export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
@@ -73,6 +74,29 @@ export const ERROR_LOG_ROUTE: AppRouteRecordRaw = {
         hideBreadcrumb: true,
         currentActiveMenu: '/error-log',
       },
+    },
+  ],
+};
+
+export const WELCOME_ROUTER: AppRouteModule = {
+  path: '/welcome',
+  name: 'Welcome',
+  component: LAYOUT,
+  redirect: '/welcome/castle',
+  meta: {
+    orderNo: 0,
+    icon: 'ant-design:smile-outlined',
+    title: '欢迎页',
+    hideChildrenInMenu: true,
+  },
+  children: [
+    {
+      path: 'castle',
+      name: 'WelcomeCastle',
+      meta: {
+        title: '欢迎页',
+      },
+      component: () => import('/@/views/welcome/castle.vue'),
     },
   ],
 };
