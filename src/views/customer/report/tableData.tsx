@@ -78,7 +78,7 @@ export function getFormConfig(): Partial<FormProps> {
         colProps: { span: 8 },
         componentProps: {
           api: getCustomerApi,
-          labelField: 'username',
+          labelField: 'nickname',
           valueField: 'user_id',
         },
       },
