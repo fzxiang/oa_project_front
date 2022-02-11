@@ -129,6 +129,7 @@
           `${index}`,
           `divider_${index}`,
         ]);
+        writerIndex.value--;
       }
 
       //其他
