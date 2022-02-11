@@ -129,7 +129,6 @@
           `${index}`,
           `divider_${index}`,
         ]);
-        writerIndex.value--;
       }
 
       //其他
@@ -253,7 +252,12 @@
               writerQuality: allWriter[`writerQuality_${i}`],
             });
           }
-          console.log(order);
+          writer.forEach((item, index) => {
+            if (!item.writerNum) {
+              writer.splice(index, 1);
+            }
+          });
+          console.log(writer);
           // TODO custom api
           if (isUpdate.value) {
             await updateOrderApi({
