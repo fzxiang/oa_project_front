@@ -17,6 +17,15 @@ export const mainOutRoutes: AppRouteModule[] = [
       ignoreAuth: true,
     },
   },
+  {
+    path: '/mobile/writer',
+    name: 'MobileWriter',
+    component: () => import('/@/views/mobile/writer/index.vue'),
+    meta: {
+      title: '写手信息查询',
+      ignoreAuth: true,
+    },
+  },
 ];
 
 export const mainOutRouteNames = mainOutRoutes.map((item) => item.name);
