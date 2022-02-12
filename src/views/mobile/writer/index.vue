@@ -105,6 +105,7 @@
           field: 'writerNum',
           component: 'Input',
           label: '写手手机号',
+          required: true,
           colProps: {
             span: 24,
           },
