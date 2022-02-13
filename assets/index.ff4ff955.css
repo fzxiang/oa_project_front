@@ -1,0 +1,19 @@
+.vben-layout-footer[data-v-71d99200] {
+  color: #d9d9d9;
+  text-align: center;
+}
+.vben-layout-footer__links[data-v-71d99200] {
+  margin-bottom: 8px;
+}
+.vben-layout-footer__links a[data-v-71d99200] {
+  color: #d9d9d9;
+}
+.vben-layout-footer__links a[data-v-71d99200]:hover {
+  color: rgba(0, 0, 0, 0.85);
+}
+.vben-layout-footer__github[data-v-71d99200] {
+  margin: 0 30px;
+}
+.vben-layout-footer__github[data-v-71d99200]:hover {
+  color: rgba(0, 0, 0, 0.85);
+}
