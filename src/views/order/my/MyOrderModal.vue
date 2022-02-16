@@ -96,7 +96,6 @@
         for (let i in field) {
           await appendSchemaByFieldWriter(field[i], '');
         }
-        console.log('for');
       }
 
       async function handleCheck(index) {
@@ -196,6 +195,11 @@
 
           await resetSchemaWriter([]);
 
+          // 新增 - 清空
+          await resetFieldsOrder();
+          await resetFieldsWriter();
+          await resetFieldsOther();
+
           if (unref(isUpdate)) {
             // 编辑
             disabled.value = false;
@@ -217,10 +221,6 @@
             }
             await setFieldsValueWriter(params);
           } else {
-            // 新增 - 清空
-            await resetFieldsOrder();
-            await resetFieldsWriter();
-            await resetFieldsOther();
             disabled.value = true;
           }
           changeLoading(false);
