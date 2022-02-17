@@ -112,6 +112,11 @@
             { field: `writerSituation_${index}`, componentProps: { disabled: false } },
             { field: `writerQuality_${index}`, componentProps: { disabled: false } },
           ]);
+          let resWithIndex = {};
+          Object.keys(res).forEach((key) => {
+            resWithIndex[`${key}_${index}`] = res[key];
+          });
+          await setFieldsValueWriter(resWithIndex);
         }
       }
 
