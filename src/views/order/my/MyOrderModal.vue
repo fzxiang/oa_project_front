@@ -218,6 +218,10 @@
               params['wechatAccount_' + i] = writerData[i].wechatAccount;
               params['writerSituation_' + i] = writerData[i].writerSituation;
               params['writerQuality_' + i] = writerData[i].writerQuality;
+              await updateSchemaWriter({
+                field: 'writerNum_' + i,
+                componentProps: { disabled: true },
+              });
             }
             await setFieldsValueWriter(params);
           } else {

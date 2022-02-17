@@ -309,11 +309,13 @@ export const writerInfoForm = (index: number, disabled = true): FormSchema[] => 
   {
     field: `writerPrice_${index}`,
     label: '写手派单价',
-    component: 'Input',
+    component: 'InputNumber',
     colProps: { span: 8 },
     required: true,
     componentProps: {
       disabled,
+      style: { width: '100%' },
+      addonBefore: '￥',
     },
   },
   {
