@@ -46,7 +46,7 @@ export function getBasicColumns(): BasicColumn[] {
     },
     {
       title: '写手派单总价',
-      dataIndex: 'overviewFilePrice',
+      dataIndex: 'writerTotalPrice',
     },
     {
       title: '付款时间',

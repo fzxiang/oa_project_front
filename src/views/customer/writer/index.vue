@@ -49,7 +49,7 @@
       </template>
       <template #toolbar>
         <!-- <a-button type="primary" @click="handleAdd">添加订单</a-button> -->
-        <a-button type="default" @click="handleExport">导出</a-button>
+        <a-button type="default" @click="handleExport" :loading="exportLoading">导出</a-button>
         <ImpExcel @success="loadDataSuccess1" dateFormat="YYYY-MM-DD">
           <a-button :loading="loadingData1" :disabled="loadingData1" type="primary" color="success"
             >上传已结算订单</a-button
@@ -212,9 +212,13 @@
         });
       }
 
-      function handleExport() {
+      const exportLoading = ref(false);
+
+      async function handleExport() {
+        exportLoading.value = true;
         const params = { searchParams: getForm().getFieldsValue() };
-        exportApi(params);
+        await exportApi(params);
+        exportLoading.value = false;
       }
 
       const loadingData1 = ref(false);
@@ -246,6 +250,7 @@
         registerTableChild,
         // handleAdd,
         handleExport,
+        exportLoading,
         handleEdit,
         handleEditAll,
         loadDataSuccess1,
