@@ -23,7 +23,14 @@ enum Api {
   GET_TABLE_CHILD = '/getWritersOfOrder',
   ONE_KEY = '/updateAllOrderState',
 }
-export const getCustomerApi = () => defHttp.get<any>({ url: Api.GET_CUSTOMER });
+export const getCustomerApi = async () => {
+  const result = await defHttp.get<any>({ url: Api.GET_CUSTOMER });
+  result.unshift({
+    nickname: '全部',
+    user_id: '',
+  });
+  return result;
+};
 
 export const searchApi = (params: { searchParmas: any }) =>
   defHttp.get<any>({ url: Api.SEARCH, params });
