@@ -151,6 +151,7 @@
         columns: getBasicColumnsChild(),
         useSearchForm: false,
         showTableSetting: false,
+        canResize: false,
         pagination: false,
         beforeFetch() {
           return { id: rowId.value };

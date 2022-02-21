@@ -1,31 +1,6 @@
 import { getWriterApi } from '/@/api/customer/writer';
 import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-/* {
-  "id": 2,
-  "writerNum": "18850105062",
-  "name": "傅子湘",
-  "alipayAccount": "18850105062",
-  "qqAccount": "848026280",
-  "wechatAccount": "18850105062",
-  "writerSituation": 1,
-  "writerQuality": "1",
-  "childOrder": [
-      {
-          "id": 3,
-          "invoice": "123",
-          "acceptUser": 7,
-          "aliOrder": "1232",
-          "wSettleState": 2,
-          "taobaoPrice": 12,
-          "writerPrice": 12,
-          "paymentTime": 0,
-          "receivingTime": 0
-      }
-  ],
-  "orderNum": 1,
-  "totalWriterPrice": 12
-} */
 export function getBasicColumns(): BasicColumn[] {
   return [
     {
@@ -36,31 +11,65 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '写手名',
       dataIndex: 'name',
-      width: 150,
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手手机号',
       dataIndex: 'writerNum',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手QQ',
       dataIndex: 'qqAccount',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手微信',
       dataIndex: 'wechatAccount',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手支付宝',
       dataIndex: 'alipayAccount',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '订单数',
       dataIndex: 'orderNum',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '总金额',
       dataIndex: 'totalWriterPrice',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     // {
     //   title: '支付宝二维码',

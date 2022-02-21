@@ -138,6 +138,7 @@
         columns: getBasicColumnsChild(),
         useSearchForm: false,
         showTableSetting: false,
+        canResize: false,
         actionColumn: {
           width: 150,
           title: '操作',

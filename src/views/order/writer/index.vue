@@ -71,6 +71,7 @@
         title: '关联订单',
         api: searchChildApi,
         columns: getBasicColumnsChild(),
+        canResize: false,
         beforeFetch() {
           return { id: rowId.value };
         },

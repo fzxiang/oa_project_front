@@ -1,9 +1,11 @@
 import { getCustomerApi } from '/@/api/customer/report';
 import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
+import { ref } from 'vue';
+import type { Ref } from 'vue';
 
-export function getBasicColumns(): BasicColumn[] {
-  return [
+export function getBasicColumns(): Ref<BasicColumn[]> {
+  return ref([
     {
       title: 'ID',
       dataIndex: 'id',
@@ -12,19 +14,38 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '发单号',
       dataIndex: 'invoice',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '接单客服',
       dataIndex: 'acceptUser',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '订单编号',
       dataIndex: 'aliOrder',
-      // defaultHidden: true,
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '结算状态',
       dataIndex: 'settleState',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
       format: new Map([
         [0, '全部'],
         [1, '已结算'],
@@ -35,32 +56,66 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '会员名',
       dataIndex: 'memberName',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '淘宝价格',
       dataIndex: 'taobaoPrice',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '客户微信或QQ',
       dataIndex: 'customerContact',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手派单总价',
       dataIndex: 'writerTotalPrice',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '付款时间',
       dataIndex: 'paymentTime',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '收货时间',
       dataIndex: 'receivingTime',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '备注',
       dataIndex: 'remarks',
+      width: 100,
+      minWidth: 100,
+      maxWidth: 200,
+      resizable: true,
     },
-  ];
+  ]);
 }
 
 export function getFormConfig(): Partial<FormProps> {
@@ -293,33 +348,62 @@ export function getBasicColumnsChild(): BasicColumn[] {
       title: 'ID',
       dataIndex: 'id',
       ifShow: false,
-      width: 200,
     },
     {
       title: '写手名',
       dataIndex: 'name',
       fixed: 'left',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手手机',
       dataIndex: 'writerNum',
       fixed: 'left',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手QQ',
       dataIndex: 'qqAccount',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手微信',
       dataIndex: 'wechatAccount',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手支付宝',
       dataIndex: 'alipayAccount',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
     },
     {
       title: '写手情况',
       dataIndex: 'writerSituation',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
       format: new Map([
         [1, '拖稿'],
         [2, '失联'],
@@ -330,6 +414,11 @@ export function getBasicColumnsChild(): BasicColumn[] {
     {
       title: '写手质量',
       dataIndex: 'writerQuality',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
       format: new Map([
         [1, '好'],
         [2, '中'],
@@ -339,6 +428,11 @@ export function getBasicColumnsChild(): BasicColumn[] {
     {
       title: '补偿状态',
       dataIndex: 'compensateState',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
       format: new Map([
         [0, '暂无补偿'],
         [1, '稿费补偿'],
@@ -347,6 +441,11 @@ export function getBasicColumnsChild(): BasicColumn[] {
     {
       title: '结算状态',
       dataIndex: 'wSettleState',
+      width: 150,
+      minWidth: 150,
+      maxWidth: 250,
+      resizable: true,
+      ellipsis: false,
       format: new Map([
         [0, '全部'],
         [1, '已结算'],

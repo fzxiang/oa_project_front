@@ -138,6 +138,7 @@
         api: searchChildApi,
         columns: getBasicColumnsChild(),
         useSearchForm: false,
+        canResize: false,
         showTableSetting: false,
         beforeFetch() {
           return { id: rowId.value };
