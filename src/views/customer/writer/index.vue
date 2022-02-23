@@ -224,7 +224,6 @@
 
       const loadingData1 = ref(false);
       async function loadDataSuccess1(excelDataList: ExcelData[]) {
-        debugger;
         try {
           loadingData1.value = true;
           const { results } = excelDataList[0];
