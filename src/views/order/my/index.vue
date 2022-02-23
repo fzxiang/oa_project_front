@@ -205,11 +205,11 @@
           });
           // fileData.length = 200
           await uploadOrderFileApi({ type: 1, fileData });
-          await reload();
           loadingData1.value = false;
         } catch (e) {
           loadingData1.value = false;
         }
+        hanldeReload();
       }
       const loadingData2 = ref(false);
       async function loadDataSuccess2(excelDataList: ExcelData[]) {
@@ -232,10 +232,10 @@
             createErrorModal({ title: '以下订单处理错误', content: res.result.join() });
           }
           loadingData2.value = false;
-          await reload();
         } catch (e) {
           loadingData2.value = false;
         }
+        hanldeReload();
       }
 
       function hanldeReload() {

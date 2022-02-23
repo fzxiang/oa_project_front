@@ -249,6 +249,7 @@
               content: () =>
                 h(
                   'div',
+                  {},
                   result.map((item) =>
                     h(
                       Tag,
