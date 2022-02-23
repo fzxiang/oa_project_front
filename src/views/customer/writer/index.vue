@@ -249,13 +249,15 @@
               content: () =>
                 h(
                   'div',
-                  {},
                   result.map((item) =>
                     h(
-                      Tag,
+                      'span',
                       {
-                        color: 'blue',
-                        style: { padding: '5px', margin: '5px' },
+                        class: 'ant-tag ant-tag-blue',
+                        style: {
+                          padding: '5px',
+                          margin: '5px',
+                        },
                       },
                       item,
                     ),
