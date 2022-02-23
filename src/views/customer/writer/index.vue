@@ -92,7 +92,7 @@
   export default defineComponent({
     components: { BasicTable, TableAction, ImpExcel, Tag, Divider, Space },
     setup() {
-      const { createConfirm } = useMessage();
+      const { createConfirm, createInfoModal } = useMessage();
       const price = reactive({
         totalPrice: 0,
         settlePrice: 0,
@@ -224,20 +224,29 @@
 
       const loadingData1 = ref(false);
       async function loadDataSuccess1(excelDataList: ExcelData[]) {
+        debugger;
         try {
           loadingData1.value = true;
           const { results } = excelDataList[0];
-          console.log(results);
           const fileData = results.map((item) => {
             return {
-              alipayAccount: item['收款方支付宝账号'] || '',
-              name: item['收款方姓名'] || '',
-              price: item['金额'] || '',
-              invoice: item['单号'] || item['单号 '] || '',
+              time: item['__EMPTY'] || '',
+              invoice: item['__EMPTY_1'] || '',
+              alipayAccount: item['__EMPTY_2'] || '',
+              name: item['__EMPTY_3'] || '',
+              price: item['__EMPTY_4'] || '',
+              status: item['__EMPTY_5'] || '',
+              bank: item['__EMPTY_6'] || '',
+              reason: item['__EMPTY_7'] || '',
             };
           });
+          fileData.splice(0, 9);
+          console.log(fileData);
           // fileData.length = 200
-          await uploadFileApi({ fileData });
+          const result = await uploadFileApi({ fileData });
+          if (result?.length !== 0) {
+            createInfoModal({ title: '以下收款账号入库未成功', content: result?.join() });
+          }
           loadingData1.value = false;
         } catch (e) {
           loadingData1.value = false;
