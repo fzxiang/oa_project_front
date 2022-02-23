@@ -92,7 +92,7 @@
   export default defineComponent({
     components: { BasicTable, TableAction, ImpExcel, Tag, Divider, Space },
     setup() {
-      const { createConfirm, createInfoModal } = useMessage();
+      const { createConfirm, createErrorModal } = useMessage();
       const price = reactive({
         totalPrice: 0,
         settlePrice: 0,
@@ -240,12 +240,29 @@
             };
           });
           fileData.splice(0, 9);
-          console.log(fileData);
           // fileData.length = 200
           const result = await uploadFileApi({ fileData });
           if (result?.length !== 0) {
-            createInfoModal({ title: '以下收款账号入库未成功', content: result?.join() });
+            createErrorModal({
+              title: '以下收款账号入库未成功',
+              width: 680,
+              content: () =>
+                h(
+                  'div',
+                  result.map((item) =>
+                    h(
+                      Tag,
+                      {
+                        color: 'blue',
+                        style: { padding: '5px', margin: '5px' },
+                      },
+                      item,
+                    ),
+                  ),
+                ),
+            });
           }
+          await reload();
           loadingData1.value = false;
         } catch (e) {
           loadingData1.value = false;
