@@ -60,6 +60,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       proxy: createProxy(VITE_PROXY),
     },
     build: {
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, 'index.html'),
+          mobile: resolve(__dirname, 'mobile.html'),
+        },
+      },
       minify: false,
       // target: 'es2015',
       // cssTarget: 'chrome86',

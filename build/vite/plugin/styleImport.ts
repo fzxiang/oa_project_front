@@ -73,6 +73,11 @@ export function configStyleImportPlugin(_isBuild: boolean) {
             : `ant-design-vue/es/${name}/style/index`;
         },
       },
+      {
+        libraryName: 'vant',
+        esModule: true,
+        resolveStyle: (name) => `vant/es/${name}/style`,
+      },
     ],
   });
   return styleImportPlugin;

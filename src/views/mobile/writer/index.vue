@@ -1,11 +1,10 @@
 <template>
-  <PageWrapper :class="prefixCls" title="订单列表">
+  <PageWrapper :class="prefixCls">
     <template #headerContent>
       <Affix :offset-top="0">
         <BasicForm
           :class="`${prefixCls}__header-form`"
           @register="register"
-          @submit="handleSubmit"
           style="background: white"
         />
       </Affix>
@@ -41,20 +40,20 @@
 
                 <div :class="`${prefixCls}__action`">
                   <div :class="`${prefixCls}__action-left`">
-                    写手状态:{{ MAPWRITER[item['wSettleState']] }}
+                    结算状态:{{ MAPSETTLE[item['wSettleState']] }}
                   </div>
                   <div :class="`${prefixCls}__action-right`">
                     补偿状态:{{ MAPSTATUS[item['compensateState']] }}
                   </div>
                 </div>
                 <div :class="`${prefixCls}__action`">
-                  <div :class="`${prefixCls}__action-left`"> 付款时间： </div>
+                  <div :class="`${prefixCls}__action-left`"> 付款时间：</div>
                   <div :class="`${prefixCls}__action-right`">
                     {{ item['paymentTime'] || '' }}
                   </div>
                 </div>
                 <div :class="`${prefixCls}__action`">
-                  <div :class="`${prefixCls}__action-left`"> 收货时间： </div>
+                  <div :class="`${prefixCls}__action-left`"> 收货时间：</div>
                   <div :class="`${prefixCls}__action-right`">
                     {{ item['receivingTime'] || '' }}
                   </div>
@@ -103,9 +102,24 @@
       const schemas: FormSchema[] = [
         {
           field: 'writerNum',
-          component: 'Input',
-          label: '写手手机号',
-          required: true,
+          component: 'InputSearch',
+          label: '手机号',
+          rulesMessageJoinLabel: false,
+          componentProps: {
+            placeholder: '请输入手机号',
+            onSearch: async (value) => {
+              if (
+                value.match(
+                  /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
+                )
+              ) {
+                const result = await getWriterInfoApi({ writerNum: value });
+                list.value = [...result];
+              } else {
+                createMessage.error('请输入正确的手机号！');
+              }
+            },
+          },
           colProps: {
             span: 24,
           },
@@ -119,19 +133,14 @@
         { icon: 'bx:bxs-like', text: '156', color: '#e24821' },
       ];
 
-      const [register, {}] = useForm({
+      const [register] = useForm({
         labelWidth: 120,
         schemas,
         actionColOptions: {
           span: 24,
         },
-        showResetButton: false,
+        showActionButtonGroup: false,
       });
-
-      async function handleSubmit(params) {
-        const result = await getWriterInfoApi(params);
-        list.value = [...result, ...result, ...result];
-      }
 
       const { createMessage } = useMessage();
       const { clipboardRef, copiedRef } = useCopyToClipboard();
@@ -142,18 +151,17 @@
           createMessage.warning('复制成功！');
         }
       }
+
       return {
         prefixCls: 'list-search',
         list,
         actions,
         register,
         handleCopy,
-        handleSubmit,
-        MAPWRITER: {
-          1: '拖稿',
-          2: '失联',
-          3: '拒绝修改',
-          4: '态度差',
+        MAPSETTLE: {
+          1: '已结算',
+          2: '未结算',
+          3: '暂缓结算',
         },
         MAPSTATUS: {
           0: '暂无补偿',

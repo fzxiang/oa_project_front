@@ -26,6 +26,24 @@ export const mainOutRoutes: AppRouteModule[] = [
       ignoreAuth: true,
     },
   },
+  {
+    path: '/mobile/income',
+    name: 'MobileIncome',
+    component: () => import('/@/views/mobile/income/index.vue'),
+    meta: {
+      title: '收入',
+      ignoreAuth: true,
+    },
+  },
+  {
+    path: '/mobile/home',
+    name: 'MobileHome',
+    component: () => import('/@/views/mobile/home/index.vue'),
+    meta: {
+      title: '首页',
+      ignoreAuth: true,
+    },
+  },
 ];
 
 export const mainOutRouteNames = mainOutRoutes.map((item) => item.name);
