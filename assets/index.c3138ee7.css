@@ -1,0 +1,22 @@
+.van-top-bar[data-v-9468d9a2] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+.van-center-wrap[data-v-9468d9a2] {
+  margin-top: 54px;
+}
+.mr-1[data-v-9468d9a2] {
+  margin-right: 5px;
+}
+.van-popup--bottom[data-v-9468d9a2] {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+}
+.van-card__title[data-v-9468d9a2] {
+  font-size: 16px;
+  margin-bottom: 5px;
+}

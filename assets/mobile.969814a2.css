@@ -1,0 +1,17 @@
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-size: inherit;
+}
+body {
+  font-size: 16px;
+  background-color: #f8f8f8;
+  -webkit-font-smoothing: antialiased;
+}
+.van-doc-demo-block__title {
+  margin: 0;
+  padding: 16px;
+  color: rgba(69, 90, 100, 0.6);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+}
