@@ -3,10 +3,15 @@
     class="van-top-bar"
     v-model="searchValue"
     shape="round"
+    show-action
     background="#ffffff"
     placeholder="请输入手机号"
     @search="onSearch"
-  />
+  >
+    <template #action>
+      <div @click="onClickButton">搜索</div>
+    </template>
+  </van-search>
 
   <div class="van-center-wrap">
     <van-empty v-if="list.length === 0 && !loading" />
@@ -19,9 +24,9 @@
         @load="onLoad"
       >
         <van-cell-group v-for="item in list" :key="item" inset>
-          <div style="background: #e4ffc8; line-height: 36px; text-align: center">{{
-            item.remitTime
-          }}</div>
+          <div style="background: #e4ffc8; line-height: 36px; text-align: center">
+            {{ item.remitTime }}
+          </div>
           <van-cell title="打款金额" :value="item.remitPrice">
             <template #title> 打款金额 </template>
             <template #value>
@@ -70,6 +75,7 @@
   import { createLocalStorage } from '/@/utils/cache';
 
   export default defineComponent({
+    name: 'MobileHome',
     components: {
       [Sticky.name]: Sticky,
       [Search.name]: Search,
@@ -94,6 +100,17 @@
         if (val) {
           searchValue.value = val;
         }
+        if (!searchValue.value) {
+          Toast.fail('请输入手机号');
+          return;
+        }
+        ls.set('writerNum', searchValue.value);
+        list.value = await getWriterInfoApi({
+          writerNum: searchValue.value,
+        });
+      }
+
+      async function onClickButton() {
         if (!searchValue.value) {
           Toast.fail('请输入手机号');
           return;
@@ -156,6 +173,7 @@
       return {
         searchValue,
         onSearch,
+        onClickButton,
         show,
         list,
         onLoad,
