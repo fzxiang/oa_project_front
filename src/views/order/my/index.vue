@@ -263,6 +263,7 @@
           onOk: async () => {
             await updateApi({ writeId: record.id, orderId: childRecord.id, state });
             await reload();
+            await reloadChild();
           },
         });
       }
@@ -281,6 +282,7 @@
           onOk: async () => {
             await switchApi({ writerId: record.id, orderId: childRecord.id, state });
             await reload();
+            await reloadChild();
           },
         });
       }
