@@ -182,6 +182,9 @@
                     notification.error({ message: '提示', description: '请输入纯数字！' });
                     return;
                   }
+                  if (!value) {
+                    return;
+                  }
                   const res = await checkOrderApi({ aliOrder: value });
                   if (res?.length > 0) {
                     notification.error({ message: '提示', description: '已存在改订单！' });
