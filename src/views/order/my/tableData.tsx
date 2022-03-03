@@ -251,7 +251,21 @@ export const orderInfoForm: FormSchema[] = [
     colProps: {
       span: 17,
     },
-    required: true,
+    // required: true,
+    rules: [
+      {
+        required: true,
+        trigger: 'change',
+        validator: async (_rule, value) => {
+          if (!/^[0-9]*$/.test(value)) {
+            return Promise.reject('请输入纯数字');
+          } else {
+            return Promise.resolve();
+          }
+        },
+      },
+      // { type: 'number', message: '请输入纯数字' },
+    ],
   },
   {
     field: 'invoice',

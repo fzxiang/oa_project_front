@@ -89,13 +89,19 @@
   import { defineComponent, ref, reactive, h } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig, getBasicColumnsChild } from './tableData';
-  import { searchOrderApi, uploadOrderFileApi, searchChildApi, exportApi } from '/@/api/order/my';
+  import {
+    searchOrderApi,
+    uploadOrderFileApi,
+    searchChildApi,
+    exportApi,
+    updateApi,
+  } from '/@/api/order/my';
   import { useModal } from '/@/components/Modal';
   import MyOrderModal from './MyOrderModal.vue';
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { Tag, Divider, Space } from 'ant-design-vue';
-  import { updateApi, switchApi } from '/@/api/customer/writer';
+  import { switchApi } from '/@/api/customer/writer';
 
   export default defineComponent({
     components: { BasicTable, MyOrderModal, TableAction, ImpExcel, Tag, Divider, Space },

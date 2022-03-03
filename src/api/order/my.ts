@@ -30,6 +30,7 @@ enum Api {
   // 检验写手(写手手机号(writerNum))
   CHECK_WRITER = '/checkWriter',
   GET_TABLE_CHILD = '/getWritersOfOrder',
+  UPDATE_ORDER_STATE = '/updateMyOrderState',
 }
 
 export const addOrderApi = (params: { orderInfo: OrderParamsModel }) =>
@@ -70,3 +71,6 @@ export const checkWriterApi = (params: { writerNum: string }) =>
 
 export const searchChildApi = (params: { id: number }) =>
   defHttp.post<any>({ url: Api.GET_TABLE_CHILD, params });
+
+export const updateApi = (params: { writeId: number; orderId: number; state: number }) =>
+  defHttp.post({ url: Api.UPDATE_ORDER_STATE, params }, { successMessageMode: 'notification' });

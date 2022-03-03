@@ -178,6 +178,10 @@
                 enterButton: '校验订单',
                 placeholder: '请先输入订单进行校验',
                 onSearch: async (value) => {
+                  if (!/^[0-9]*$/.test(value)) {
+                    notification.error({ message: '提示', description: '请输入纯数字！' });
+                    return;
+                  }
                   const res = await checkOrderApi({ aliOrder: value });
                   if (res?.length > 0) {
                     notification.error({ message: '提示', description: '已存在改订单！' });
@@ -193,7 +197,7 @@
                     disabled.value = false;
                   }
                 },
-                disabled: false,
+                disabled: isUpdate.value,
               },
             },
           ]);
