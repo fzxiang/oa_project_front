@@ -31,13 +31,13 @@
                 {
                   label: '未结算',
                   color: 'error',
-                  ifShow: record.wSettleState !== 2,
+                  ifShow: record.wSettleState === 3,
                   onClick: handleAccount.bind(null, record, recordOrder, 2),
                 },
                 {
                   label: '暂缓结算',
                   color: 'warning',
-                  ifShow: record.wSettleState !== 3,
+                  ifShow: record.wSettleState === 2,
                   onClick: handleAccount.bind(null, record, recordOrder, 3),
                 },
               ]"
@@ -262,7 +262,7 @@
             h('span', `此操作将该写手( ${record.name} )的结算状态修改为: ${MAP[state]}, 是否继续?`),
           onOk: async () => {
             await updateApi({ writeId: record.id, orderId: childRecord.id, state });
-            await reloadChild();
+            await reload();
           },
         });
       }
@@ -280,7 +280,7 @@
             ),
           onOk: async () => {
             await switchApi({ writerId: record.id, orderId: childRecord.id, state });
-            await reloadChild();
+            await reload();
           },
         });
       }
