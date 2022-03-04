@@ -100,8 +100,8 @@
         if (val) {
           searchValue.value = val;
         }
-        if (!searchValue.value) {
-          Toast.fail('请输入手机号');
+        if (/^(1)\d{10}$/.test(searchValue.value)) {
+          Toast.fail('请输入正确手机号');
           return;
         }
         ls.set('writerNum', searchValue.value);
@@ -111,8 +111,8 @@
       }
 
       async function onClickButton() {
-        if (!searchValue.value) {
-          Toast.fail('请输入手机号');
+        if (/^(1)\d{10}$/.test(searchValue.value)) {
+          Toast.fail('请输入正确手机号');
           return;
         }
         ls.set('writerNum', searchValue.value);
