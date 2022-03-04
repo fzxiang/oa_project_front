@@ -108,13 +108,8 @@
           componentProps: {
             placeholder: '请输入手机号',
             onSearch: async (value) => {
-              if (
-                value.match(
-                  /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
-                )
-              ) {
-                const result = await getWriterInfoApi({ writerNum: value });
-                list.value = [...result];
+              if (/^(13[0-9]|14[5|7]|15[0-9]|17[0-9]|18[0-9])\d{8}$/.test(value)) {
+                list.value = await getWriterInfoApi({ writerNum: value });
               } else {
                 createMessage.error('请输入正确的手机号！');
               }
