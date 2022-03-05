@@ -122,8 +122,8 @@ export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
     fieldMapToTime: [
-      ['pTime', ['pStartTime', 'pEndTime'], 'YYYY-MM-DD'],
-      ['rTime', ['rStartTime', 'rEndTime'], 'YYYY-MM-DD'],
+      ['pTime', ['pStartTime', 'pEndTime'], 'YYYY-MM-DD HH:mm:ss'],
+      ['rTime', ['rStartTime', 'rEndTime'], 'YYYY-MM-DD HH:mm:ss'],
     ],
     schemas: [
       {
@@ -141,12 +141,24 @@ export function getFormConfig(): Partial<FormProps> {
         field: 'pTime',
         label: '订单付款时间',
         component: 'RangePicker',
+        componentProps: {
+          format: 'YYYY-MM-DD HH:mm:ss',
+          showTime: {
+            hideDisabledOptions: true,
+          },
+        },
         colProps: { span: 8 },
       },
       {
         field: 'rTime',
         label: '确认收货时间',
         component: 'RangePicker',
+        componentProps: {
+          format: 'YYYY-MM-DD HH:mm:ss',
+          showTime: {
+            hideDisabledOptions: true,
+          },
+        },
         colProps: { span: 8 },
       },
 
