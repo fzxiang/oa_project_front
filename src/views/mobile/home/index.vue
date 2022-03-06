@@ -100,7 +100,7 @@
         if (val) {
           searchValue.value = val;
         }
-        if (/^(1)\d{10}$/.test(searchValue.value)) {
+        if (!/^(1)\d{10}$/.test(searchValue.value)) {
           Toast.fail('请输入正确手机号');
           return;
         }
@@ -111,7 +111,7 @@
       }
 
       async function onClickButton() {
-        if (/^(1)\d{10}$/.test(searchValue.value)) {
+        if (!/^(1)\d{10}$/.test(searchValue.value)) {
           Toast.fail('请输入正确手机号');
           return;
         }
