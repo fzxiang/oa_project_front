@@ -1,13 +1,18 @@
 <template>
-  <a-select
-    v-model:value="value"
-    show-search
-    placeholder="请选择平台"
-    style="width: 200px"
-    :options="options"
-    :filter-option="filterOption"
-    @change="handleChange"
-  />
+  <div>
+    <div class="ant-form-item-label" style="width: 120px">
+      <label class="ant-form-item-no-colon">选择店铺: </label>
+    </div>
+    <a-select
+      v-model:value="value"
+      show-search
+      placeholder="请选择店铺"
+      style="width: 200px"
+      :options="options"
+      :filter-option="filterOption"
+      @change="handleChange"
+    />
+  </div>
 </template>
 <script lang="ts">
   import { Select } from 'ant-design-vue';

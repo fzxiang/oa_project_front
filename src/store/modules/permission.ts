@@ -106,8 +106,7 @@ export const usePermissionStore = defineStore({
       const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
 
       const { permission, selectedShop, role } = userStore.getUserInfo;
-      const storePermission =
-        permission.find((item) => item.shop === selectedShop) || permission[0];
+      const storePermission = permission.find((item) => item.shop === selectedShop);
 
       const routeFilter = (route: AppRouteRecordRaw) => {
         const { meta } = route;
@@ -122,7 +121,11 @@ export const usePermissionStore = defineStore({
         const { menu } = meta || {};
         if (!menu) return true;
         // @ts-ignore
-        return storePermission?.menu?.includes(menu);
+        if (selectedShop) {
+          return storePermission?.menu?.includes(menu);
+        } else {
+          return false;
+        }
       };
 
       const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {
