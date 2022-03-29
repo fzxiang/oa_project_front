@@ -1,5 +1,6 @@
 import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
+import type { RuleObject } from 'ant-design-vue/es/form';
 
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -263,13 +264,17 @@ export const orderInfoForm: FormSchema[] = [
     colProps: {
       span: 17,
     },
+    componentProps: {
+      allowClear: false,
+    },
     // required: true,
     rules: [
       {
         required: true,
         trigger: 'change',
         validator: async (_rule, value) => {
-          if (!/^[0-9]*$/.test(value)) {
+          console.log(value);
+          if (!/^[0-9]+$/.test(value)) {
             return Promise.reject('请输入纯数字');
           } else {
             return Promise.resolve();
@@ -338,12 +343,25 @@ export const writerInfoForm = (index: number, disabled = true): FormSchema[] => 
   {
     field: `writerNum_${index}`,
     label: '手机号',
-    component: 'InputNumber',
+    component: 'Input',
     colProps: { span: 8 },
     componentProps: {
       style: { width: '100%' },
     },
-    required: true,
+    rules: [
+      {
+        required: true,
+        validator: async (_ruls: RuleObject, value: string) => {
+          console.log(value);
+          if (!/^1\d{10}$/.test(value)) {
+            return Promise.reject('请输入正确的手机号');
+          }
+          return Promise.resolve();
+        },
+        trigger: 'blur',
+      },
+    ],
+    // required: true,
   },
   {
     field: `${index}`,

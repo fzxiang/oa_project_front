@@ -27,7 +27,7 @@
 </template>
 <script lang="ts">
   import { Divider, Space } from 'ant-design-vue';
-  import { defineComponent, ref, computed, unref, reactive } from 'vue';
+  import { defineComponent, ref, computed, unref } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { orderInfoForm, writerInfoForm } from './tableData';
@@ -56,6 +56,7 @@
           updateSchema: updateSchemaOrder,
           resetFields: resetFieldsOrder,
           validate: validateOrder,
+          validateFields: validateFieldsOrder,
           setFieldsValue: setFieldsValueOrder,
         },
       ] = useForm({
@@ -76,7 +77,8 @@
           resetFields: resetFieldsWriter,
           appendSchemaByField: appendSchemaByFieldWriter,
           validate: validateWriter,
-          getFieldsValue,
+          validateFields,
+          // getFieldsValue,
           updateSchema: updateSchemaWriter,
           resetSchema: resetSchemaWriter,
           removeSchemaByFiled: removeSchemaByFiledWriter,
@@ -99,24 +101,28 @@
       }
 
       async function handleCheck(index) {
-        const params = await getFieldsValue();
-        const writerNum = params[`writerNum_${index}`];
-        const res = await checkWriterApi({ writerNum });
-        if (res.lenght !== 0) {
-          await updateSchemaWriter([
-            { field: `name_${index}`, componentProps: { disabled: false } },
-            { field: `writerPrice_${index}`, componentProps: { disabled: false } },
-            { field: `alipayAccount_${index}`, componentProps: { disabled: false } },
-            { field: `qqAccount_${index}`, componentProps: { disabled: false } },
-            { field: `wechatAccount_${index}`, componentProps: { disabled: false } },
-            { field: `writerSituation_${index}`, componentProps: { disabled: false } },
-            { field: `writerQuality_${index}`, componentProps: { disabled: false } },
-          ]);
-          let resWithIndex = {};
-          Object.keys(res).forEach((key) => {
-            resWithIndex[`${key}_${index}`] = res[key];
-          });
-          await setFieldsValueWriter(resWithIndex);
+        try {
+          const params = await validateFields([`writerNum_${index}`]);
+          const writerNum = params[`writerNum_${index}`];
+          const res = await checkWriterApi({ writerNum });
+          if (res.lenght !== 0) {
+            await updateSchemaWriter([
+              { field: `name_${index}`, componentProps: { disabled: false } },
+              { field: `writerPrice_${index}`, componentProps: { disabled: false } },
+              { field: `alipayAccount_${index}`, componentProps: { disabled: false } },
+              { field: `qqAccount_${index}`, componentProps: { disabled: false } },
+              { field: `wechatAccount_${index}`, componentProps: { disabled: false } },
+              { field: `writerSituation_${index}`, componentProps: { disabled: false } },
+              { field: `writerQuality_${index}`, componentProps: { disabled: false } },
+            ]);
+            let resWithIndex = {};
+            Object.keys(res).forEach((key) => {
+              resWithIndex[`${key}_${index}`] = res[key];
+            });
+            await setFieldsValueWriter(resWithIndex);
+          }
+        } catch (e) {
+          console.log(e);
         }
       }
 
@@ -178,26 +184,24 @@
                 enterButton: '校验订单',
                 placeholder: '请先输入订单进行校验',
                 onSearch: async (value) => {
-                  if (!/^[0-9]*$/.test(value)) {
-                    notification.error({ message: '提示', description: '请输入纯数字！' });
-                    return;
-                  }
-                  if (!value) {
-                    return;
-                  }
-                  const res = await checkOrderApi({ aliOrder: value });
-                  if (res?.length > 0) {
-                    notification.error({ message: '提示', description: '已存在改订单！' });
-                    disabled.value = true;
-                  } else {
-                    await updateSchemaOrder([
-                      { field: 'invoice', componentProps: { disabled: false } },
-                      { field: 'taobaoPrice', componentProps: { disabled: false } },
-                      { field: 'customrContact', componentProps: { disabled: false } },
-                      { field: 'orderOutline', componentProps: { disabled: false } },
-                      { field: 'memberName', componentProps: { disabled: false } },
-                    ]);
-                    disabled.value = false;
+                  try {
+                    await validateFieldsOrder(['aliOrder']);
+                    const res = await checkOrderApi({ aliOrder: value });
+                    if (res?.length > 0) {
+                      notification.error({ message: '提示', description: '已存在改订单！' });
+                      disabled.value = true;
+                    } else {
+                      await updateSchemaOrder([
+                        { field: 'invoice', componentProps: { disabled: false } },
+                        { field: 'taobaoPrice', componentProps: { disabled: false } },
+                        { field: 'customrContact', componentProps: { disabled: false } },
+                        { field: 'orderOutline', componentProps: { disabled: false } },
+                        { field: 'memberName', componentProps: { disabled: false } },
+                      ]);
+                      disabled.value = false;
+                    }
+                  } catch (error) {
+                    console.log(error);
                   }
                 },
                 disabled: isUpdate.value,
