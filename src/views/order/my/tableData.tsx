@@ -338,8 +338,11 @@ export const writerInfoForm = (index: number, disabled = true): FormSchema[] => 
   {
     field: `writerNum_${index}`,
     label: '手机号',
-    component: 'Input',
+    component: 'InputNumber',
     colProps: { span: 8 },
+    componentProps: {
+      style: { width: '100%' },
+    },
     required: true,
   },
   {
