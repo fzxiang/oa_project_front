@@ -204,7 +204,7 @@ const transform: AxiosTransform = {
     } catch (error) {
       throw new Error(error as unknown as string);
     }
-
+    console.log(error, msg, errorMessageMode);
     checkStatus(error?.response?.status, msg, errorMessageMode);
     return Promise.reject(error);
   },

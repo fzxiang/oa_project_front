@@ -49,6 +49,9 @@ export function checkStatus(
     case 408:
       errMessage = t('sys.api.errMsg408');
       break;
+    case 413:
+      errMessage = '上传的文件数据量过大';
+      break;
     case 500:
       errMessage = t('sys.api.errMsg500');
       break;

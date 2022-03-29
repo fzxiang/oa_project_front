@@ -36,21 +36,33 @@ export const searchApi = (params: { searchParmas: any }) =>
   defHttp.get<any>({ url: Api.SEARCH, params });
 
 export const oneKeyApi = (params: any) =>
-  defHttp.post<any>({ url: Api.ONE_KEY, params }, { successMessageMode: 'notification' });
+  defHttp.post<any>(
+    { url: Api.ONE_KEY, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const addApi = (params: { orderInfo: ParamsModel }) =>
-  defHttp.post<ResultModel>({ url: Api.ADD, params }, { successMessageMode: 'notification' });
+  defHttp.post<ResultModel>(
+    { url: Api.ADD, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const updateApi = (params: { orderId: number; state: number }) =>
-  defHttp.post({ url: Api.UPDATE, params }, { successMessageMode: 'notification' });
+  defHttp.post(
+    { url: Api.UPDATE, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const checkApi = (params: { ali: string }) =>
-  defHttp.post({ url: Api.CHECK, params }, { successMessageMode: 'notification' });
+  defHttp.post(
+    { url: Api.CHECK, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const uploadFileApi = (params: UpdateParamsModel<UpdateFileData>) =>
   defHttp.post<ResultModel>(
     { url: Api.UPLOAD_FILE, params, timeout: 600 * 1000 },
-    { successMessageMode: 'notification' },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
   );
 export const exportApi = (params) => {
   const { getToken, userInfo } = useUserStore();

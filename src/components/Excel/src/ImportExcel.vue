@@ -32,7 +32,7 @@
         default: 8,
       },
     },
-    emits: ['success', 'error'],
+    emits: ['success', 'error', 'loading'],
     setup(props, { emit }) {
       const inputRef = ref<HTMLInputElement | null>(null);
       const loadingRef = ref<Boolean>(false);
@@ -102,6 +102,7 @@
        */
       function readerData(rawFile: File) {
         loadingRef.value = true;
+        emit('loading', loadingRef.value);
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = async (e) => {

@@ -48,7 +48,11 @@
       <template #toolbar>
         <a-button type="primary" @click="handleAdd">添加订单</a-button>
         <a-button type="default" @click="handleExport">导出订单</a-button>
-        <ImpExcel @success="loadDataSuccess1" dateFormat="YYYY-MM-DD">
+        <ImpExcel
+          @success="loadDataSuccess1"
+          dateFormat="YYYY-MM-DD"
+          @loading="() => (loadingData1 = true)"
+        >
           <a-button
             v-auth="[1, 2, 3]"
             :loading="loadingData1"
@@ -58,7 +62,11 @@
             >上传总览附件</a-button
           >
         </ImpExcel>
-        <ImpExcel @success="loadDataSuccess2" dateFormat="YYYY-MM-DD">
+        <ImpExcel
+          @success="loadDataSuccess2"
+          dateFormat="YYYY-MM-DD"
+          @loading="() => (loadingData2 = true)"
+        >
           <a-button
             v-auth="[1, 2, 3]"
             :loading="loadingData2"
@@ -197,7 +205,7 @@
       const loadingData1 = ref(false);
       async function loadDataSuccess1(excelDataList: ExcelData[]) {
         try {
-          loadingData1.value = true;
+          // loadingData1.value = true;
           const { results } = excelDataList[0];
 
           const fileData = results.map((item) => {
@@ -220,7 +228,7 @@
       const loadingData2 = ref(false);
       async function loadDataSuccess2(excelDataList: ExcelData[]) {
         try {
-          loadingData2.value = true;
+          // loadingData2.value = true;
           const { results } = excelDataList[0];
 
           const fileData = results.map((item) => {

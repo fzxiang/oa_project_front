@@ -39,16 +39,19 @@ export const addOrderApi = (params: { orderInfo: OrderParamsModel }) =>
 export const updateOrderApi = (params: { orderInfo: OrderParamsModel }) =>
   defHttp.post<OrderParamsModel>(
     { url: Api.UPDATE, params },
-    { successMessageMode: 'notification' },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
   );
 
 export const checkOrderApi = (params: { aliOrder: string }) =>
-  defHttp.post({ url: Api.CHECK, params }, { successMessageMode: 'notification' });
+  defHttp.post(
+    { url: Api.CHECK, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const uploadOrderFileApi = (params: UpdateOrderParamsModel<UpdateOrderFileData>) =>
   defHttp.post<OrderResultModel>(
     { url: Api.UPLOAD_FILE, params, timeout: 600 * 1000 },
-    { successMessageMode: 'notification' },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
   );
 
 export const exportOrderApi = (params) =>
@@ -67,10 +70,16 @@ export const searchOrderApi = (params: SearchOrderPageModel) =>
   defHttp.get<SearchOrderResultModel>({ url: Api.SEARCH, params });
 
 export const checkWriterApi = (params: { writerNum: string }) =>
-  defHttp.get({ url: Api.CHECK_WRITER, params }, { successMessageMode: 'notification' });
+  defHttp.get(
+    { url: Api.CHECK_WRITER, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const searchChildApi = (params: { id: number }) =>
   defHttp.post<any>({ url: Api.GET_TABLE_CHILD, params });
 
 export const updateApi = (params: { writeId: number; orderId: number; state: number }) =>
-  defHttp.post({ url: Api.UPDATE_ORDER_STATE, params }, { successMessageMode: 'notification' });
+  defHttp.post(
+    { url: Api.UPDATE_ORDER_STATE, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );

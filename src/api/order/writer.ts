@@ -14,7 +14,10 @@ export const searchApi = (params: SearchWriterPageModel) =>
   defHttp.get<SearchWriterResultModel>({ url: Api.SEARCH_WRITER, params });
 
 export const updateWriterApi = (params: WriterParamsModel) =>
-  defHttp.post<any>({ url: Api.UPDATE_WRITER, params }, { successMessageMode: 'notification' });
+  defHttp.post<any>(
+    { url: Api.UPDATE_WRITER, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const searchChildApi = (params: { id: number }) =>
   defHttp.post<any>({ url: Api.GET_TABLE_CHILD, params });

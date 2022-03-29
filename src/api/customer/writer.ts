@@ -27,15 +27,21 @@ export const searchApi = (params: { searchParmas: any }) =>
   defHttp.get<any>({ url: Api.SEARCH, params });
 
 export const addApi = (params: { orderInfo: ParamsModel }) =>
-  defHttp.post<ResultModel>({ url: Api.ADD, params }, { successMessageMode: 'notification' });
+  defHttp.post<ResultModel>(
+    { url: Api.ADD, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const checkApi = (params: { ali: string }) =>
-  defHttp.post({ url: Api.CHECK, params }, { successMessageMode: 'notification' });
+  defHttp.post(
+    { url: Api.CHECK, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const uploadFileApi = (params: any) =>
   defHttp.post<ResultModel>(
     { url: Api.UPLOAD_FILE, params, timeout: 600 * 1000 },
-    { successMessageMode: 'notification' },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
   );
 
 export const exportApi = (params) => {
@@ -48,10 +54,19 @@ export const exportApi = (params) => {
 };
 
 export const updateApi = (params: { writeId: number; orderId: number; state: number }) =>
-  defHttp.post({ url: Api.UPDATE, params }, { successMessageMode: 'notification' });
+  defHttp.post(
+    { url: Api.UPDATE, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const updateAllApi = (params) =>
-  defHttp.post({ url: Api.UPDATE_ALL, params }, { successMessageMode: 'notification' });
+  defHttp.post(
+    { url: Api.UPDATE_ALL, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
 
 export const switchApi = (params: { writerId: number; orderId: number; state: number }) =>
-  defHttp.post({ url: Api.SWITCH, params }, { successMessageMode: 'notification' });
+  defHttp.post(
+    { url: Api.SWITCH, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
