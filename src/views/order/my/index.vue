@@ -86,6 +86,15 @@
               icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
             },
+            {
+              label: '删除',
+              icon: 'carbon:delete',
+              color: 'error',
+              popConfirm: {
+                title: '是否删除',
+                confirm: handleDelete.bind(null, record),
+              },
+            },
           ]"
         />
       </template>
@@ -103,6 +112,7 @@
     searchChildApi,
     exportApi,
     updateApi,
+    deleteOrderApi,
   } from '/@/api/order/my';
   import { useModal } from '/@/components/Modal';
   import MyOrderModal from './MyOrderModal.vue';
@@ -143,7 +153,7 @@
         showIndexColumn: false,
         rowKey: 'id',
         actionColumn: {
-          width: 80,
+          width: 120,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -195,6 +205,16 @@
           isUpdate: true,
         });
       }
+
+      async function handleDelete(record: Recordable) {
+        try {
+          await deleteOrderApi({ orderId: record.id });
+          reload();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
       async function handleExport() {
         const params = {
           searchParams: getForm().getFieldsValue(),
@@ -305,6 +325,7 @@
         handleAdd,
         handleExport,
         handleEdit,
+        handleDelete,
         loadDataSuccess1,
         loadDataSuccess2,
         loadingData1,

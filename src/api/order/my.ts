@@ -16,6 +16,7 @@ enum Api {
   // 编辑订单(订单信息(orderInfo(json格式(数据中需要有原本订单ID和写手ID))))
   UPDATE = '/updateOrder',
   // 校验订单编号(淘宝编号(aliOrder))
+  DELETE = '/delOrder',
   CHECK = '/checkOrder',
   // 上传附件(type(1:总揽附件，2:退款附件)，对应字断数据(fileData)(json格式))
   UPLOAD_FILE = '/uploadOrderFile',
@@ -81,5 +82,11 @@ export const searchChildApi = (params: { id: number }) =>
 export const updateApi = (params: { writeId: number; orderId: number; state: number }) =>
   defHttp.post(
     { url: Api.UPDATE_ORDER_STATE, params },
+    { successMessageMode: 'notification', errorMessageMode: 'message' },
+  );
+
+export const deleteOrderApi = (params: { orderId: string }) =>
+  defHttp.post(
+    { url: Api.DELETE, params },
     { successMessageMode: 'notification', errorMessageMode: 'message' },
   );
