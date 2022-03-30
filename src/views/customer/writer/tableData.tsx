@@ -1,3 +1,4 @@
+import { moneyRender, settleStateRender } from '/@/views/customRender';
 import { getWriterApi } from '/@/api/customer/writer';
 import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
@@ -68,6 +69,7 @@ export function getBasicColumns(): BasicColumn[] {
       width: 100,
       minWidth: 100,
       maxWidth: 200,
+      customRender: moneyRender,
       resizable: true,
       ellipsis: false,
     },
@@ -106,10 +108,12 @@ export function getBasicColumnsChild(): BasicColumn[] {
     {
       title: '淘宝价格',
       dataIndex: 'taobaoPrice',
+      customRender: moneyRender,
     },
     {
       title: '写手派单价',
       dataIndex: 'writerPrice',
+      customRender: moneyRender,
     },
     {
       title: '派单客服',
@@ -118,12 +122,7 @@ export function getBasicColumnsChild(): BasicColumn[] {
     {
       title: '结算状态',
       dataIndex: 'wSettleState',
-      format: new Map([
-        [0, '全部'],
-        [1, '已结算'],
-        [2, '未结算'],
-        [3, '暂缓结算'],
-      ]),
+      customRender: settleStateRender,
     },
     // {
     //   title: '结算方式',

@@ -3,6 +3,13 @@ import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
+import {
+  compensateStateRender,
+  moneyRender,
+  settleStateRender,
+  writerQualityRender,
+  writerSituationRender,
+} from '/@/views/customRender';
 
 export function getBasicColumns(): Ref<BasicColumn[]> {
   return ref([
@@ -46,12 +53,13 @@ export function getBasicColumns(): Ref<BasicColumn[]> {
       maxWidth: 200,
       resizable: true,
       ellipsis: false,
-      format: new Map([
-        [0, '全部'],
-        [1, '已结算'],
-        [2, '未结算'],
-        [3, '暂缓结算'],
-      ]),
+      customRender: settleStateRender,
+      // format: new Map([
+      //   [0, '全部'],
+      //   [1, '已结算'],
+      //   [2, '未结算'],
+      //   [3, '暂缓结算'],
+      // ]),
     },
     {
       title: '会员名',
@@ -69,6 +77,7 @@ export function getBasicColumns(): Ref<BasicColumn[]> {
       minWidth: 100,
       maxWidth: 200,
       resizable: true,
+      customRender: moneyRender,
       ellipsis: false,
     },
     {
@@ -86,6 +95,7 @@ export function getBasicColumns(): Ref<BasicColumn[]> {
       width: 100,
       minWidth: 100,
       maxWidth: 200,
+      customRender: moneyRender,
       resizable: true,
       ellipsis: false,
     },
@@ -416,12 +426,13 @@ export function getBasicColumnsChild(): BasicColumn[] {
       maxWidth: 250,
       resizable: true,
       ellipsis: false,
-      format: new Map([
-        [1, '拖稿'],
-        [2, '失联'],
-        [3, '拒绝修改'],
-        [4, '态度差'],
-      ]),
+      customRender: writerSituationRender,
+      // format: new Map([
+      //   [1, '拖稿'],
+      //   [2, '失联'],
+      //   [3, '拒绝修改'],
+      //   [4, '态度差'],
+      // ]),
     },
     {
       title: '写手质量',
@@ -431,11 +442,12 @@ export function getBasicColumnsChild(): BasicColumn[] {
       maxWidth: 250,
       resizable: true,
       ellipsis: false,
-      format: new Map([
-        [1, '好'],
-        [2, '中'],
-        [3, '差'],
-      ]),
+      customRender: writerQualityRender,
+      // format: new Map([
+      //   [1, '好'],
+      //   [2, '中'],
+      //   [3, '差'],
+      // ]),
     },
     {
       title: '补偿状态',
@@ -445,10 +457,11 @@ export function getBasicColumnsChild(): BasicColumn[] {
       maxWidth: 250,
       resizable: true,
       ellipsis: false,
-      format: new Map([
-        [0, '暂无补偿'],
-        [1, '稿费补偿'],
-      ]),
+      customRender: compensateStateRender,
+      // format: new Map([
+      //   [0, '暂无补偿'],
+      //   [1, '稿费补偿'],
+      // ]),
     },
     {
       title: '结算状态',
@@ -458,12 +471,13 @@ export function getBasicColumnsChild(): BasicColumn[] {
       maxWidth: 250,
       resizable: true,
       ellipsis: false,
-      format: new Map([
-        [0, '全部'],
-        [1, '已结算'],
-        [2, '未结算'],
-        [3, '暂缓结算'],
-      ]),
+      customRender: settleStateRender,
+      // format: new Map([
+      //   [0, '全部'],
+      //   [1, '已结算'],
+      //   [2, '未结算'],
+      //   [3, '暂缓结算'],
+      // ]),
     },
   ];
 }

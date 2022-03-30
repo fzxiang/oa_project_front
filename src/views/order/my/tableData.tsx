@@ -1,6 +1,13 @@
 import { FormProps, FormSchema } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 import type { RuleObject } from 'ant-design-vue/es/form';
+import {
+  compensateStateRender,
+  moneyRender,
+  settleStateRender,
+  writerQualityRender,
+  writerSituationRender,
+} from '/@/views/customRender';
 
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -49,12 +56,7 @@ export function getBasicColumns(): BasicColumn[] {
       maxWidth: 200,
       resizable: true,
       ellipsis: false,
-      format: new Map([
-        [0, '全部'],
-        [1, '已结算'],
-        [2, '未结算'],
-        [3, '暂缓结算'],
-      ]),
+      customRender: settleStateRender,
     },
     {
       title: '会员名',
@@ -68,6 +70,7 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '淘宝价格',
       dataIndex: 'taobaoPrice',
+      customRender: moneyRender,
       width: 150,
     },
     {
@@ -76,6 +79,7 @@ export function getBasicColumns(): BasicColumn[] {
       width: 100,
       minWidth: 100,
       maxWidth: 200,
+      customRender: moneyRender,
       resizable: true,
       ellipsis: false,
     },
@@ -133,39 +137,22 @@ export function getBasicColumnsChild(): BasicColumn[] {
     {
       title: '写手情况',
       dataIndex: 'writerSituation',
-      format: new Map([
-        [1, '拖稿'],
-        [2, '失联'],
-        [3, '拒绝修改'],
-        [4, '态度差'],
-      ]),
+      customRender: writerSituationRender,
     },
     {
       title: '写手质量',
       dataIndex: 'writerQuality',
-      format: new Map([
-        [1, '好'],
-        [2, '中'],
-        [3, '差'],
-      ]),
+      customRender: writerQualityRender,
     },
     {
       title: '补偿状态',
       dataIndex: 'compensateState',
-      format: new Map([
-        [0, '暂无补偿'],
-        [1, '稿费补偿'],
-      ]),
+      customRender: compensateStateRender,
     },
     {
       title: '结算状态',
       dataIndex: 'wSettleState',
-      format: new Map([
-        [0, '全部'],
-        [1, '已结算'],
-        [2, '未结算'],
-        [3, '暂缓结算'],
-      ]),
+      customRender: settleStateRender,
     },
   ];
 }
