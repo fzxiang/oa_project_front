@@ -50,7 +50,7 @@
         <a-button type="default" @click="handleExport">导出订单</a-button>
         <ImpExcel
           @success="loadDataSuccess1"
-          dateFormat="YYYY-MM-DD"
+          dateFormat="YYYY-MM-DD hh:mm:ss"
           @loading="() => (loadingData1 = true)"
         >
           <a-button
@@ -64,7 +64,7 @@
         </ImpExcel>
         <ImpExcel
           @success="loadDataSuccess2"
-          dateFormat="YYYY-MM-DD"
+          dateFormat="YYYY-MM-DD hh:mm:ss"
           @loading="() => (loadingData2 = true)"
         >
           <a-button
@@ -228,6 +228,7 @@
           // loadingData1.value = true;
           const { results } = excelDataList[0];
 
+          console.log(results);
           const fileData = results.map((item) => {
             return {
               aliOrder: item['订单编号'] || '',
