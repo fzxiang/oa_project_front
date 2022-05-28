@@ -15,6 +15,19 @@ export const settleStateRender = ({ text }) => {
   }
 };
 
+export const saleStateRender = ({ text }) => {
+  const map = {
+    1: { text: '已处理', color: 'green' },
+    2: { text: '未处理', color: 'red' },
+  };
+  const obj = map[text] || {};
+  if (obj.text) {
+    return h(Tag, { color: obj.color }, () => obj.text);
+  } else {
+    return '-';
+  }
+};
+
 export const compensateStateRender = ({ text }) => {
   const map = {
     0: { text: '暂无补偿', color: 'default' },

@@ -8,6 +8,7 @@ import {
   settleStateRender,
   writerQualityRender,
   writerSituationRender,
+  saleStateRender,
 } from '/@/views/customRender';
 
 export function getBasicColumns(): Ref<BasicColumn[]> {
@@ -45,14 +46,14 @@ export function getBasicColumns(): Ref<BasicColumn[]> {
       ellipsis: false,
     },
     {
-      title: '结算状态',
-      dataIndex: 'settleState',
+      title: '处理状态',
+      dataIndex: 'saleState',
       width: 100,
       minWidth: 100,
       maxWidth: 200,
       resizable: true,
       ellipsis: false,
-      customRender: settleStateRender,
+      customRender: saleStateRender,
       // format: new Map([
       //   [0, '全部'],
       //   [1, '已结算'],
