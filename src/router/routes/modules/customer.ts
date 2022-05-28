@@ -49,6 +49,15 @@ const customer: AppRouteModule = {
       },
       component: () => import('/@/views/customer/writer/index.vue'),
     },
+    {
+      path: 'afterSale',
+      name: 'AfterSale',
+      meta: {
+        title: '售后报表',
+        menu: '3-4',
+      },
+      component: () => import('/@/views/customer/afterSale/index.vue'),
+    },
   ],
 };
 
