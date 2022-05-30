@@ -10,6 +10,7 @@ import {
   writerSituationRender,
   saleStateRender,
 } from '/@/views/customRender';
+import { getCustomerApi } from '/@/api/customer/report';
 
 export function getBasicColumns(): Ref<BasicColumn[]> {
   return ref([
@@ -136,6 +137,17 @@ export function getFormConfig(): Partial<FormProps> {
       ['rTime', ['rStartTime', 'rEndTime'], 'YYYY-MM-DD HH:mm:ss'],
     ],
     schemas: [
+      {
+        field: 'customerId',
+        label: '选择客服',
+        component: 'ApiSelect',
+        colProps: { span: 8 },
+        componentProps: {
+          api: getCustomerApi,
+          labelField: 'nickname',
+          valueField: 'user_id',
+        },
+      },
       {
         field: 'aliOrder',
         label: '淘宝订单编号',
