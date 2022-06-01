@@ -48,7 +48,7 @@ export function getBasicColumns(): Ref<BasicColumn[]> {
     },
     {
       title: '处理状态',
-      dataIndex: 'saleState',
+      dataIndex: 'suppleState',
       width: 100,
       minWidth: 100,
       maxWidth: 200,
@@ -155,7 +155,7 @@ export function getFormConfig(): Partial<FormProps> {
         colProps: { span: 8 },
       },
       {
-        field: 'saleState',
+        field: 'state',
         label: '处理状态',
         component: 'RadioButtonGroup',
         colProps: { span: 8 },

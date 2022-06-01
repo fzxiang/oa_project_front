@@ -47,7 +47,7 @@ export const addApi = (params: { orderInfo: ParamsModel }) =>
     { successMessageMode: 'notification', errorMessageMode: 'message' },
   );
 
-export const updateApi = (params: { orderId: number; saleState: number; customerId: string }) =>
+export const updateApi = (params: { orderId: number; state: number; customerId: string }) =>
   defHttp.post(
     { url: Api.UPDATE, params },
     { successMessageMode: 'notification', errorMessageMode: 'message' },

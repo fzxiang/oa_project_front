@@ -53,14 +53,14 @@
               label: '已处理',
               color: 'success',
               type: 'link',
-              ifShow: record['saleState'] !== 1,
+              ifShow: record['suppleState'] !== 1,
               onClick: handleEdit.bind(null, record, 1),
             },
             {
               label: '未处理',
               color: 'error',
               type: 'link',
-              ifShow: record['saleState'] !== 2,
+              ifShow: record['suppleState'] !== 2,
               onClick: handleEdit.bind(null, record, 2),
             },
           ]"
@@ -207,7 +207,7 @@
           onOk: async () => {
             await updateApi({
               orderId: record.id,
-              saleState: state,
+              state: state,
               customerId: record.customerId,
             });
             await reload();
