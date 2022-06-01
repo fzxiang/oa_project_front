@@ -58,6 +58,15 @@ const customer: AppRouteModule = {
       },
       component: () => import('/@/views/customer/afterSale/index.vue'),
     },
+    {
+      path: 'suppleOrder',
+      name: 'SuppleOrder',
+      meta: {
+        title: '补单明细',
+        menu: '3-5',
+      },
+      component: () => import('/@/views/customer/suppleOrder/index.vue'),
+    },
   ],
 };
 
