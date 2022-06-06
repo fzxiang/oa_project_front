@@ -132,20 +132,19 @@
       });
 
       // 子表
-      const [registerTableChild, { reload: reloadChild, setTableData: setTableChildData }] =
-        useTable({
-          title: '关联写手',
-          rowKey: 'id',
-          api: searchChildApi,
-          columns: getBasicColumnsChild(),
-          useSearchForm: false,
-          canResize: false,
-          showTableSetting: false,
-          beforeFetch() {
-            return { id: rowId.value };
-          },
-          pagination: false,
-        });
+      const [registerTableChild, { reload: reloadChild }] = useTable({
+        title: '关联写手',
+        rowKey: 'id',
+        api: searchChildApi,
+        columns: getBasicColumnsChild(),
+        useSearchForm: false,
+        canResize: false,
+        showTableSetting: false,
+        beforeFetch() {
+          return { id: rowId.value };
+        },
+        pagination: false,
+      });
       // const [registerTableItem, {}] = useTable({});
       // const [registerModal, { openModal }] = useModal();
       const oneKeyBtn = ref(false);
@@ -182,7 +181,9 @@
             } finally {
               oneKeyBtn.value = false;
               await reload();
-              await reloadChild();
+              if (rowId.value) {
+                await reloadChild();
+              }
             }
           },
         });
@@ -201,7 +202,9 @@
           onOk: async () => {
             await updateApi({ orderId: record.id, state });
             await reload();
-            await reloadChild();
+            if (rowId.value) {
+              await reloadChild();
+            }
           },
         });
       }
