@@ -258,7 +258,7 @@
           const allWriter = await validateWriter();
           const other = await validateOther();
 
-          const writer: any[] = [];
+          let writer: any[] = [];
           for (let i = 0; i < writerIndex.value; i++) {
             writer.push({
               id: allWriter[`id_${i}`],
@@ -272,12 +272,7 @@
               writerQuality: allWriter[`writerQuality_${i}`],
             });
           }
-          writer.forEach((item, index) => {
-            if (!item.writerNum) {
-              writer.splice(index, 1);
-            }
-          });
-          console.log(writer);
+          writer = writer.filter((item) => item.writerNum !== undefined);
           // TODO custom api
           if (isUpdate.value) {
             await updateOrderApi({
