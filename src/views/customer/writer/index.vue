@@ -227,16 +227,18 @@
         try {
           loadingData1.value = true;
           const { results } = excelDataList[0];
+
+          console.log(results);
           const fileData = results.map((item) => {
             return {
               time: item['__EMPTY'] || '',
-              invoice: item['__EMPTY_1'] || '',
-              alipayAccount: item['__EMPTY_2'] || '',
-              name: item['__EMPTY_3'] || '',
-              price: item['__EMPTY_4'] || '',
-              status: item['__EMPTY_5'] || '',
-              bank: item['__EMPTY_6'] || '',
-              reason: item['__EMPTY_7'] || '',
+              invoice: item['__EMPTY_2'] || '',
+              alipayAccount: item['__EMPTY_3'] || '',
+              name: item['__EMPTY_4'] || '',
+              price: item['__EMPTY_5'] || '',
+              status: item['__EMPTY_6'] || '',
+              bank: item['__EMPTY_7'] || '',
+              reason: item['__EMPTY_8'] || '',
             };
           });
           fileData.splice(0, 9);
