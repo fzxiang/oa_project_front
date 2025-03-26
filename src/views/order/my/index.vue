@@ -232,10 +232,10 @@
           const fileData = results.map((item) => {
             return {
               aliOrder: item['订单编号'] || '',
-              paymentMer: item['打款商家金额'] || '',
+              paymentMer: item['确认收货打款金额'] || '',
               confirmTime: item['确认收货时间'] || '',
               paymentTime: item['订单付款时间'] || item['订单付款时间 '] || '',
-              actualPaymentPrice: item['买家实际支付金额'] || '',
+              actualPaymentPrice: item['买家实付金额'] || '',
             };
           });
           // fileData.length = 200
